@@ -1,0 +1,256 @@
+## Set file for twodphs3.ode on Fri Feb 10 15:12:56 2017
+10   Number of equations and auxiliaries
+3   Number of parameters
+# Numerical stuff
+1    nout
+40    nullcline mesh
+3   Runge-Kutta
+8  total
+0.01  DeltaT
+0  T0
+0  Transient
+100000  Bound
+1e-12  DtMin
+1  DtMax
+0.001  Tolerance
+0.001  Abs. Tolerance
+0  Max Delay
+100   Eigenvector iterates
+0.001  Eigenvector tolerance
+0.001  Newton tolerance
+0  Poincare plane
+1e-05  Boundary value tolerance
+1e-05  Boundary value epsilon
+20   Boundary value iterates
+0   Poincare None
+1   Poincare variable
+1   Poincare sign
+0   Stop on Section
+0   Delay flag
+7.999999999999874  Current time
+7.999999999999874  Last Time
+1   MyStart
+1   INFLAG
+# Delays
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+# Bndry conds
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Old ICs
+2.229488134384155  X
+6.283182144165039  Y
+-0.01023658271878958  CXS
+1  CYS
+0.7966012954711914  SXS
+-3.381136593816336e-06  SYS
+-2.665181909833336e-06  SXSYS
+0.7966012954711914  SXCYS
+-2.713461810799345e-08  CXSYS
+-0.01023658271878958  CXCYS
+# Ending  ICs
+8.520461283343415  X
+6.283184473721608  Y
+-0.01638251657458156  CXS
+0.9999999999991726  CYS
+0.7965179311306272  SXS
+-1.232030696363129e-06  SYS
+-8.787841954055254e-07  SXSYS
+0.7965179311301387  SXCYS
+-1.309163998169859e-07  CXSYS
+-0.01638251657477079  CXCYS
+# Parameters
+0.8  b
+0.01  q
+0.5859292206409347  g
+# Graphics
+0.7071097251469876  rm
+-0.4999999999826661  rm
+0.4999958366025518  rm
+0.7071038372138506  rm
+0.5000041633974482  rm
+-0.4999999999826661  rm
+0  rm
+0.7071038372138506  rm
+0.7071097251469876  rm
+0    
+1    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+-1000   
+1000   
+0    
+0   3DFlag
+1   Timeflag
+0   Colorflag
+0   Type
+1  color scale
+0   minscale
+8   xmax
+0   xmin
+6.280308723449707   ymax
+0.004960927646607161   ymin
+12   zmax
+-12   zmin
+4   
+0.25   
+3.142634825548157   
+0.3187074350424981   
+0   
+0.08333333333333333   
+45   Theta
+45   Phi
+0    xshft
+0    yshft
+0    zshft
+0   xlo
+0.004960927646607161   ylo
+0   
+0   
+8   xhi
+6.280308723449707   yhi
+6.3   
+6.3   
+# Transpose variables etc
+X
+2   n columns
+1   n rows
+1   row skip
+1   col skip
+1   row 0
+# Coupling stuff for H funs
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Array plot stuff
+
+1   NCols
+0   Row 1
+50   NRows
+8   RowSkip
+0  Zmin
+1  Zmax
+# Torus information 
+0    Torus flag 1=ON
+6.283185307179586  Torus period
+# Range information
+b
+-1   eq-range stab col
+0   shoot flag 1=on
+10   eq-range steps
+0  eq_range low
+1  eq_range high
+X
+X
+20   Range steps
+0   Cycle color 1=on
+1   Reset data 1=on
+1   Use old I.C.s 1=yes
+0  Par1 low
+0  Par2 low
+1  Par1 high
+1  Par2 high
+b
+0   BVP side
+0   color cycle flag 1=on
+10   BVP range steps
+0  BVP range low
+1  BVP range high
+RHS etc ...
+dX/dT=Q*J(X,Y)-G*(I1X+I2X)
+dY/dT=Q*J(Y,X)-G*(I1Y+I2Y)
+dCXS/dT=-CXS+CX
+dCYS/dT=-CYS+CY
+dSXS/dT=-SXS+SX
+dSYS/dT=-SYS+SY
+dSXSYS/dT=-SXSYS+SXSY
+dSXCYS/dT=-SXCYS+SXCY
+dCXSYS/dT=-CXSYS+CXSY
+dCXCYS/dT=-CXCYS+CXCY
+
+where ...
+CX = COS(X)   
+CY = COS(Y)   
+SX = SIN(X)   
+SY = SIN(Y)   
+SXSY = SIN(X)*SIN(Y)   
+SXCY = SIN(X)*COS(Y)   
+CXSY = COS(X)*SIN(Y)   
+CXCY = COS(X)*COS(Y)   
+I1X = SXS*CX-CXS*SX   
+I1Y = SYS*CY-CYS*SY   
+I2X = B*(CXCY*SXCYS - SXCY*CXCYS  + CXSY*SXSYS - SXSY*CXSYS)   
+I2Y = B*(CXCY*CXSYS - CXSY*CXCYS  + SXCY*SXSYS - SXSY*SXCYS)   
+
+User-defined functions:
+H(X,Y) = SIN(X)*(1+B*COS(Y))  
+J(X,Y) = -H(X,Y)  

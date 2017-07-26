@@ -1,0 +1,3315 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    138887,       3306]
+NotebookOptionsPosition[    137054,       3243]
+NotebookOutlinePosition[    137390,       3258]
+CellTagsIndexPosition[    137347,       3255]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["Existence equations", "Text",
+ CellChangeTimes->{{3.707486070071316*^9, 3.707486075510851*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"H", " ", "fourier", " ", "terms"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"c", "=", 
+     RowBox[{
+      RowBox[{"Import", "[", 
+       RowBox[{"FileNameJoin", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+          "\"\<fourier2d_coeffs.csv\>\""}], "}"}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"n", "=", 
+     RowBox[{
+      RowBox[{"Import", "[", 
+       RowBox[{"FileNameJoin", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+          "\"\<fourier2d_n.csv\>\""}], "}"}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"m", "=", 
+     RowBox[{
+      RowBox[{"Import", "[", 
+       RowBox[{"FileNameJoin", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+          "\"\<fourier2d_m.csv\>\""}], "}"}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.707486198696068*^9, 3.707486199927628*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"H", " ", "with", " ", "actual", " ", "numbers"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"H", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], "=", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", 
+         RowBox[{"c", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], 
+        RowBox[{"Sin", "[", 
+         RowBox[{
+          RowBox[{"x", " ", 
+           RowBox[{"n", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}], "+", 
+          RowBox[{"y", " ", 
+           RowBox[{"m", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}]}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "30"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Hx", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], "=", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", 
+         RowBox[{"c", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], 
+        RowBox[{"n", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          RowBox[{"x", " ", 
+           RowBox[{"n", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}], "+", 
+          RowBox[{"y", " ", 
+           RowBox[{"m", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}]}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "30"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Hy", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], "=", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", 
+         RowBox[{"c", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], 
+        RowBox[{"m", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          RowBox[{"x", " ", 
+           RowBox[{"n", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}], "+", 
+          RowBox[{"y", " ", 
+           RowBox[{"m", "[", 
+            RowBox[{"[", "i", "]"}], "]"}]}]}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "30"}], "}"}]}], "]"}]}], 
+    ";"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"existence", " ", "functions"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"G1", "[", 
+      RowBox[{"nu1_", ",", "nu2_"}], "]"}], "=", 
+     RowBox[{"Integrate", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Exp", "[", 
+         RowBox[{"-", "s"}], "]"}], 
+        RowBox[{"H", "[", 
+         RowBox[{
+          RowBox[{"nu1", " ", "s"}], ",", 
+          RowBox[{"nu2", " ", "s"}]}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"G2", "[", 
+      RowBox[{"nu1_", ",", "nu2_"}], "]"}], "=", 
+     RowBox[{"Integrate", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Exp", "[", 
+         RowBox[{"-", "s"}], "]"}], 
+        RowBox[{"H", "[", 
+         RowBox[{
+          RowBox[{"nu2", " ", "s"}], ",", 
+          RowBox[{"nu1", " ", "s"}]}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], 
+    ";"}]}]}]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", 
+  RowBox[{"G1", "[", 
+   RowBox[{"nu1", ",", "nu2"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7074864727435713`*^9, 3.707486477623703*^9}, {
+  3.707486540984872*^9, 3.707486547383815*^9}}],
+
+Cell["\<\
+        ConditionalExpression((0.598083281184*nu1)/(1 + nu1**2) + 
+     -   (0.04937088889079999*nu1)/(1 + 4*nu1**2) + \
+(1.754427975804e-6*nu1)/(1 + 9*nu1**2) + 
+     -   (0.00268157925132*(nu1 - 2*nu2))/(1 + (nu1 - 2*nu2)**2) + 
+     -   (2.81101865815e-7*(3*nu1 - 2*nu2))/(1 + (3*nu1 - 2*nu2)**2) + 
+     -   (0.221324119894*(nu1 - nu2))/(1 + (nu1 - nu2)**2) + 
+     -   (0.00003512773503056*(nu1 - nu2))/(1 + 4*(nu1 - nu2)**2) + 
+     -   (2.60238339622e-7*(3*nu1 - nu2))/(1 + (-3*nu1 + nu2)**2) + 
+     -   (0.00511355916622*(2*nu1 - nu2))/(1 + (-2*nu1 + nu2)**2) + 
+     -   (0.221324119894*(nu1 + nu2))/(1 + (nu1 + nu2)**2) + 
+     -   (0.00003512773503052*(nu1 + nu2))/(1 + 4*(nu1 + nu2)**2) + 
+     -   (0.00511355916622*(2*nu1 + nu2))/(1 + (2*nu1 + nu2)**2) + 
+     -   (2.60238339621e-7*(3*nu1 + nu2))/(1 + (3*nu1 + nu2)**2) + 
+     -   (0.00268157925132*(nu1 + 2*nu2))/(1 + (nu1 + 2*nu2)**2) + 
+     -   (2.81101865819e-7*(3*nu1 + 2*nu2))/(1 + (3*nu1 + 2*nu2)**2),
+     -  Inequality(-1,Less,Im(3*nu1 - 2*nu2),Less,1).and.
+     -   Inequality(-1,Less,Im(3*nu1 + 2*nu2),Less,1))\
+\>", "Output",
+ CellChangeTimes->{{3.707486474106494*^9, 3.707486477933631*^9}, 
+   3.7074865481915894`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", 
+  RowBox[{"G2", "[", 
+   RowBox[{"nu1", ",", "nu2"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.707486553407864*^9, 3.707486553520341*^9}}],
+
+Cell["\<\
+        ConditionalExpression((-2.60238339622e-7*(nu1 - 3*nu2))/(1 + (nu1 - \
+3*nu2)**2) - 
+     -   (2.81101865815e-7*(2*nu1 - 3*nu2))/(1 + (2*nu1 - 3*nu2)**2) - 
+     -   (0.00511355916622*(nu1 - 2*nu2))/(1 + (nu1 - 2*nu2)**2) - 
+     -   (0.221324119894*(nu1 - nu2))/(1 + (nu1 - nu2)**2) - 
+     -   (0.00003512773503056*(nu1 - nu2))/(1 + 4*(nu1 - nu2)**2) + 
+     -   (0.5980832811839999*nu2)/(1 + nu2**2) + (0.04937088889079999*nu2)/(1 \
++ 4*nu2**2) + 
+     -   (1.754427975804e-6*nu2)/(1 + 9*nu2**2) - 
+     -   (0.00268157925132*(2*nu1 - nu2))/(1 + (-2*nu1 + nu2)**2) + 
+     -   (0.221324119894*(nu1 + nu2))/(1 + (nu1 + nu2)**2) + 
+     -   (0.00003512773503052*(nu1 + nu2))/(1 + 4*(nu1 + nu2)**2) + 
+     -   (0.00268157925132*(2*nu1 + nu2))/(1 + (2*nu1 + nu2)**2) + 
+     -   (0.00511355916622*(nu1 + 2*nu2))/(1 + (nu1 + 2*nu2)**2) + 
+     -   (2.60238339621e-7*(nu1 + 3*nu2))/(1 + (nu1 + 3*nu2)**2) + 
+     -   (2.81101865819e-7*(2*nu1 + 3*nu2))/(1 + (2*nu1 + 3*nu2)**2),
+     -  Inequality(-1,Less,Im(2*nu1 - 3*nu2),Less,1).and.
+     -   Inequality(-1,Less,Im(2*nu1 + 3*nu2),Less,1))\
+\>", "Output",
+ CellChangeTimes->{3.7074865539156017`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"pq1", "=", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"-", "s"}], "]"}], 
+     RowBox[{"Hx", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "nu1"}], " ", "s"}], ",", 
+       RowBox[{
+        RowBox[{"-", "nu2"}], " ", "s"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"al", "+", 
+            RowBox[{"be", " ", "I"}]}], ")"}]}], "s"}], "]"}], "-", "1"}], 
+      ")"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}], ",", " ", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"al", "\[Element]", "Reals"}], ",", 
+       RowBox[{"al", ">", 
+        RowBox[{"-", "1"}]}], ",", 
+       RowBox[{"be", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu1", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu2", "\[Element]", "Reals"}]}], "}"}]}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"pq2", "=", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"-", "s"}], "]"}], 
+     RowBox[{"Hy", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "nu1"}], " ", "s"}], ",", 
+       RowBox[{
+        RowBox[{"-", "nu2"}], " ", "s"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"al", "+", 
+            RowBox[{"be", " ", "I"}]}], ")"}]}], "s"}], "]"}], "-", "1"}], 
+      ")"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}], ",", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"al", "\[Element]", "Reals"}], ",", 
+       RowBox[{"al", ">", 
+        RowBox[{"-", "1"}]}], ",", 
+       RowBox[{"be", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu1", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu2", "\[Element]", "Reals"}]}], "}"}]}]}], "]"}]}]}], "Input",\
+
+ CellChangeTimes->{{3.707486335415889*^9, 3.707486335696279*^9}, {
+  3.707486387496138*^9, 3.707486464360424*^9}, {3.707486821384573*^9, 
+  3.707486857742895*^9}, {3.707564785526856*^9, 3.707564802276642*^9}}],
+
+Cell[BoxData[
+ RowBox[{"0.598083281184`", " ", 
+  RowBox[{"(", 
+   RowBox[{
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["0.04127425932477376`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["0.04127425932477376`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["0.04127425932477376`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["0.04127425932477376`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["1.4667087603007675`*^-6", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["1.4667087603007675`*^-6", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["1.4667087603007675`*^-6", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+    FractionBox["1.4667087603007675`*^-6", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002936692609181377`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002936692609181377`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002936692609181377`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002936692609181377`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["6.526808585256318`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["6.526808585256318`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["6.526808585256318`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["6.526808585256318`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["7.050068309780737`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["7.050068309780737`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["7.050068309680416`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["7.050068309680416`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["7.050068309680416`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["7.050068309680416`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["7.050068309780737`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["7.050068309780737`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.1850278438279148`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002936692609178033`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002936692609178033`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002936692609178033`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002936692609178033`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00854991157100547`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["6.526808585231239`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["6.526808585231239`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["6.526808585231239`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["6.526808585231239`*^-7", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.002241810911359528`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}]], "Output",
+ CellChangeTimes->{{3.707564766580098*^9, 3.70756479503286*^9}, 
+   3.707564845435811*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "0.00536315850264`"}], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.0032749111380232817`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.0032749111380232817`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.0032749111380232817`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.0032749111380232817`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00002426166777412027`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00002426166777412027`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00002426166777412027`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00002426166777412027`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00005241349210183298`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00005241349210183298`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00005241349210108715`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00005241349210108715`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00005241349210108715`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00005241349210108715`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["0.00005241349210183298`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["0.00005241349210183298`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["20.6337477985271`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.0032749111380195525`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.0032749111380195525`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.0032749111380195525`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.0032749111380195525`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.47673019207831213`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002426166777402704`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002426166777402704`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.00002426166777402704`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["0.00002426166777402704`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}]], "Output",
+ CellChangeTimes->{{3.707564766580098*^9, 3.70756479503286*^9}, 
+   3.7075648597699547`*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.707486864306014*^9, 3.707486864322195*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pq1", "=", 
+   RowBox[{"0.598083281184`", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "-", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.707486866271838*^9, 3.707486868041458*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pq2", "=", 
+   RowBox[{
+    RowBox[{"-", "0.00536315850264`"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.0032749111380232817`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.0032749111380232817`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.0032749111380232817`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.0032749111380232817`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00002426166777412027`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00002426166777412027`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00002426166777412027`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00002426166777412027`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00005241349210183298`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00005241349210183298`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00005241349210108715`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00005241349210108715`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00005241349210108715`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00005241349210108715`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.00005241349210183298`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.00005241349210183298`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["20.6337477985271`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.0032749111380195525`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.0032749111380195525`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.0032749111380195525`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.0032749111380195525`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.47673019207831213`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002426166777402704`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002426166777402704`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002426166777402704`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002426166777402704`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.70748689542419*^9, 3.7074868990015993`*^9}, 
+   3.707564906803502*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"phat1", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Re", "[", "pq1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"qhat1", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Im", "[", "pq1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"phat2", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Re", "[", "pq2", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"qhat2", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Im", "[", "pq2", "]"}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.707486900705735*^9, 3.707486931032383*^9}, {
+  3.7074869988271008`*^9, 3.7074870538723783`*^9}, {3.707487473380938*^9, 
+  3.7074874945768833`*^9}, {3.7074875900586987`*^9, 3.707487590880949*^9}, {
+  3.707487649457395*^9, 3.707487660665391*^9}, {3.707487698441393*^9, 
+  3.707487714665366*^9}, {3.7074880230776043`*^9, 3.707488024593306*^9}, {
+  3.707488648102407*^9, 3.7074886524978647`*^9}, {3.70756420511906*^9, 
+  3.707564206255274*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "phat1", "]"}]], "Input",
+ CellChangeTimes->{{3.7074870567432613`*^9, 3.707487060104249*^9}}],
+
+Cell["\<\
+        (0.,0.) + 8.77213987902e-7/((-1 - al)**2 + (-be - 3*nu1)**2) + 
+     -  (8.77213987902e-7*al)/((-1 - al)**2 + (-be - 3*nu1)**2) + 
+     -  0.024685444445399995/((-1 - al)**2 + (-be - 2*nu1)**2) + 
+     -  (0.024685444445399995*al)/((-1 - al)**2 + (-be - 2*nu1)**2) + 
+     -  0.299041640592/((-1 - al)**2 + (-be - nu1)**2) + 
+     -  (0.299041640592*al)/((-1 - al)**2 + (-be - nu1)**2) - 
+     -  0.598083281184/(1 + nu1**2) - 0.04937088889079999/(1 + 4*nu1**2) - 
+     -  1.754427975804e-6/(1 + 9*nu1**2) + 
+     -  0.299041640592/((-1 - al)**2 + (-be + nu1)**2) + 
+     -  (0.299041640592*al)/((-1 - al)**2 + (-be + nu1)**2) + 
+     -  0.024685444445399995/((-1 - al)**2 + (-be + 2*nu1)**2) + 
+     -  (0.024685444445399995*al)/((-1 - al)**2 + (-be + 2*nu1)**2) + 
+     -  8.77213987902e-7/((-1 - al)**2 + (-be + 3*nu1)**2) + 
+     -  (8.77213987902e-7*al)/((-1 - al)**2 + (-be + 3*nu1)**2) + 
+     -  0.00001756386751528/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + 
+     -  (0.00001756386751528*al)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + 
+     -  0.00001756386751528/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + 
+     -  (0.00001756386751528*al)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -  4.2165279872850006e-7/(1 + (-3*nu1 - 2*nu2)**2) + 
+     -  4.2165279872850006e-7/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) + 
+     -  (4.2165279872850006e-7*al)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) - 
+     -  0.00134078962566/(1 + (-nu1 - 2*nu2)**2) + 
+     -  0.00134078962566/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -  (0.00134078962566*al)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -  0.00134078962566/(1 + (nu1 - 2*nu2)**2) + 
+     -  0.00134078962566/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -  (0.00134078962566*al)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -  4.216527987225e-7/(1 + (3*nu1 - 2*nu2)**2) + 
+     -  4.216527987225e-7/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) + 
+     -  (4.216527987225e-7*al)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) - 
+     -  3.903575094315e-7/(1 + (-3*nu1 - nu2)**2) + 
+     -  3.903575094315e-7/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + 
+     -  (3.903575094315e-7*al)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) - 
+     -  0.00511355916622/(1 + (-2*nu1 - nu2)**2) + 
+     -  0.00511355916622/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.00511355916622*al)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -  0.110662059947/(1 + (-nu1 - nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -  0.110662059947/(1 + (nu1 - nu2)**2) - 
+     -  0.00003512773503056/(1 + 4*(nu1 - nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -  0.00511355916622/(1 + (2*nu1 - nu2)**2) + 
+     -  0.00511355916622/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -  (0.00511355916622*al)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -  3.90357509433e-7/(1 + (3*nu1 - nu2)**2) + 
+     -  3.90357509433e-7/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) + 
+     -  (3.90357509433e-7*al)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) - 
+     -  3.90357509433e-7/(1 + (-3*nu1 + nu2)**2) + 
+     -  3.90357509433e-7/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) + 
+     -  (3.90357509433e-7*al)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) - 
+     -  0.00511355916622/(1 + (-2*nu1 + nu2)**2) + 
+     -  0.00511355916622/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*al)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -  0.110662059947/(1 + (-nu1 + nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be - nu1 + nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  0.110662059947/(1 + (nu1 + nu2)**2) - 
+     -  0.00003512773503052/(1 + 4*(nu1 + nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -  0.00511355916622/(1 + (2*nu1 + nu2)**2) + 
+     -  0.00511355916622/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*al)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) - 
+     -  3.903575094315e-7/(1 + (3*nu1 + nu2)**2) + 
+     -  3.903575094315e-7/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (3.903575094315e-7*al)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) - 
+     -  4.216527987225e-7/(1 + (-3*nu1 + 2*nu2)**2) + 
+     -  4.216527987225e-7/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) + 
+     -  (4.216527987225e-7*al)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) - 
+     -  0.00134078962566/(1 + (-nu1 + 2*nu2)**2) + 
+     -  0.00134078962566/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) + 
+     -  (0.00134078962566*al)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  0.00134078962566/(1 + (nu1 + 2*nu2)**2) + 
+     -  0.00134078962566/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00134078962566*al)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) - 
+     -  4.2165279872850006e-7/(1 + (3*nu1 + 2*nu2)**2) + 
+     -  4.2165279872850006e-7/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  (4.2165279872850006e-7*al)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  0.00001756386751526/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + 
+     -  (0.00001756386751526*al)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + 
+     -  0.00001756386751526/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -  (0.00001756386751526*al)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2)\
+\>", "Output",
+ CellChangeTimes->{{3.707486995880928*^9, 3.707487060468629*^9}, {
+   3.707487653174362*^9, 3.707487666059202*^9}, 3.707487710828134*^9, 
+   3.707564282234559*^9, 3.7075649121930237`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "qhat1", "]"}]], "Input",
+ CellChangeTimes->{{3.707488064465535*^9, 3.7074880647093687`*^9}}],
+
+Cell["\<\
+        (0.,0.) - (8.77213987902e-7*be)/((-1 - al)**2 + (-be - 3*nu1)**2) - 
+     -  (0.024685444445399995*be)/((-1 - al)**2 + (-be - 2*nu1)**2) - 
+     -  (0.299041640592*be)/((-1 - al)**2 + (-be - nu1)**2) - 
+     -  (2.631641963706e-6*nu1)/((-1 - al)**2 + (-be - 3*nu1)**2) - 
+     -  (0.04937088889079999*nu1)/((-1 - al)**2 + (-be - 2*nu1)**2) - 
+     -  (0.299041640592*nu1)/((-1 - al)**2 + (-be - nu1)**2) - 
+     -  (0.299041640592*be)/((-1 - al)**2 + (-be + nu1)**2) + 
+     -  (0.299041640592*nu1)/((-1 - al)**2 + (-be + nu1)**2) - 
+     -  (0.024685444445399995*be)/((-1 - al)**2 + (-be + 2*nu1)**2) + 
+     -  (0.04937088889079999*nu1)/((-1 - al)**2 + (-be + 2*nu1)**2) - 
+     -  (8.77213987902e-7*be)/((-1 - al)**2 + (-be + 3*nu1)**2) + 
+     -  (2.631641963706e-6*nu1)/((-1 - al)**2 + (-be + 3*nu1)**2) - 
+     -  (0.00001756386751528*be)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - 
+     -  (0.00003512773503056*nu1)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - \
+
+     -  (0.00001756386751528*be)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + 
+     -  (0.00003512773503056*nu1)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -  (1.2649583961855002e-6*nu1)/(1 + (-3*nu1 - 2*nu2)**2) - 
+     -  (4.2165279872850006e-7*be)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) - 
+     -  (1.2649583961855002e-6*nu1)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) \
++ 
+     -  (0.00134078962566*nu1)/(1 + (-nu1 - 2*nu2)**2) - 
+     -  (0.00134078962566*be)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -  (0.00134078962566*nu1)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -  (0.00134078962566*nu1)/(1 + (nu1 - 2*nu2)**2) - 
+     -  (0.00134078962566*be)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -  (0.00134078962566*nu1)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -  (1.2649583961675002e-6*nu1)/(1 + (3*nu1 - 2*nu2)**2) - 
+     -  (4.216527987225e-7*be)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) + 
+     -  (1.2649583961675002e-6*nu1)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) \
++ 
+     -  (1.1710725282945002e-6*nu1)/(1 + (-3*nu1 - nu2)**2) - 
+     -  (3.903575094315e-7*be)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) - 
+     -  (1.1710725282945002e-6*nu1)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + \
+
+     -  (0.01022711833244*nu1)/(1 + (-2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*be)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -  (0.01022711833244*nu1)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.110662059947*nu1)/(1 + (-nu1 - nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -  (0.110662059947*nu1)/(1 + (nu1 - nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -  (0.01022711833244*nu1)/(1 + (2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*be)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -  (0.01022711833244*nu1)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -  (1.171072528299e-6*nu1)/(1 + (3*nu1 - nu2)**2) - 
+     -  (3.90357509433e-7*be)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) + 
+     -  (1.171072528299e-6*nu1)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) + 
+     -  (0.00003512773503056*nu2)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - \
+
+     -  (0.00003512773503056*nu2)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -  (8.433055974570001e-7*nu2)/(1 + (-3*nu1 - 2*nu2)**2) - 
+     -  (8.433055974570001e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*nu2)/(1 + (-nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*nu2)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*nu2)/(1 + (nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*nu2)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -  (8.43305597445e-7*nu2)/(1 + (3*nu1 - 2*nu2)**2) - 
+     -  (8.43305597445e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) + 
+     -  (3.903575094315e-7*nu2)/(1 + (-3*nu1 - nu2)**2) - 
+     -  (3.903575094315e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + 
+     -  (0.00511355916622*nu2)/(1 + (-2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*nu2)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.110662059947*nu2)/(1 + (-nu1 - nu2)**2) - 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -  (0.110662059947*nu2)/(1 + (nu1 - nu2)**2) - 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -  (0.00511355916622*nu2)/(1 + (2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*nu2)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -  (3.90357509433e-7*nu2)/(1 + (3*nu1 - nu2)**2) - 
+     -  (3.90357509433e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) + 
+     -  (1.171072528299e-6*nu1)/(1 + (-3*nu1 + nu2)**2) - 
+     -  (3.90357509433e-7*nu2)/(1 + (-3*nu1 + nu2)**2) - 
+     -  (3.90357509433e-7*be)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) - 
+     -  (1.171072528299e-6*nu1)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) + 
+     -  (3.90357509433e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) + 
+     -  (0.01022711833244*nu1)/(1 + (-2*nu1 + nu2)**2) - 
+     -  (0.00511355916622*nu2)/(1 + (-2*nu1 + nu2)**2) - 
+     -  (0.00511355916622*be)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -  (0.01022711833244*nu1)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*nu2)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -  (0.110662059947*nu1)/(1 + (-nu1 + nu2)**2) - 
+     -  (0.110662059947*nu2)/(1 + (-nu1 + nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 + nu2)**2) + 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  (0.110662059947*nu1)/(1 + (nu1 + nu2)**2) - 
+     -  (0.110662059947*nu2)/(1 + (nu1 + nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -  (0.01022711833244*nu1)/(1 + (2*nu1 + nu2)**2) - 
+     -  (0.00511355916622*nu2)/(1 + (2*nu1 + nu2)**2) - 
+     -  (0.00511355916622*be)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.01022711833244*nu1)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*nu2)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) - 
+     -  (1.1710725282945002e-6*nu1)/(1 + (3*nu1 + nu2)**2) - 
+     -  (3.903575094315e-7*nu2)/(1 + (3*nu1 + nu2)**2) - 
+     -  (3.903575094315e-7*be)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (1.1710725282945002e-6*nu1)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + \
+
+     -  (3.903575094315e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (1.2649583961675002e-6*nu1)/(1 + (-3*nu1 + 2*nu2)**2) - 
+     -  (8.43305597445e-7*nu2)/(1 + (-3*nu1 + 2*nu2)**2) - 
+     -  (4.216527987225e-7*be)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) - 
+     -  (1.2649583961675002e-6*nu1)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) \
++ 
+     -  (8.43305597445e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) + 
+     -  (0.00134078962566*nu1)/(1 + (-nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*nu2)/(1 + (-nu1 + 2*nu2)**2) - 
+     -  (0.00134078962566*be)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  (0.00134078962566*nu1)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*nu2)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  (0.00134078962566*nu1)/(1 + (nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*nu2)/(1 + (nu1 + 2*nu2)**2) - 
+     -  (0.00134078962566*be)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00134078962566*nu1)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*nu2)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) - 
+     -  (1.2649583961855002e-6*nu1)/(1 + (3*nu1 + 2*nu2)**2) - 
+     -  (8.433055974570001e-7*nu2)/(1 + (3*nu1 + 2*nu2)**2) - 
+     -  (4.2165279872850006e-7*be)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  (1.2649583961855002e-6*nu1)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) \
++ 
+     -  (8.433055974570001e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) - 
+     -  (0.00001756386751526*be)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - 
+     -  (0.00003512773503052*nu1)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - \
+
+     -  (0.00003512773503052*nu2)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - \
+
+     -  (0.00001756386751526*be)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -  (0.00003512773503052*nu1)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + \
+
+     -  (0.00003512773503052*nu2)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2)\
+\>", "Output",
+ CellChangeTimes->{3.707488065018497*^9, 3.707564285875669*^9, 
+  3.70756491591661*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "phat2", "]"}]], "Input",
+ CellChangeTimes->{{3.707564296966549*^9, 3.70756430141363*^9}}],
+
+Cell["\<\
+        (0.,0.) - 0.00001756386751528/((-1 - al)**2 + (-be - 2*(nu1 - \
+nu2))**2) - 
+     -  (0.00001756386751528*al)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - 
+     -  0.00001756386751528/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -  (0.00001756386751528*al)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -  2.81101865819e-7/(1 + (-3*nu1 - 2*nu2)**2) + 
+     -  2.81101865819e-7/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) + 
+     -  (2.81101865819e-7*al)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) - 
+     -  0.00268157925132/(1 + (-nu1 - 2*nu2)**2) + 
+     -  0.00268157925132/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*al)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -  0.00268157925132/(1 + (nu1 - 2*nu2)**2) - 
+     -  0.00268157925132/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*al)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -  2.81101865815e-7/(1 + (3*nu1 - 2*nu2)**2) - 
+     -  2.81101865815e-7/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) - 
+     -  (2.81101865815e-7*al)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) - 
+     -  1.301191698105e-7/(1 + (-3*nu1 - nu2)**2) + 
+     -  1.301191698105e-7/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + 
+     -  (1.301191698105e-7*al)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) - 
+     -  0.00255677958311/(1 + (-2*nu1 - nu2)**2) + 
+     -  0.00255677958311/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.00255677958311*al)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -  0.110662059947/(1 + (-nu1 - nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -  0.110662059947/(1 + (nu1 - nu2)**2) + 
+     -  0.00003512773503056/(1 + 4*(nu1 - nu2)**2) - 
+     -  0.110662059947/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -  0.00255677958311/(1 + (2*nu1 - nu2)**2) - 
+     -  0.00255677958311/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -  (0.00255677958311*al)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -  1.30119169811e-7/(1 + (3*nu1 - nu2)**2) - 
+     -  1.30119169811e-7/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) - 
+     -  (1.30119169811e-7*al)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) + 
+     -  1.30119169811e-7/(1 + (-3*nu1 + nu2)**2) - 
+     -  1.30119169811e-7/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) - 
+     -  (1.30119169811e-7*al)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) + 
+     -  0.00255677958311/(1 + (-2*nu1 + nu2)**2) - 
+     -  0.00255677958311/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -  (0.00255677958311*al)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -  0.110662059947/(1 + (-nu1 + nu2)**2) - 
+     -  0.110662059947/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  0.110662059947/(1 + (nu1 + nu2)**2) - 
+     -  0.00003512773503052/(1 + 4*(nu1 + nu2)**2) + 
+     -  0.110662059947/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -  0.00255677958311/(1 + (2*nu1 + nu2)**2) + 
+     -  0.00255677958311/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.00255677958311*al)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) - 
+     -  1.301191698105e-7/(1 + (3*nu1 + nu2)**2) + 
+     -  1.301191698105e-7/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (1.301191698105e-7*al)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  2.81101865815e-7/(1 + (-3*nu1 + 2*nu2)**2) - 
+     -  2.81101865815e-7/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) - 
+     -  (2.81101865815e-7*al)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) + 
+     -  0.00268157925132/(1 + (-nu1 + 2*nu2)**2) - 
+     -  0.00268157925132/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*al)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  0.00268157925132/(1 + (nu1 + 2*nu2)**2) + 
+     -  0.00268157925132/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*al)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) - 
+     -  2.81101865819e-7/(1 + (3*nu1 + 2*nu2)**2) + 
+     -  2.81101865819e-7/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  (2.81101865819e-7*al)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  0.00001756386751526/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + 
+     -  (0.00001756386751526*al)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + 
+     -  0.00001756386751526/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -  (0.00001756386751526*al)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2)\
+\>", "Output",
+ CellChangeTimes->{3.707564302937162*^9, 3.707564919415056*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "qhat2", "]"}]], "Input",
+ CellChangeTimes->{{3.707564337745761*^9, 3.707564341117752*^9}}],
+
+Cell["\<\
+        (0.,0.) + (0.00001756386751528*be)/((-1 - al)**2 + (-be - 2*(nu1 - \
+nu2))**2) + 
+     -  (0.00003512773503056*nu1)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + \
+
+     -  (0.00001756386751528*be)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -  (0.00003512773503056*nu1)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -  (8.43305597457e-7*nu1)/(1 + (-3*nu1 - 2*nu2)**2) - 
+     -  (2.81101865819e-7*be)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) - 
+     -  (8.43305597457e-7*nu1)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*nu1)/(1 + (-nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*be)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*nu1)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*nu1)/(1 + (nu1 - 2*nu2)**2) + 
+     -  (0.00268157925132*be)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -  (0.00268157925132*nu1)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -  (8.433055974449999e-7*nu1)/(1 + (3*nu1 - 2*nu2)**2) + 
+     -  (2.81101865815e-7*be)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) - 
+     -  (8.433055974449999e-7*nu1)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) + 
+     -  (3.903575094315e-7*nu1)/(1 + (-3*nu1 - nu2)**2) - 
+     -  (1.301191698105e-7*be)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) - 
+     -  (3.903575094315e-7*nu1)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + 
+     -  (0.00511355916622*nu1)/(1 + (-2*nu1 - nu2)**2) - 
+     -  (0.00255677958311*be)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*nu1)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.110662059947*nu1)/(1 + (-nu1 - nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -  (0.110662059947*nu1)/(1 + (nu1 - nu2)**2) + 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -  (0.00511355916622*nu1)/(1 + (2*nu1 - nu2)**2) + 
+     -  (0.00255677958311*be)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -  (0.00511355916622*nu1)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -  (3.903575094330001e-7*nu1)/(1 + (3*nu1 - nu2)**2) + 
+     -  (1.30119169811e-7*be)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) - 
+     -  (3.903575094330001e-7*nu1)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) - 
+     -  (0.00003512773503056*nu2)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + \
+
+     -  (0.00003512773503056*nu2)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -  (5.62203731638e-7*nu2)/(1 + (-3*nu1 - 2*nu2)**2) - 
+     -  (5.62203731638e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 - 2*nu2)**2) + 
+     -  (0.00536315850264*nu2)/(1 + (-nu1 - 2*nu2)**2) - 
+     -  (0.00536315850264*nu2)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -  (0.00536315850264*nu2)/(1 + (nu1 - 2*nu2)**2) + 
+     -  (0.00536315850264*nu2)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -  (5.6220373163e-7*nu2)/(1 + (3*nu1 - 2*nu2)**2) + 
+     -  (5.6220373163e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 - 2*nu2)**2) + 
+     -  (1.301191698105e-7*nu2)/(1 + (-3*nu1 - nu2)**2) - 
+     -  (1.301191698105e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 - nu2)**2) + 
+     -  (0.00255677958311*nu2)/(1 + (-2*nu1 - nu2)**2) - 
+     -  (0.00255677958311*nu2)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -  (0.110662059947*nu2)/(1 + (-nu1 - nu2)**2) - 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -  (0.110662059947*nu2)/(1 + (nu1 - nu2)**2) + 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -  (0.00255677958311*nu2)/(1 + (2*nu1 - nu2)**2) + 
+     -  (0.00255677958311*nu2)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -  (1.30119169811e-7*nu2)/(1 + (3*nu1 - nu2)**2) + 
+     -  (1.30119169811e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 - nu2)**2) - 
+     -  (3.903575094330001e-7*nu1)/(1 + (-3*nu1 + nu2)**2) + 
+     -  (1.30119169811e-7*nu2)/(1 + (-3*nu1 + nu2)**2) + 
+     -  (1.30119169811e-7*be)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) + 
+     -  (3.903575094330001e-7*nu1)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) - 
+     -  (1.30119169811e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 + nu2)**2) - 
+     -  (0.00511355916622*nu1)/(1 + (-2*nu1 + nu2)**2) + 
+     -  (0.00255677958311*nu2)/(1 + (-2*nu1 + nu2)**2) + 
+     -  (0.00255677958311*be)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*nu1)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -  (0.00255677958311*nu2)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -  (0.110662059947*nu1)/(1 + (-nu1 + nu2)**2) + 
+     -  (0.110662059947*nu2)/(1 + (-nu1 + nu2)**2) + 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 + nu2)**2) + 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -  (0.110662059947*nu1)/(1 + (nu1 + nu2)**2) - 
+     -  (0.110662059947*nu2)/(1 + (nu1 + nu2)**2) - 
+     -  (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -  (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -  (0.00511355916622*nu1)/(1 + (2*nu1 + nu2)**2) - 
+     -  (0.00255677958311*nu2)/(1 + (2*nu1 + nu2)**2) - 
+     -  (0.00255677958311*be)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.00511355916622*nu1)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -  (0.00255677958311*nu2)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) - 
+     -  (3.903575094315e-7*nu1)/(1 + (3*nu1 + nu2)**2) - 
+     -  (1.301191698105e-7*nu2)/(1 + (3*nu1 + nu2)**2) - 
+     -  (1.301191698105e-7*be)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (3.903575094315e-7*nu1)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) + 
+     -  (1.301191698105e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 + nu2)**2) - 
+     -  (8.433055974449999e-7*nu1)/(1 + (-3*nu1 + 2*nu2)**2) + 
+     -  (5.6220373163e-7*nu2)/(1 + (-3*nu1 + 2*nu2)**2) + 
+     -  (2.81101865815e-7*be)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) + 
+     -  (8.433055974449999e-7*nu1)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) - 
+     -  (5.6220373163e-7*nu2)/((-1 - al)**2 + (-be - 3*nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*nu1)/(1 + (-nu1 + 2*nu2)**2) + 
+     -  (0.00536315850264*nu2)/(1 + (-nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*be)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*nu1)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  (0.00536315850264*nu2)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*nu1)/(1 + (nu1 + 2*nu2)**2) - 
+     -  (0.00536315850264*nu2)/(1 + (nu1 + 2*nu2)**2) - 
+     -  (0.00268157925132*be)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00268157925132*nu1)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -  (0.00536315850264*nu2)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) - 
+     -  (8.43305597457e-7*nu1)/(1 + (3*nu1 + 2*nu2)**2) - 
+     -  (5.62203731638e-7*nu2)/(1 + (3*nu1 + 2*nu2)**2) - 
+     -  (2.81101865819e-7*be)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  (8.43305597457e-7*nu1)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) + 
+     -  (5.62203731638e-7*nu2)/((-1 - al)**2 + (-be + 3*nu1 + 2*nu2)**2) - 
+     -  (0.00001756386751526*be)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - 
+     -  (0.00003512773503052*nu1)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - \
+
+     -  (0.00003512773503052*nu2)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - \
+
+     -  (0.00001756386751526*be)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -  (0.00003512773503052*nu1)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + \
+
+     -  (0.00003512773503052*nu2)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2)\
+\>", "Output",
+ CellChangeTimes->{3.707564341611043*^9, 3.707564921850713*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"pq3", "=", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"-", "s"}], "]"}], 
+     RowBox[{"Hy", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "nu2"}], " ", "s"}], ",", 
+       RowBox[{
+        RowBox[{"-", "nu1"}], " ", "s"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"al", "+", 
+            RowBox[{"be", " ", "I"}]}], ")"}]}], "s"}], "]"}], "-", "1"}], 
+      ")"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}], ",", " ", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"al", "\[Element]", "Reals"}], ",", 
+       RowBox[{"al", ">", 
+        RowBox[{"-", "1"}]}], ",", 
+       RowBox[{"b", "\[Element]", "Reals"}], ",", 
+       RowBox[{"b", "\[GreaterEqual]", "0"}], ",", 
+       RowBox[{"al", "\[Element]", "Reals"}], ",", 
+       RowBox[{"be", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu1", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu2", "\[Element]", "Reals"}]}], "}"}]}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"pq4", "=", 
+  RowBox[{"Integrate", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"-", "s"}], "]"}], 
+     RowBox[{"Hx", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "nu2"}], " ", "s"}], ",", 
+       RowBox[{
+        RowBox[{"-", "nu1"}], " ", "s"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"al", "+", 
+            RowBox[{"be", " ", "I"}]}], ")"}]}], "s"}], "]"}], "-", "1"}], 
+      ")"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}], ",", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"a", "\[Element]", "Reals"}], ",", 
+       RowBox[{"a", ">", 
+        RowBox[{"-", "1"}]}], ",", 
+       RowBox[{"b", "\[Element]", "Reals"}], ",", 
+       RowBox[{"b", "\[GreaterEqual]", "0"}], ",", 
+       RowBox[{"al", "\[Element]", "Reals"}], ",", 
+       RowBox[{"be", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu1", "\[Element]", "Reals"}], ",", 
+       RowBox[{"nu2", "\[Element]", "Reals"}]}], "}"}]}]}], "]"}]}]}], "Input",\
+
+ CellChangeTimes->{{3.707488044241871*^9, 3.7074880522576857`*^9}, {
+  3.7074886235227337`*^9, 3.7074886250754538`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "2.60238339622`*^-7"}], " ", 
+  RowBox[{"(", 
+   RowBox[{
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.5`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["67.4914677859987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["67.4914677859987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["67.4914677859987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["67.4914677859987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["1.0801708396514693`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["1.0801708396514693`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["1.0801708396360987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["1.0801708396360987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["1.0801708396360987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["1.0801708396360987`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["1.0801708396514693`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+    FractionBox["1.0801708396514693`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+      RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["425233.49982841976`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["67.49146778592184`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["67.49146778592184`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["67.49146778592184`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["67.49146778592184`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+    FractionBox["10304.32047489633`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["9824.761358467624`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.49999999999807865`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.49999999999807865`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+    FractionBox["0.49999999999807865`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+    FractionBox["0.49999999999807865`", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "al", "-", 
+      RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+      RowBox[{"\[ImaginaryI]", " ", 
+       RowBox[{"(", 
+        RowBox[{"nu1", "+", 
+         RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}]], "Output",
+ CellChangeTimes->{3.7074880575228653`*^9, 3.707488114841598*^9, 
+  3.707566007474462*^9}],
+
+Cell[BoxData[
+ RowBox[{"ConditionalExpression", "[", 
+  RowBox[{
+   RowBox[{"0.598083281184`", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585256318`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609181377`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "-", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.5`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["0.04127425932477376`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "-", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["1.4667087603007675`*^-6", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309680416`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "-", 
+      FractionBox["7.050068309780737`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", "nu1"}], "+", 
+        RowBox[{"3", " ", "\[ImaginaryI]", " ", "nu2"}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.1850278438279148`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.00002936692609178033`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"2", " ", "\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "-", 
+      FractionBox["0.002241810911359528`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"2", " ", "nu1"}], "+", "nu2"}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["0.00854991157100547`", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"2", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "-", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "+", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]], "-", 
+      FractionBox["6.526808585231239`*^-7", 
+       RowBox[{
+        RowBox[{"-", "1"}], "-", "al", "-", 
+        RowBox[{"\[ImaginaryI]", " ", "be"}], "+", 
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"(", 
+          RowBox[{"nu1", "+", 
+           RowBox[{"3", " ", "nu2"}]}], ")"}]}]}]]}], ")"}]}], ",", 
+   RowBox[{"al", ">", 
+    RowBox[{"-", "1"}]}]}], "]"}]], "Output",
+ CellChangeTimes->{3.7074880575228653`*^9, 3.707488114841598*^9, 
+  3.707566078299025*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"phat4", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Re", "[", "pq4", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"qhat4", "=", 
+   RowBox[{"ComplexExpand", "[", 
+    RowBox[{"Im", "[", "pq4", "]"}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.707566132207468*^9, 3.707566140103465*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "phat4", "]"}]], "Input",
+ CellChangeTimes->{{3.707566143422823*^9, 3.707566146719472*^9}}],
+
+Cell["\<\
+        ConditionalExpression((0.,0.) + 
+     -   0.00001756386751528/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + 
+     -   (0.00001756386751528*al)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) + \
+
+     -   0.00001756386751528/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + 
+     -   (0.00001756386751528*al)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -   8.77213987902e-7/((-1 - al)**2 + (-be - 3*nu2)**2) + 
+     -   (8.77213987902e-7*al)/((-1 - al)**2 + (-be - 3*nu2)**2) - 
+     -   4.2165279872850006e-7/(1 + (-2*nu1 - 3*nu2)**2) + 
+     -   4.2165279872850006e-7/((-1 - al)**2 + (-be - 2*nu1 - 3*nu2)**2) + 
+     -   (4.2165279872850006e-7*al)/((-1 - al)**2 + (-be - 2*nu1 - 3*nu2)**2) \
+- 
+     -   3.903575094315e-7/(1 + (-nu1 - 3*nu2)**2) + 
+     -   3.903575094315e-7/((-1 - al)**2 + (-be - nu1 - 3*nu2)**2) + 
+     -   (3.903575094315e-7*al)/((-1 - al)**2 + (-be - nu1 - 3*nu2)**2) - 
+     -   3.90357509433e-7/(1 + (nu1 - 3*nu2)**2) + 
+     -   3.90357509433e-7/((-1 - al)**2 + (-be + nu1 - 3*nu2)**2) + 
+     -   (3.90357509433e-7*al)/((-1 - al)**2 + (-be + nu1 - 3*nu2)**2) - 
+     -   4.216527987225e-7/(1 + (2*nu1 - 3*nu2)**2) + 
+     -   4.216527987225e-7/((-1 - al)**2 + (-be + 2*nu1 - 3*nu2)**2) + 
+     -   (4.216527987225e-7*al)/((-1 - al)**2 + (-be + 2*nu1 - 3*nu2)**2) + 
+     -   0.024685444445399995/((-1 - al)**2 + (-be - 2*nu2)**2) + 
+     -   (0.024685444445399995*al)/((-1 - al)**2 + (-be - 2*nu2)**2) - 
+     -   0.00511355916622/(1 + (-nu1 - 2*nu2)**2) + 
+     -   0.00511355916622/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -   (0.00511355916622*al)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -   0.00511355916622/(1 + (nu1 - 2*nu2)**2) + 
+     -   0.00511355916622/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -   (0.00511355916622*al)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -   0.299041640592/((-1 - al)**2 + (-be - nu2)**2) + 
+     -   (0.299041640592*al)/((-1 - al)**2 + (-be - nu2)**2) - 
+     -   0.00134078962566/(1 + (-2*nu1 - nu2)**2) + 
+     -   0.00134078962566/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -   (0.00134078962566*al)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -   0.110662059947/(1 + (-nu1 - nu2)**2) + 
+     -   0.110662059947/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -   (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -   0.110662059947/(1 + (nu1 - nu2)**2) - 
+     -   0.00003512773503056/(1 + 4*(nu1 - nu2)**2) + 
+     -   0.110662059947/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -   (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -   0.00134078962566/(1 + (2*nu1 - nu2)**2) + 
+     -   0.00134078962566/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -   (0.00134078962566*al)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -   0.598083281184/(1 + nu2**2) - 0.04937088889079999/(1 + 4*nu2**2) - 
+     -   1.754427975804e-6/(1 + 9*nu2**2) + 
+     -   0.299041640592/((-1 - al)**2 + (-be + nu2)**2) + 
+     -   (0.299041640592*al)/((-1 - al)**2 + (-be + nu2)**2) - 
+     -   0.00134078962566/(1 + (-2*nu1 + nu2)**2) + 
+     -   0.00134078962566/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -   (0.00134078962566*al)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -   0.110662059947/(1 + (-nu1 + nu2)**2) + 
+     -   0.110662059947/((-1 - al)**2 + (-be - nu1 + nu2)**2) + 
+     -   (0.110662059947*al)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -   0.110662059947/(1 + (nu1 + nu2)**2) - 
+     -   0.00003512773503052/(1 + 4*(nu1 + nu2)**2) + 
+     -   0.110662059947/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -   (0.110662059947*al)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -   0.00134078962566/(1 + (2*nu1 + nu2)**2) + 
+     -   0.00134078962566/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -   (0.00134078962566*al)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -   0.024685444445399995/((-1 - al)**2 + (-be + 2*nu2)**2) + 
+     -   (0.024685444445399995*al)/((-1 - al)**2 + (-be + 2*nu2)**2) - 
+     -   0.00511355916622/(1 + (-nu1 + 2*nu2)**2) + 
+     -   0.00511355916622/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) + 
+     -   (0.00511355916622*al)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -   0.00511355916622/(1 + (nu1 + 2*nu2)**2) + 
+     -   0.00511355916622/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -   (0.00511355916622*al)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -   8.77213987902e-7/((-1 - al)**2 + (-be + 3*nu2)**2) + 
+     -   (8.77213987902e-7*al)/((-1 - al)**2 + (-be + 3*nu2)**2) - 
+     -   4.216527987225e-7/(1 + (-2*nu1 + 3*nu2)**2) + 
+     -   4.216527987225e-7/((-1 - al)**2 + (-be - 2*nu1 + 3*nu2)**2) + 
+     -   (4.216527987225e-7*al)/((-1 - al)**2 + (-be - 2*nu1 + 3*nu2)**2) - 
+     -   3.90357509433e-7/(1 + (-nu1 + 3*nu2)**2) + 
+     -   3.90357509433e-7/((-1 - al)**2 + (-be - nu1 + 3*nu2)**2) + 
+     -   (3.90357509433e-7*al)/((-1 - al)**2 + (-be - nu1 + 3*nu2)**2) - 
+     -   3.903575094315e-7/(1 + (nu1 + 3*nu2)**2) + 
+     -   3.903575094315e-7/((-1 - al)**2 + (-be + nu1 + 3*nu2)**2) + 
+     -   (3.903575094315e-7*al)/((-1 - al)**2 + (-be + nu1 + 3*nu2)**2) - 
+     -   4.2165279872850006e-7/(1 + (2*nu1 + 3*nu2)**2) + 
+     -   4.2165279872850006e-7/((-1 - al)**2 + (-be + 2*nu1 + 3*nu2)**2) + 
+     -   (4.2165279872850006e-7*al)/((-1 - al)**2 + (-be + 2*nu1 + 3*nu2)**2) \
++ 
+     -   0.00001756386751526/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + 
+     -   (0.00001756386751526*al)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) + \
+
+     -   0.00001756386751526/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -   (0.00001756386751526*al)/((-1 - al)**2 + (-be + 2*(nu1 + \
+nu2))**2),al.gt.-1)\
+\>", "Output",
+ CellChangeTimes->{3.7075661471038647`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FortranForm", "[", "qhat4", "]"}]], "Input",
+ CellChangeTimes->{{3.707566175663376*^9, 3.707566176240019*^9}}],
+
+Cell["\<\
+        ConditionalExpression((0.,0.) - 
+     -   (0.00001756386751528*be)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - \
+
+     -   (0.00003512773503056*nu1)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - 
+     -   (0.00001756386751528*be)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) + \
+
+     -   (0.00003512773503056*nu1)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -   (8.77213987902e-7*be)/((-1 - al)**2 + (-be - 3*nu2)**2) + 
+     -   (8.433055974570001e-7*nu1)/(1 + (-2*nu1 - 3*nu2)**2) - 
+     -   (4.2165279872850006e-7*be)/((-1 - al)**2 + (-be - 2*nu1 - 3*nu2)**2) \
+- 
+     -   (8.433055974570001e-7*nu1)/((-1 - al)**2 + (-be - 2*nu1 - 3*nu2)**2) \
++ 
+     -   (3.903575094315e-7*nu1)/(1 + (-nu1 - 3*nu2)**2) - 
+     -   (3.903575094315e-7*be)/((-1 - al)**2 + (-be - nu1 - 3*nu2)**2) - 
+     -   (3.903575094315e-7*nu1)/((-1 - al)**2 + (-be - nu1 - 3*nu2)**2) - 
+     -   (3.90357509433e-7*nu1)/(1 + (nu1 - 3*nu2)**2) - 
+     -   (3.90357509433e-7*be)/((-1 - al)**2 + (-be + nu1 - 3*nu2)**2) + 
+     -   (3.90357509433e-7*nu1)/((-1 - al)**2 + (-be + nu1 - 3*nu2)**2) - 
+     -   (8.43305597445e-7*nu1)/(1 + (2*nu1 - 3*nu2)**2) - 
+     -   (4.216527987225e-7*be)/((-1 - al)**2 + (-be + 2*nu1 - 3*nu2)**2) + 
+     -   (8.43305597445e-7*nu1)/((-1 - al)**2 + (-be + 2*nu1 - 3*nu2)**2) - 
+     -   (0.024685444445399995*be)/((-1 - al)**2 + (-be - 2*nu2)**2) + 
+     -   (0.00511355916622*nu1)/(1 + (-nu1 - 2*nu2)**2) - 
+     -   (0.00511355916622*be)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -   (0.00511355916622*nu1)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) - 
+     -   (0.00511355916622*nu1)/(1 + (nu1 - 2*nu2)**2) - 
+     -   (0.00511355916622*be)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) + 
+     -   (0.00511355916622*nu1)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -   (0.299041640592*be)/((-1 - al)**2 + (-be - nu2)**2) + 
+     -   (0.00268157925132*nu1)/(1 + (-2*nu1 - nu2)**2) - 
+     -   (0.00134078962566*be)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) - 
+     -   (0.00268157925132*nu1)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -   (0.110662059947*nu1)/(1 + (-nu1 - nu2)**2) - 
+     -   (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -   (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 - nu2)**2) - 
+     -   (0.110662059947*nu1)/(1 + (nu1 - nu2)**2) - 
+     -   (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -   (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 - nu2)**2) - 
+     -   (0.00268157925132*nu1)/(1 + (2*nu1 - nu2)**2) - 
+     -   (0.00134078962566*be)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -   (0.00268157925132*nu1)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) + 
+     -   (0.00003512773503056*nu2)/((-1 - al)**2 + (-be - 2*(nu1 - nu2))**2) - 
+     -   (0.00003512773503056*nu2)/((-1 - al)**2 + (-be + 2*(nu1 - nu2))**2) - 
+     -   (2.631641963706e-6*nu2)/((-1 - al)**2 + (-be - 3*nu2)**2) + 
+     -   (1.2649583961855002e-6*nu2)/(1 + (-2*nu1 - 3*nu2)**2) - 
+     -   (1.2649583961855002e-6*nu2)/((-1 - al)**2 + (-be - 2*nu1 - \
+3*nu2)**2) + 
+     -   (1.1710725282945002e-6*nu2)/(1 + (-nu1 - 3*nu2)**2) - 
+     -   (1.1710725282945002e-6*nu2)/((-1 - al)**2 + (-be - nu1 - 3*nu2)**2) + 
+     -   (1.171072528299e-6*nu2)/(1 + (nu1 - 3*nu2)**2) - 
+     -   (1.171072528299e-6*nu2)/((-1 - al)**2 + (-be + nu1 - 3*nu2)**2) + 
+     -   (1.2649583961675002e-6*nu2)/(1 + (2*nu1 - 3*nu2)**2) - 
+     -   (1.2649583961675002e-6*nu2)/((-1 - al)**2 + (-be + 2*nu1 - \
+3*nu2)**2) - 
+     -   (0.04937088889079999*nu2)/((-1 - al)**2 + (-be - 2*nu2)**2) + 
+     -   (0.01022711833244*nu2)/(1 + (-nu1 - 2*nu2)**2) - 
+     -   (0.01022711833244*nu2)/((-1 - al)**2 + (-be - nu1 - 2*nu2)**2) + 
+     -   (0.01022711833244*nu2)/(1 + (nu1 - 2*nu2)**2) - 
+     -   (0.01022711833244*nu2)/((-1 - al)**2 + (-be + nu1 - 2*nu2)**2) - 
+     -   (0.299041640592*nu2)/((-1 - al)**2 + (-be - nu2)**2) + 
+     -   (0.00134078962566*nu2)/(1 + (-2*nu1 - nu2)**2) - 
+     -   (0.00134078962566*nu2)/((-1 - al)**2 + (-be - 2*nu1 - nu2)**2) + 
+     -   (0.110662059947*nu2)/(1 + (-nu1 - nu2)**2) - 
+     -   (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 - nu2)**2) + 
+     -   (0.110662059947*nu2)/(1 + (nu1 - nu2)**2) - 
+     -   (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 - nu2)**2) + 
+     -   (0.00134078962566*nu2)/(1 + (2*nu1 - nu2)**2) - 
+     -   (0.00134078962566*nu2)/((-1 - al)**2 + (-be + 2*nu1 - nu2)**2) - 
+     -   (0.299041640592*be)/((-1 - al)**2 + (-be + nu2)**2) + 
+     -   (0.299041640592*nu2)/((-1 - al)**2 + (-be + nu2)**2) + 
+     -   (0.00268157925132*nu1)/(1 + (-2*nu1 + nu2)**2) - 
+     -   (0.00134078962566*nu2)/(1 + (-2*nu1 + nu2)**2) - 
+     -   (0.00134078962566*be)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) - 
+     -   (0.00268157925132*nu1)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -   (0.00134078962566*nu2)/((-1 - al)**2 + (-be - 2*nu1 + nu2)**2) + 
+     -   (0.110662059947*nu1)/(1 + (-nu1 + nu2)**2) - 
+     -   (0.110662059947*nu2)/(1 + (-nu1 + nu2)**2) - 
+     -   (0.110662059947*be)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -   (0.110662059947*nu1)/((-1 - al)**2 + (-be - nu1 + nu2)**2) + 
+     -   (0.110662059947*nu2)/((-1 - al)**2 + (-be - nu1 + nu2)**2) - 
+     -   (0.110662059947*nu1)/(1 + (nu1 + nu2)**2) - 
+     -   (0.110662059947*nu2)/(1 + (nu1 + nu2)**2) - 
+     -   (0.110662059947*be)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -   (0.110662059947*nu1)/((-1 - al)**2 + (-be + nu1 + nu2)**2) + 
+     -   (0.110662059947*nu2)/((-1 - al)**2 + (-be + nu1 + nu2)**2) - 
+     -   (0.00268157925132*nu1)/(1 + (2*nu1 + nu2)**2) - 
+     -   (0.00134078962566*nu2)/(1 + (2*nu1 + nu2)**2) - 
+     -   (0.00134078962566*be)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -   (0.00268157925132*nu1)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) + 
+     -   (0.00134078962566*nu2)/((-1 - al)**2 + (-be + 2*nu1 + nu2)**2) - 
+     -   (0.024685444445399995*be)/((-1 - al)**2 + (-be + 2*nu2)**2) + 
+     -   (0.04937088889079999*nu2)/((-1 - al)**2 + (-be + 2*nu2)**2) + 
+     -   (0.00511355916622*nu1)/(1 + (-nu1 + 2*nu2)**2) - 
+     -   (0.01022711833244*nu2)/(1 + (-nu1 + 2*nu2)**2) - 
+     -   (0.00511355916622*be)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -   (0.00511355916622*nu1)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) + 
+     -   (0.01022711833244*nu2)/((-1 - al)**2 + (-be - nu1 + 2*nu2)**2) - 
+     -   (0.00511355916622*nu1)/(1 + (nu1 + 2*nu2)**2) - 
+     -   (0.01022711833244*nu2)/(1 + (nu1 + 2*nu2)**2) - 
+     -   (0.00511355916622*be)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -   (0.00511355916622*nu1)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) + 
+     -   (0.01022711833244*nu2)/((-1 - al)**2 + (-be + nu1 + 2*nu2)**2) - 
+     -   (8.77213987902e-7*be)/((-1 - al)**2 + (-be + 3*nu2)**2) + 
+     -   (2.631641963706e-6*nu2)/((-1 - al)**2 + (-be + 3*nu2)**2) + 
+     -   (8.43305597445e-7*nu1)/(1 + (-2*nu1 + 3*nu2)**2) - 
+     -   (1.2649583961675002e-6*nu2)/(1 + (-2*nu1 + 3*nu2)**2) - 
+     -   (4.216527987225e-7*be)/((-1 - al)**2 + (-be - 2*nu1 + 3*nu2)**2) - 
+     -   (8.43305597445e-7*nu1)/((-1 - al)**2 + (-be - 2*nu1 + 3*nu2)**2) + 
+     -   (1.2649583961675002e-6*nu2)/((-1 - al)**2 + (-be - 2*nu1 + \
+3*nu2)**2) + 
+     -   (3.90357509433e-7*nu1)/(1 + (-nu1 + 3*nu2)**2) - 
+     -   (1.171072528299e-6*nu2)/(1 + (-nu1 + 3*nu2)**2) - 
+     -   (3.90357509433e-7*be)/((-1 - al)**2 + (-be - nu1 + 3*nu2)**2) - 
+     -   (3.90357509433e-7*nu1)/((-1 - al)**2 + (-be - nu1 + 3*nu2)**2) + 
+     -   (1.171072528299e-6*nu2)/((-1 - al)**2 + (-be - nu1 + 3*nu2)**2) - 
+     -   (3.903575094315e-7*nu1)/(1 + (nu1 + 3*nu2)**2) - 
+     -   (1.1710725282945002e-6*nu2)/(1 + (nu1 + 3*nu2)**2) - 
+     -   (3.903575094315e-7*be)/((-1 - al)**2 + (-be + nu1 + 3*nu2)**2) + 
+     -   (3.903575094315e-7*nu1)/((-1 - al)**2 + (-be + nu1 + 3*nu2)**2) + 
+     -   (1.1710725282945002e-6*nu2)/((-1 - al)**2 + (-be + nu1 + 3*nu2)**2) - 
+     -   (8.433055974570001e-7*nu1)/(1 + (2*nu1 + 3*nu2)**2) - 
+     -   (1.2649583961855002e-6*nu2)/(1 + (2*nu1 + 3*nu2)**2) - 
+     -   (4.2165279872850006e-7*be)/((-1 - al)**2 + (-be + 2*nu1 + 3*nu2)**2) \
++ 
+     -   (8.433055974570001e-7*nu1)/((-1 - al)**2 + (-be + 2*nu1 + 3*nu2)**2) \
++ 
+     -   (1.2649583961855002e-6*nu2)/((-1 - al)**2 + (-be + 2*nu1 + \
+3*nu2)**2) - 
+     -   (0.00001756386751526*be)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - \
+
+     -   (0.00003512773503052*nu1)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - 
+     -   (0.00003512773503052*nu2)/((-1 - al)**2 + (-be - 2*(nu1 + nu2))**2) - 
+     -   (0.00001756386751526*be)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + \
+
+     -   (0.00003512773503052*nu1)/((-1 - al)**2 + (-be + 2*(nu1 + nu2))**2) + 
+     -   (0.00003512773503052*nu2)/((-1 - al)**2 + (-be + 2*(nu1 + \
+nu2))**2),al.gt.-1)\
+\>", "Output",
+ CellChangeTimes->{3.707566176497756*^9}]
+}, Open  ]]
+},
+WindowSize->{924, 906},
+WindowMargins->{{Automatic, 308}, {452, Automatic}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 101, 1, 31, "Text"],
+Cell[662, 23, 1255, 36, 99, "Input"],
+Cell[1920, 61, 2224, 72, 99, "Input"],
+Cell[4147, 135, 1121, 37, 77, "Input"],
+Cell[CellGroupData[{
+Cell[5293, 176, 238, 5, 32, "Input"],
+Cell[5534, 183, 1209, 20, 302, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6780, 208, 187, 4, 32, "Input"],
+Cell[6970, 214, 1165, 20, 302, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8172, 239, 2274, 69, 99, "Input"],
+Cell[10449, 310, 14060, 371, 851, "Output"],
+Cell[24512, 683, 11852, 318, 724, "Output"]
+}, Open  ]],
+Cell[36379, 1004, 92, 1, 32, "Input"],
+Cell[36474, 1007, 14817, 373, 1080, "Input"],
+Cell[51294, 1382, 12528, 321, 906, "Input"],
+Cell[63825, 1705, 1048, 23, 99, "Input"],
+Cell[CellGroupData[{
+Cell[64898, 1732, 136, 2, 32, "Input"],
+Cell[65037, 1736, 5694, 88, 1540, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[70768, 1829, 136, 2, 32, "Input"],
+Cell[70907, 1833, 8678, 140, 2260, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[79622, 1978, 133, 2, 32, "Input"],
+Cell[79758, 1982, 4642, 73, 1288, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[84437, 2060, 134, 2, 32, "Input"],
+Cell[84574, 2064, 7774, 122, 2044, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[92385, 2191, 2493, 74, 143, "Input"],
+Cell[94881, 2267, 11919, 326, 699, "Output"],
+Cell[106803, 2595, 15041, 383, 885, "Output"]
+}, Open  ]],
+Cell[121859, 2981, 359, 9, 55, "Input"],
+Cell[CellGroupData[{
+Cell[122243, 2994, 134, 2, 32, "Input"],
+Cell[122380, 2998, 5687, 93, 1558, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[128104, 3096, 134, 2, 65, "Input"],
+Cell[128241, 3100, 8797, 140, 2278, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -1,0 +1,22 @@
+# one-d stupid bump
+# k(x)=a0+a1*cos(x)
+# all done in xpp so it will be SLOW
+# u' = -u + K*f(u) - eps*gz*z  -eps*amp*cos(x)
+# z' = eps*(-z+u)/tau
+#  a0 int(f) + a1*cos(x) int(f *cos) + a1*sin(x)*int(f*sin)
+!dx=2*pi/100
+table cx % 100 -50 49 cos(2*pi*t/100)
+table sx % 100 -50 49 sin(2*pi*t/100)
+f(u)=1/(1+exp(-beta*(u-uth)))
+par beta=30,uth=.5
+par a0=-.25,a1=1
+fu[0..99]=f(u[j])
+f0=sum(0,99)of(shift(fu0,i'))*dx
+fc=sum(0,99)of(shift(fu0,i')*cx(i'))*dx
+fs=sum(0,99)of(shift(fu0,i')*sx(i'))*dx
+u[0..99]'=-u[j]+a0*f0+a1*cx([j])*fc+a1*sx([j])*fs-eps*gz*z[j]-eps*amp*cx([j])
+z[0..99]'=eps*(u[j]-z[j])/tau
+par amp=0,gz=0,tau=1,eps=.02
+init u[0..20]=1
+@ total=200
+d

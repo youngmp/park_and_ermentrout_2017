@@ -1,0 +1,31 @@
+# this uses the external DLL stuff to solve the wave existence equations
+# nu1'=-nu1+G(nu1,nu2)
+
+
+nu1'=-nu1+g*G1
+nu2'=-nu2+g*G2
+
+G1=0
+G2=0
+
+init nu1=1,nu2=0
+
+par g=1
+
+export {nu1,nu2} {G1,G2}
+
+@ dll_lib=f2d.so,dll_fun=getg
+@ total=1
+@ xp=nu1,yp=nu2
+@ xlo=-4,xhi=4
+@ ylo=-4,yhi=4
+@ nmesh=40
+
+done
+
+# in ubuntu 14.04, 32 bit, the following command worked to compile
+# gcc -fPIC -shared -march=i386 f2d.c -o f2d.so -lm -Ofast -floop-nest-optimize -funroll-loops
+
+# note that as of feb 14, 2017 only the 32 bit compiled version is recognized by xpp. trying to call twodfull64.so after compiling returns the error "Cant find the library"
+# 
+

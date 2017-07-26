@@ -1,0 +1,58 @@
+\documentclass{article}
+\begin{document}
+We widh to analyze the bifurcation to breathing pulses for the general integral equation:
+\begin{equation}
+\label{eq:th}
+\frac{d\theta}{d\tau} = -q J(\theta) - g \int_0^\infty e^{-s} H(\theta(\tau-s)-\theta(\tau))\ ds
+\end{equation}
+as $g$ increases.  For simplicity, we will assume $J(\theta)$ is an odd periodic function (as is the case for $H(\theta)$ and through suitable rescaling of $g,q$, we will assume:
+\begin{eqnarray*}
+J(\theta) &=& \theta + j_3 \theta^3 + \ldots \\
+H(\theta) &=& \theta + h_3 \theta^3 + \ldots.
+\end{eqnarray*}
+If, we use $H(\theta)=J(\theta)=\sin(\theta)$, then $j_3=h_3=-(1/6).$ The linearization about $\theta=0$ has the form:
+\[
+\theta_\tau = -q \theta - g \int_0^\infty e^{-s} (\theta(\tau-s)-\theta(\tau))\ ds
+\]
+which has the general solution, $e^{\lambda \tau}$. After soe simplification, we find that 
+\[
+\lambda^2 +(1+q-g)\lambda+ q=0
+\]
+so there is an imaginary eigenvalue, $i\sqrt{q}:=i\omega$ when $g=1+q\equiv g_0$, so we expect a Hopf bifurcation will occur.  To analyze this, we will use a multiple time scale expansion.  We will assume that $\theta(\tau)$ is a function of a ``fast'' time $\zeta=\tau$ and a ``slow'' time $\xi=\delta^2\tau$ where $\delta$ measures the amplitude of the bifurcating solution. As the nonlinearities are all odd, we can assume that 
+\[
+g= g_0 + \delta^2 g_2, \qquad \theta = \delta \theta_1(\zeta,\xi) + \delta^3 \theta_3(\zeta,xi)
+\]
+to order $\delta^3$. We will develop a perturbation expansion to obtain the normal form. Before continuing, we need to briefly describe how the integral equation gets expanded in multiple scales. If $f(\zeta,\xi)$ is a function of the fast and slow time-like variable, then, clearly
+\[
+\frac{df}{d\tau} = \frac{\partial f}{\partial \zeta} + \delta^2 \frac{\partial f}{\partial \xi} 
+\]
+and 
+\[
+\int_0^\infty e^{-s} f(\tau-s) \ ds =  \int_0^\infty e^{-s} f(\zeta-s,\xi - \delta^2 s) \ ds.
+\]
+We expand this expression to order $\delta^2$ to get:
+\begin{equation}
+\label{eq:slowint}
+ \int_0^\infty e^{-s} f(\tau-s) \ ds \approx \int_0^\infty e^{-s} f(\zeta-s,\xi) \ ds  - \delta^2 \int_0^\infty s e^{-s} \frac{\partial f(\zeta-s,\xi)}{\partial \xi} \ ds.
+\end{equation}
+Let 
+\[
+(L u)(\zeta):= \frac{\partial u}{\partial \zeta} + q u + g_0 \int_0^\infty e^{-s} [u(\zeta-s)-u(\zeta)] \ ds.
+\]
+By our choice of $g_0$, $L$ has a nullspace $e^{\pm i\omega\zeta}$ and since it is a scalar, so does the adjoint operator under the usual inner product
+\[
+\langle u,v\rangle:= \int_0^{2\pi/\omega} \bar{u}(s)v(s)\ ds.
+\]  
+We plug in all the expansions and find to first order that
+\[
+\theta_1 = z(\xi) e^{i\omega \zeta} + c.c
+\]
+where $z(\xi)$ is a complex function of $\xi$ and c.c means complex conjugates.  Our goal is to derive equations for $z$.  To the cubic order, we obtain:
+\begin{eqnarray*}
+(L \theta_3)(\zeta)&=&  z_\xi e^{i\omega\zeta}\left(-1 + \frac{g_0}{1 + 2 i \omega -\omega^2}\right) + c.c\\
+{} &+&  g_2 z e^{i\omega\zeta}\frac{i\omega}{1+i\omega} + c.c \\
+{} &+&  -q j_3 \left[ z e^{i\omega \zeta} + \bar{z}e^{-i\omega\zeta}\right]^3  \\
+{} &+& -g h_3 \int_0^\infty} \left[z(\xi)e^{i\omega\zeta}(e^{-i\omega s}-1) + \bar{z}(\xi)e^{-i\omega\zeta}(e^{i\omega s}-1)\right]^3 \ ds.
+\end{eqnarray*}  
+
+\end{document}

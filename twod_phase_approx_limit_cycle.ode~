@@ -1,0 +1,20 @@
+# get parameters of the 2d phase approximation limit cycles
+# look at intersections of nullclines of the system of equations
+# resulting from the constant radius, constant angular velocity assumption
+# see log_youngmin2.pdf, eq (54),(65)
+
+M(r,nu)=(sum(0,500)of(exp(-(r^2)*(1-2*cos(nu*i'*ds))-i'*ds)*(cos(nu*i'*ds)-1)))*ds
+N(r,nu)=(sum(0,500)of(exp(-(r^2)*(1-2*cos(nu*i'*ds))-i'*ds)*sin(nu*i'*ds)))*ds
+
+
+# stability doesn't matter. Intersections are all we care about.
+r'=g*exp(-r^2)*N(r,nu)-nu
+nu'=g*M(r,nu)+q
+
+
+
+p ds=.05
+p g=3,q=1
+
+@ dt=.01
+d

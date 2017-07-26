@@ -1,0 +1,145 @@
+"""
+Itskov et al 2011
+
+TODO put in boundary conditions
+"""
+
+import matplotlib.pylab as mp
+import numpy as np;pi=np.pi;sin=np.sin;cos=np.cos
+import scipy as sp
+import time
+
+from scipy.integrate import odeint
+from euler import *
+
+# anim
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+np.random.seed(10000)
+
+def phi(d,j0=-0.6,j1=1.):
+    beta = 1
+    nL = np.arange(0,5,1)
+    mL = np.arange(0,5,1)
+    pi = np.pi
+    tot = 0
+    #for n in nL:
+    #    tot += np.sum(np.exp(-(n *pi/(2*pi))**2)*np.exp(-(mL*pi/(2*pi))**2)*np.cos(n*d)*np.cos(mL*d))
+    #return j0 + j1*tot
+    #return j0 + j1*np.exp(-beta*d/np.sqrt(2))
+    #return j0 + j1*np.exp(-beta*d/np.sqrt(2))
+    return j0 + j1*np.cos(d/np.sqrt(2))
+
+def num2coord(k,N):
+    """
+    return coordinate index pair given cell number
+    I'm using the natural ordering starting from the bottom left
+    N is the side length
+    """
+    x_idx = k%N
+    y_idx = int(np.floor((k+0.5)/N))
+    return (x_idx,y_idx)
+
+def coord2num(i,j,N):
+    """
+    return number given coordinate
+    start indices at 0
+    """
+    return (i+1)+N*j
+
+def reshape2(M):
+    """
+    find built-in for this purpose.
+    takes natural indexing into matrix.
+    (0 bottom left, -1 top right, left to right)
+    """
+    rN = int(np.sqrt(len(M))) # of rows
+    out = np.zeros((rN,rN))
+    k = 0
+    for i in range(rN):
+        for j in range(rN):
+            out[rN-i-1,j]=M[k]
+            k += 1
+    return out
+
+
+def rhs(vec,t,N,I,J,c,taum,taua):
+    dx=np.zeros(N);dh=np.zeros(N)
+    x=vec[:N];h=vec[N:]
+
+    dx = (-x + np.maximum(0,np.dot(J,x)+I-h))/taum
+    dh = (-h + c*x)/taua
+    
+    return np.append(dx,dh)
+    
+
+def main():
+    taua=2000.;taum=20.
+    eps=0.5;c=.5
+    rN=cN=10
+    N = rN**2
+    
+    x = np.linspace(0,2*np.pi,rN)
+    y = np.linspace(0,2*np.pi,rN)
+
+    J = np.zeros((N,N))
+
+    for i in range(N):
+        for j in range(N):
+            # take distance from neuron i to neuron j
+            # on the torus
+            ix,iy = num2coord(i,rN) # get torus coordinates
+            jx,jy = num2coord(j,rN)
+
+            d = np.sqrt((x[ix]-x[jx])**2 +\
+                        (y[iy]-y[jy])**2) # distance on torus
+
+            J0ij = phi(d)*4*(np.pi**2)/N
+
+            # add heterogeneity
+            Jhetij = ( eps/np.sqrt(N) )*np.random.normal(0,1)
+            J[i,j] = J0ij + Jhetij # coupling matrix
+    mp.matshow(J)
+    mp.show()
+    # add initial conditions
+    x0=np.zeros(2*N) + np.random.normal(0,1,2*N)
+    dt=.1;T=40000;t=np.linspace(0,T,int(T/dt))
+    
+    #sol = odeint(rhs,x0,t,args=(N,I,J,c,taum,taua))
+    sol = np.zeros((len(t),len(x0)))
+    sol2 = np.zeros(len(x0)))
+    sol[0,:] = x0
+    s=0
+    """
+    for i in range(len(t)-1):
+        I = 1+np.random.normal(0,1,N)
+        sol[i+1,:] += sol[i,:] + dt*rhs(sol[i,:],s,N,I,J,c,taum,taua)
+        s += dt
+    """
+    while True:
+        I = 1+np.random.normal(0,1,N)
+        sol[i+1,:] += sol[i,:] + dt*rhs(sol[i,:],s,N,I,J,c,taum,taua)
+        s += dt
+    
+    # PLOT
+    fig = plt.figure()
+    fig2 = plt.figure()
+    plt.ion()
+    plt.show()
+    g1 = fig.add_subplot(111)
+    g2 = fig2.add_subplot(111)
+    for i in range(len(t)):
+        k = i*300
+        #Ln.set_data(np.reshape(sol[i,:N],(rN,rN)))
+        g1.matshow(reshape2(sol[k,:N]))
+        g2.matshow(reshape2(sol[k,N:]))
+        plt.pause(.001)
+        print t[k], 'of max t =',t[-1]
+        g1.clear()
+        g2.clear()
+        
+
+if __name__ == "__main__":
+    main()
+    

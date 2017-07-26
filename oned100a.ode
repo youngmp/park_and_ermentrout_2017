@@ -1,0 +1,15 @@
+k(x)=(1-x^2/sig^2)*exp(-x^2/(2*sig^2))
+par dx=.062830,sig=1.2
+table w % 101 -50 50 k(t*dx)*dx
+f(u)=1/(1+exp(-shp*(u-thr)))
+f[0..100]=f(u[j])
+par shp=25,thr=.25
+special wf=conv(periodic,101,50,w,f0)
+u[0..100]'=-u[j]+wf([j])*amp-g*z[j]
+z[0..100]'=(-z[j]+u[j])/tau
+par g=0.05,tau=50
+u[0..100](0)=heav([j]-40)*heav(60-[j])
+z[0..100](0)=ran(1)*.05
+@ total=200
+par amp=5
+d

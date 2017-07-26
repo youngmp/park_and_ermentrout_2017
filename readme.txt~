@@ -1,0 +1,392 @@
+Table of Contents:
+
+Search the following headers to go to that section
+### FILES/DIRECTORIES
+### twod_full.py
+### twod_phase.py
+### oned_simple.py
+### create poincare map chaos figure
+
+
+### FILES/DIRECTORIES
+
+*.nb files
+	1d_normal_file.nb: normal form calculation for Hopf on the ring
+	2d_fourier.nb: integral calculations using the accurate Fourier series
+	2d_fourier3_existence.nb,2d_truc_fourier.nb: traveling bump existence calculations using truncated Fourier series
+	2d_fourier3_general_stability.nb: evans function calcs, truncated Fourier series
+	2d_fourier3_stability.nb,2d_stability_trunc.nb: stability of traveling bumps with trunc. Fourier
+	2d_stability: stability calculations using accurate Fourier series
+	evans.nb: evans function calculations for truncated phase model
+	evans_full.nb: evans function for accurate fourier series phase model
+
+
+*.ode files
+	
+	1d.ode: 1d equivalent phase model (cosine kernel)
+	1dphs.ode: another 1d equivalent phase model (cosine kernel)
+
+	bc.ode: ? some kind of testing
+	bump.ode: example bump solution with cosine kernel with pinning.
+
+	evans.ode: nullclines are zeros of evans function for truncated phase model
+	evans_full.ode: nullclines are zeros of evans function for accurate phase model
+
+	for.ode: ? testing
+
+	full2dbump*.ode*: truncated twod neural field model.
+
+	numerical_bard_sep.ode: 1d equivalent model that simulates coefficients a1, a2, a3 (cosine kernel)
+	numerical_bard.ode: full 1d neural field model with convolution (cosine kernel)	
+	numerical_bard_simple.ode: same as numerical_bard.ode but without the convolution
+
+	n1n2.ode:?
+
+	oned30.ode: example bump solution with gaussian kernel, no pinning or adaptation.
+	oned100.ode: similar to oned30.ode but with discretization of 100.
+	onedfc.ode: similar to oned100.ode but with cosine kernel and adaptation.
+	oned100a.ode : same as onedfc.ode but with gaussian kernel.	
+	one-d.ode: same as numerical_bard_simple.ode.
+
+	twod_phase_approx_limit_cycle.ode: theoretical prediction of limit cycle amplitude and angular velocity in 2d phase model.
+
+	twodphs3.ode: truncated phase model on torus
+
+	twod_trunc.ode: equilibria show existence of constant velocity traveling bump solutions in the truncated phase model.
+	twod_wave_exist.ode: wave existence brute force integrals on full fourier series
+	twod_wave_exist_simple.ode: same as above, but with the fourier series fully integrated
+	twod_wave_stbl.ode: evans function for full phase model, axial directions
+	
+
+*.set files
+      1dphs.coolchaos.set: chaos in 1d phase model
+      1dphs.ode.set: ? possibly default parameter sets for generating bifurcation diagram
+      oned100a.jic.set: ? 
+
+*.py files
+	adaptation_demo_2d_wave_stbl.py: demonstration of axial bump solution stability. generates movie frames.
+	plot.py: generic plotting function for data in its directory. uncalled by other scripts
+	oned_full_kernel_matrix.py: oned full model with cosine kernel with full matrix mult instead of conv
+	itskov_bump.py: itskov et al 2011 threshold model with adaptation
+	generate_figures.py: figure generation file for paper
+	generate_presentation_figures.py: figure generation for presentations
+	lib.py: library functions used by multiple scripts
+	mexican_hat.py: playground function for mexican hat stuff (getting fourier coefficients).
+	twod_full.py,twod_phase.py: twod full and phase neural field models with full gaussian kernel and approx kernel (-(deriv gaussian)).
+	oned_full.py: oned neural field with gaussian kernel.
+	euler.py: straightforward euler scheme for solving ODEs.
+	oned_simple.py: oned neural field with cosine kernel1
+
+
+*.dat files
+	bif_full_a1_q0.5_gvary1.dat: hopf bifurcation + branches in the equivalent 1d full model for parameter a1
+	bif_full_a1_q0.5_gvary1_hopf.dat: hopf bifurcation in the equivalent 1d full model (parameter a1)
+	bif_full_a2_a0.5_gvary1_hopf.dat,
+		bif_full_a2_q0.5_gvary2.dat,
+		bif_full_a2_q0.5_gvary2b.dat: hopf bifurcation in the equivalent 1d full model (parameter a2)
+
+	bif_full_a2_gq_hb.dat: two parameter hopf in 1d full model
+	bif_full_a2_gq_lp2.dat: two parameter limit point in 1d full model
+	bif_full_q2_a0.5_gvary1_hopf_branch.dat: a2 bifurcations
+
+	bif_full_a3_gq_hb.dat: a3 hopf
+	bif_full_a3_q0.5_gvary1.dat,
+		bif_full_a3_q0.5_gvary1_hopf_branch.dat,
+		bif_full_a3_q0.5_gvary2.dat,
+		bif_full_a3_q0.5_gvary2b.dat: a3 bifurcations
+
+      bif_q0.5_gvary*.dat: branches of phase bifurcation diagram. fixed q=0.5, vary g=0 to g=5.
+      bif_q1_gvary*.dat: branches of phase bifurcation diagram. fixed q=1, vary g=0 to g=5.
+
+      bif_gq_hb.dat: two parameter bifurcation diagram for hopf (phase model).
+      bif_gq_lp.dat: two parameter bifurcation diagram for limit point (phase model).
+      bif_gq_lp_large.dat: two param. bif. diag. for other limit point (phase model).
+      bif_gq_lp_travel.dat: two param. bif. diag. for existence of traveling bump (phase model).
+      bif_gq_bp.dat: two param. bif. diag. branch point (phase model).
+      bif_gq_bp2.dat: two param. bif. diag. other branch point (phase model).
+
+      bif_full_*.dat corresponding two param bifurcation diagram for the equivalent full model.
+      chaos_simple.dat: chaotic solution in the 1d neural field with fully separated kernel. parameters unknown.
+      
+      chaos_simple1.dat: chaotic solution in the 1d neural field model, zshift = .01, g=2.65,q=0.5,eps=0.01,mu=1,T=50000
+      chaos_simple2.dat: same as above, but with zshift=.0100001
+
+      chaos_simple_theory1.dat: chaotic solution in the 1d reduced/phase neural field model.  zshift=.01,g=2.661,q=0.5,eps=.01,mu=1,T=50000
+      chaos_simple_theory2.dat: same as above, but with zshift = .0100001
+
+	diagram.dat,diagram.25.dat: data for normal form figures (1d phase model).
+
+	evans.ode.2par_b_g.dat: evans function 2parameter curve data (truncated phase model)
+	evans.ode.al_be.dat: evans function bifurcation diagram? (truncated phase model)
+
+	evans_full.ode.all_info.dat: bifurcation diagram of zero intersection in evans function for full phase model
+
+      nc_phase_approx_*.dat: nullcline for the 2d phase approx model.
+      nc_phase_approx_*.dat: nullcline for the 2d phase approx model.
+
+      full2dbranches1info.dat,
+      full2dbranches1info_inits.dat, 
+      full2dbranches2info.dat,
+      full2dbranches2_inits.dat: from full2dbump.ode, with
+	0.17  g
+	0.2  w
+	20  tau
+	25  r
+	0.25  theta
+	50  n
+	1  beta
+	1.5  i0
+
+      fourier2d_coeffs.dat, fourier2d_n.dat, fourier2d_m.dat: fourier coefficients and associated index.
+
+	twodphs*.dat: bifurcation data for twodphs3.ode
+	twod_wave_exist*.dat: bifurcation data for twod_wave_exist.ode
+
+*.ps and *.pdf files
+      bif_q0.5_gvary_periodic2.ps: 
+      bif_q0.5_gvary.ps: hopf bifurcation + branches with q=0.5
+      bif_q2_gvary.ps: hopf bifurcation + branches with q=2.
+      bif_q0.1_gvary.ps: hopf bifurcation + branches with q=0.1.
+      bif_q0.2_gvary.ps: hopf bifurcation + branches with q=0.2.
+      bif_q0.4_gvary.ps: hopf bifurcation + branches with q=0.4.
+      bif_q1_gvary.ps: hopf bifurcation + branches + branch points with q=1.
+      bif_hopf_g_q.ps: two param bifurcation diagram for hopf.
+
+*.tab files
+      fup.tab: used in for.ode
+
+*.c files
+	f2d.c: fourier approximation to h functions. for use in computing existence of traveing wave solutions in XPP
+	twodfull*.c: same idea as f2d.c with varying discretization sizes (explicit discretization used to speed up sims).
+
+*.csv files
+	fourier2d_*.csv: phase model H function full fourier coefficients for use in mathematica.
+
+Directories:
+      bump_ss_1d_simple/: steady-state data for 1d simulations with cosine kernel.
+                          The directories + data are generated automatically by oned_simple.py
+      bump_ss_2d_full/: same as the above directory, but for twod.py
+      hopf_data/: brute-force oscillation amplitudes for the 1d Hopf. generated automatically by generate_figures.py
+      mov/: temporary directory for movie frames. generated automatically by oned_simple.py and twod.py
+
+
+Misc notes:
+I used the command
+$ find ./ -name "*.ode" -exec basename '{}' \;
+to get the names of ode files for example.
+
+Used 
+$ ls -I "*.dat*" -I "*.ode*" -I "*.py*" -I "*.pdf*"
+etc to check for remaining data file types.
+
+To count total lines in python files recursively:
+( find ./ -name '*py' -print0 | xargs -0 cat ) | wc -l
+
+### create poincare map chaos figure
+numerics > Poincare map > section > variable cys, other defaults OK
+numerics > total > 150000
+numerics > transient > 7000
+initial conditions > range > range over g, steps 200, start 0.75, end 2.5, reset storage: N
+
+go. it will take a long time.
+
+to view the data, plot 3d "gg" vs "cys" vs "sys" (yes use gg).
+
+save data as needed.
+
+### twod_full.py
+### twod_phase.py
+
+COMMANDS for twod.py
+The format of this file is very similar to oned_simple.py, which has a sligtly more detailed documentation of the options of each class.
+
+This file is organized into three classes:
+class Sim (for seldom-changed parameter values)
+class Kernel (for building the kernel. later used in SteadyState and SimDat)
+class SteadyState (for computing the steady-state bump solution)
+class SimDat (for simulations of the neural field model)
+class Phase (for simulations of the phase model of the neural field model)
+
+since the classes Sim, Kernel, and SteadyState are mostly for debugging, we show example commands for SimDat and Phase.
+
+EXAMPLE 1:
+ex = SimDat()
+ex.plot()
+
+these lines produce a plot of the simulation run with default initial conditions. Defaults initialize at a steady-state bump, and since g=0,q=0, the bump does not move over time. The default plot command shows a phase space representation of the peak of the steady-state bump, which remains in the center.
+
+EXAMPLE 2:
+        ex = SimDat(q=1.,g=8.,
+                         ushift1=0,
+                         ushift2=0,
+                         zshift1=.1
+                         zshift2=.1
+                         ishift1=0,
+                         ishift2=0,
+                         pinning_function='ss',
+                         initial_function='ss',
+                         recompute_I=False,
+                         save_last=save_last,
+                         use_last=use_last,
+                         T=4000,eps=.01)
+
+        ex.plot('phase_space')
+        ex.plot('pinning')
+
+this second example initializes the two d simulation as a steady-state bump solution (for both u and the adaptation variable z). Since the parameters q and g are chosen such that there is a traveling bump solution, we choose zshift1 and zshift2 to shift the adaptation variable off the origin to encourage the bump to travel. Otherwise the bump will not move or take a very long time to move. We also choose the pinning function to be the steady-state bump for convenience, although we could change this function to something else (like a gaussian or mexican hat), if we wish. We keep the pinning function at the origin by setting ishift1  and ishift2 to 0. We do not wish to recompute the pinning function I so we load it from a saved file (if there is no saved pinning function, it is automatically recomputed and saved). save_last and use_last are determined by the flags set at the time the script is run. see def usage() or run twod.py -h to see the options. if save_last is true, we save the last simulation value. If use_last=True, we use the previously saved simulation value. This is an ad-hoc way of extending simulation times.
+
+With these options set, we view the results of the simulation with the plot command. All options are:
+phase_space, phase_time, init, pinning, final, movie
+
+
+EXAMPLE 3
+To run the phase model, we use the command
+        phase = Phase(x0=0,x1=2,y0=0.,y1=0,init_mode='cartesian',q=0.,g=1.5,dde_T=100,phase_option='full',
+                      recompute_h=False,recompute_j=False,compute_h_error=True)
+
+        phase.plot("h1_fourier")
+        phase.plot("h2_fourier")
+
+        phase.plot('h1')
+        phase.plot('h2')
+    
+        phase.plot("h1_fourier_d")
+        phase.plot("h2_fourier_d")
+        
+        phase.plot("nullclines")
+        
+        phase.plot("h1_approx")
+        phase.plot("h2_approx")
+        
+        phase.plot("phase_time")
+        phase.plot("phase_space")
+        phase.plot("h1_1d")
+    
+        phase.plot("j1")
+        phase.plot("j2")
+
+
+The Phase class runs the 2d phase model of the 2d neural field model. initial conditions are chosen to be an arc or a line. This choice is important because the phase model is a delay differential equation and needs an array of initial conditions. In this example, We have chosen the initial condition to be a cartesian type. This choice allows us to initialize in a straight line starting at (x0,y0) and ending at (x1,y1). If the init_mode is 'polar', we initialize in an arc with radius x0 over the radian values y0. dde_T sets the total backwards time. Since there is an exponential decay backwards in time, dde_T doesn't have to be much larger. We choose phase_option='full' to say that we want to use the lookup tables for the H functions. We could also choose phase_option='approx' to use the negative derivative of the gaussian instead. We trust that the existing H and J function lookup tables are accurate, so we choose recompute_h and recompute_j to False.
+
+The plot functions are pretty self explanatory. The plot function for the class Phase has many more options since there is more to debug.
+
+As in the oned_simple.py code, there is an option to save movie frames.  The frames are saved to mov/test.
+
+this script may also be run from the terminal. run twod.py to see the options.
+
+
+### oned_simple.py
+
+
+COMMANDS:
+
+This file is organized into three classes:
+class Sim
+class SteadyState
+class SimDat
+
+SimDat depends on SteadyState, which depends on Sim.
+
+SimDat is the command/class most commonly used (see below for examples).
+
+SteadyState is a helper class that builds functions which depend on the steady state bump solution.
+
+Sim is a class for seldom-changed parameters. 
+
+See below for more in-depth descriptions of each class.
+
+CLASS SIM (class Sim)
+The class Sim contains the following options with default values which are usually left unchanged:
+N=120 # domain discretitation
+a=0. # left domain value
+b=2*pi # right domain value
+break_symm=False 
+r=15.,ut=0.25 # firing rate parameters. r is the steepness of the nonlinearity, ut is the threshold value.
+mu=1. # time constant for adaptation.
+A=-.5 # cosine kernel parameter
+B=3. # cosine kernel parameter
+
+CLASS STEADY STATE (class SteadyState)
+The class SteadyState generates the steady-state bump solution given the parameters in the class Sim.
+use_ss=True # let the pinning function be the steady-state bump
+recompute_ss=False # recompute the steady-state bump
+display_params=False # show all parameters
+break_symm=False # set to true to add noise to initial conditions. This helps break symmetry of the initial conditions. a better option is to use zshit (see below)
+save_ss_bump=True # save steady state bump
+g=0. # these are always set to 0 for this class since we only want to find the steady-state bump 
+q=0. #
+ss_dt=.1 # time step to find steady state bump
+ss_t0=0,ss_T=5000 # time parameters for steady-state bump calculation
+eps=0.005 # doesn't matter for this class since g=q=0
+ss0=-69 # steady-state bump y-shift (default -69 to make it easier to debug)
+ss1=-69 # steady-state bump amplitude (default -69 to make it easier to debug)
+ss_shift=0. # steady-state bump shift
+Nkap=200 # discretization for computing kappa (in the paper this parameter is called mu)
+kernel_factor=1. # set to different values to change magnitude of the kernel
+
+The class SteadyState has several functions that are used in the class SimDat. The following are initialzed immediately:
+
+The pinning function (steady state bump solution by default)
+self.Ivals = self.I(self.domain)
+
+The kappa parameter (estimate inner produt kappa = (u_0',u^*)), called mu in the paper.
+self.kap = self.kappa_estimate()
+
+H function amplitude (assume it is sine function)
+self.Hamp,self.H_numerical = self.get_H(return_data=True)
+
+get J function parameters (also a sine function)
+self.i0,self.i1,self.ishift,self.J_numerical = self.get_J(return_data=True)
+
+The class SteadyState also contains the function rhs2, which is the right hand side of the 1d neural field model.
+
+To plot the functions H,J and the steady state bump, use the built-in plot function. for example
+
+ex = SteadyState()
+ex.plot(choice='ss')
+ex.plot(choice='J')
+ex.plot(choice='H')
+plt.show()
+
+will show plots of the functions.
+
+CLASS SIMDAT (class SimDat)
+The most often used command is shown in the following example:
+
+dat = SimDat(g=1.625,q=0.5,zshift=.01,phase=True,T=5000,kernel_factor=1.)
+
+It runs the full 1d neural field model with parameters g=1.625 and q=0.5. the zshift term sets the initial condition of the z variables to be the steady-state bump shifted by 0.01 radians. This feature allows the bump to leave the unstable steady-state bump much faster (assuming appropriate parameters). We always initialize the u terms as the steady-state bump.
+
+Additional options + default values for class SimDat:
+ushift=0. # shift in u initial function (steady state bump by default)
+zshift=0. # shift in z initial function (steady state bump by default)
+g=0. # adaptation parameter
+q=0. # pinning parameter
+dt=.05 # time step
+t0=0 # initial time
+T=5000 # final time
+eps=0.01 # magnitude of slow parameter (smaller the better, but simulations take longer if too small)
+display_params=True # show all parameters
+phase=False # run phase model if True
+save_ss=False # save steady-state bump
+sim_factor=1. # set to higher values if you are feeling impatient, but be careful. sim_factor=10 will make the simulation run 10x faster at the cost of numerical accuracy, since dt is effectively increased by an order of magnitude as well.
+kernel_factor=1. # see above
+
+to plot the phase angle of the solution, run
+
+dat.plot()
+plt.show()
+
+As another example if I were to run the perfectly valid command
+dat = SimDat()
+
+then
+dat.plot()
+plt.show()
+would show a very boring steady-state bump solution.
+
+In the def main() function below, there is an option to save frames for a movie file. All movie frames are sent to the directory 'mov'. How you compile the movie is left to you.
+
+We saved each frame to files test1.jpg, test2.jpg, test3.jpg, etc. Then compiled the frames into a movie with the command:
+
+avconv -r 10 -start_number 1 -i test%d.jpg -b:v 1000k test.mp4

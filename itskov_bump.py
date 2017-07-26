@@ -1,0 +1,218 @@
+"""
+Itskov et al 2011
+
+"""
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pylab as mp
+import numpy as np;pi=np.pi;sin=np.sin;cos=np.cos
+import scipy as sp
+import time
+
+from scipy.integrate import odeint
+from euler import *
+
+# anim
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+from matplotlib import cm
+
+np.random.seed(10000)
+
+sqrt = np.sqrt
+pi = np.pi
+cos = np.cos
+sin = np.sin
+exp = np.exp
+
+def phi(d,j0=-0.6,j1=1.):
+    beta = 1
+    nL = np.arange(0,5,1)
+    mL = np.arange(0,5,1)
+    pi = np.pi
+    tot = 0
+    #for n in nL:
+    #    tot += np.sum(np.exp(-(n *pi/(2*pi))**2)*np.exp(-(mL*pi/(2*pi))**2)*np.cos(n*d)*np.cos(mL*d))
+    #return j0 + j1*tot
+    #return j0 + j1*np.exp(-beta*d/np.sqrt(2))
+    #return j0 + j1*np.exp(-beta*d/np.sqrt(2))
+    return j0 + j1*np.cos(d/np.sqrt(2))
+
+def K_ricker(x,sig=.6):
+    """
+    ricker wavelet https://en.wikipedia.org/wiki/Mexican_hat_wavelet
+    """
+    return (2/(sqrt(3*sig)*pi**(.25))) * (1-x**2/sig**2) * exp(-x**2/(2*sig**2))
+
+def K_ricker_p(X,Y,sig=.6,Kamp=5):
+    """
+    periodized kernel
+    """
+    tot = 0
+    for n in range(-3,3+1):
+        for m in range(-3,3+1):
+            tot = tot + K_ricker(sqrt( (X+n*2*pi)**2 + (Y+m*2*pi)**2 ),sig)
+            #tot = tot + K_ricker(sqrt( (X+n*30)^2 + (Y+m*30)^2 ),sig)
+    return Kamp*tot
+
+
+
+def num2coord(k,N):
+    """
+    return coordinate index pair given cell number
+    I'm using the natural ordering starting from the bottom left
+    N is the side length
+    """
+    x_idx = k%N
+    y_idx = int(np.floor((k+0.5)/N))
+    return (x_idx,y_idx)
+
+def coord2num(i,j,N):
+    """
+    return number given coordinate
+    start indices at 0
+    """
+    return (i+1)+N*j
+
+def reshape2(M):
+    """
+    find built-in for this purpose.
+    takes natural indexing into matrix.
+    (0 bottom left, -1 top right, left to right)
+    """
+    rN = int(np.sqrt(len(M))) # of rows
+    out = np.zeros((rN,rN))
+    k = 0
+    for i in range(rN):
+        for j in range(rN):
+            out[rN-i-1,j]=M[k]
+            k += 1
+    return out
+
+
+def rhs(vec,t,N,I,J,c,taum,taua):
+    dx=np.zeros(N);dh=np.zeros(N)
+    x=vec[:N];h=vec[N:]
+    wf = np.maximum(0,np.dot(J,x)+I-h)
+    #wf = np.maximum(0,np.dot(J,x))
+    #wf[wf<=0] = 0.
+    dx = (-x + wf)/taum
+    dh = (-h + c*x)/taua
+    
+    return np.append(dx,dh)
+    
+
+def main():
+    taua=2000.;taum=20.
+    eps=0.5;c=.5
+    rN=cN=11
+    N = rN**2
+    
+    x = np.linspace(0,2*np.pi,rN)
+    y = np.linspace(0,2*np.pi,rN)
+
+    J = np.zeros((N,N))
+
+    for i in range(N):
+        for j in range(N):
+            # take distance from neuron i to neuron j
+            # on the torus
+            ix,iy = num2coord(i,rN) # get torus coordinates
+            jx,jy = num2coord(j,rN)
+
+            d = np.sqrt((x[ix]-x[jx])**2 +\
+                        (y[iy]-y[jy])**2) # distance on torus
+
+            J0ij = phi(d)*4*(np.pi**2)/N
+
+            # add heterogeneity
+            Jhetij = 0#( eps/np.sqrt(N) )*np.random.normal(0,1)
+            J[i,j] = J0ij + Jhetij # coupling matrix
+
+    mp.matshow(J)
+    mp.show()
+    # add initial conditions
+    x0=np.zeros(2*N)
+    x0[:N] = np.random.normal(0,1,N)
+    dt=.1;T=10000;t=np.linspace(0,T,int(T/dt))
+
+    #sol = odeint(rhs,x0,t,args=(N,I,J,c,taum,taua))
+    sol = np.zeros((len(t),len(x0)))
+    sol2 = np.zeros(len(x0))
+    sol[0,:] = x0
+    s=0
+
+
+    # uncomment to run full sim and plot later
+    for i in range(len(t)-1):
+        I = np.random.normal(0,1,N)
+        sol[i+1,:] += sol[i,:] + dt*rhs(sol[i,:],s,N,I,J,c,taum,taua)
+        s += dt
+
+    
+    # PLOT full sim
+    fig = plt.figure()
+    fig2 = plt.figure()
+    plt.ion()
+    plt.show()
+    g1 = fig.add_subplot(111)
+    g2 = fig2.gca(projection='3d')
+    X, Y = np.meshgrid(x, y)
+    for i in range(len(t)):
+        k = i*100
+        #Ln.set_data(np.reshape(sol[i,:N],(rN,rN)))
+        g1.matshow(reshape2(sol[k,:N]))
+        g2.plot_surface(X,Y,reshape2(sol[k,:N]),rstride=1, cstride=1, cmap=cm.coolwarm)
+        plt.pause(.001)
+        print t[k], 'of max t =',t[-1]
+        g1.clear()
+        g2.clear()
+
+
+    
+    """
+    # plot final bump
+    fig = plt.figure()
+    fig2 = plt.figure()
+    g1 = fig.add_subplot(111)
+    g2 = fig2.gca(projection='3d')
+    sol[-1,0] = 1
+    g1.matshow(reshape2(sol[-1,:N]))
+
+    X, Y = np.meshgrid(x, y)
+    g2.plot_surface(X,Y,reshape2(sol[-1,:N]))
+    plt.show()
+    """
+    
+
+    """
+    # on the fly plotting
+    fig = plt.figure()
+    fig2 = plt.figure()
+    plt.ion()
+    plt.show()
+    g1 = fig.add_subplot(111)
+    g2 = fig2.gca(projection='3d')
+
+    X, Y = np.meshgrid(x, y)
+
+
+    while True:
+        I = 1+np.random.normal(0,1,N)
+        sol2_prev = sol2
+        sol2 = sol2_prev + dt*rhs(sol2_prev,s,N,I,J,c,taum,taua)
+        s += dt
+
+        g1.matshow(reshape2(sol2[:N]))
+        g2.plot_surface(X,Y,reshape2(sol2[N:]))
+        plt.pause(.00001)
+        print 'time s',s
+        g1.clear()
+        g2.clear()
+    # end on the fly plotting
+    """
+
+
+if __name__ == "__main__":
+    main()
+    

@@ -1,0 +1,182 @@
+import numpy as np
+import matplotlib.pylab as mp
+import scipy as sp
+from scipy.integrate import odeint,dblquad
+import time
+from colorsys import hsv_to_rgb
+from mpl_toolkits.mplot3d import Axes3D
+
+# anim
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+import twod
+import fourier_2d as f2d
+
+#import np.sin as sin
+#import np.cos as cos
+
+sin = np.sin
+cos = np.cos
+pi = np.pi
+erf = sp.special.erf
+exp = np.exp
+sqrt = np.sqrt
+
+def K(X,Y,sige,sigi,Kamp):
+    """
+    X,Y: (x,y) coordinate vectors/points
+    exact 2d Mexican hat kernel
+    """
+    A=1./(pi*sige**2);B=1./(pi*sigi**2)
+    #X = np.mod(X,2*pi)
+    #Y = np.mod(Y,2*pi)
+    return Kamp*(A*np.exp(-(X**2 + Y**2)/sige**2) -\
+        B*np.exp(-(X**2 + Y**2)/sigi**2))
+
+def Khat(n,m,se,si):
+    """
+    Fourier transform of Mexican hat kernel
+    """
+    A=1./(pi*se**2);B=1./(pi*si**2)
+    #return (A*pi/sige**2)*np.exp(-(pi*sige)**2 * (n**2 + m**2))-\
+    #    (B*pi/sigi**2)*np.exp(-(pi*sigi)**2 * (n**2 + m**2))
+    c1 = .25*exp(-.25*(n**2 + m**2)*(se**2 + si**2))
+    
+    d1 = (se**2)*A*pi*exp(.25*(m**2 + n**2)*si**2)
+    d11 = erf(pi/se - m*se*1j/2.) + erf(pi/se + m*se*1j/2.)
+    d12 = erf(pi/se - n*se*1j/2.) + erf(pi/se + n*se*1j/2.)
+    
+    e1 = (si**2)*B*pi*exp(.25*(m**2 + n**2)*se**2)
+    e11 = erf(pi/si - m*si*1j/2.) + erf(pi/si + m*si*1j/2.)
+    e12 = erf(pi/si - n*si*1j/2.) + erf(pi/si + n*si*1j/2.)
+    
+
+    return c1*(d1*d11*d12 - e1*e11*e12)
+    #if n==0 and m==0:
+    #    return A*pi*sige**2 * erf(pi/sige)**2 - B*pi*sigi**2 * erf(pi/sigi)**2
+    #else:
+    #    pass
+
+def Kapprox(X,Y,sige,sigi):
+    """
+    Fourier approximation to Mexican hat kernel
+    """
+    a00 = Khat(0,0,sige,sigi)
+    a10 = Khat(1,0,sige,sigi)
+    a01 = Khat(0,1,sige,sigi)
+    a11 = Khat(1,1,sige,sigi)
+    a20 = 0.#Khat(2,0,sige,sigi)
+    a02 = 0.#Khat(0,2,sige,sigi)
+    return a00 + a10*cos(X) + a01*cos(Y) + a11*cos(X)*cos(Y) +\
+        a20*cos(2*X) + a02*cos(2*Y)
+
+def K2(X,Y,sig,Kamp):
+    """
+    equation taken from https://en.wikipedia.org/wiki/Mexican_hat_wavelet
+    """
+    return Kamp*((1./(pi*sig**4)) * (1 - (X**2 + Y**2/(2*sig**2))) * exp(-(X**2+Y**2)/(2*sig**2)))
+    
+def K_diff(x,se,si,d=False):
+    """
+    difference of gaussians
+    """
+    
+    A=1./(sqrt(pi)*se);B=1./(sqrt(pi)*si)
+    if not(d):
+        return (A*exp(-(x/se)**2) -
+                B*exp(-(x/si)**2))
+    else:
+        return
+
+def main():
+    ## parameter estimation for mexican hat
+    sige=2;sigi=3
+    Kamp = 10
+    dim = 2 # dimension (1 or 2)
+    grid = 51
+
+    if dim == 1:
+        X = np.linspace(-pi,pi,grid)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(X,Kamp*K_diff(X,sige,sigi))
+        #ax.plot(X,Kamp*K_ricker(X,sige,sigi))
+
+    elif dim == 2:
+
+        
+        #kernel = twod.Kernel().Ktable
+        kernel = np.roll(np.roll(twod.Kernel().Ktable,int(65/2),axis=-1),int(65/2),axis=-2)
+        nx,ny = np.shape(kernel)
+
+        X, Y = np.meshgrid(np.linspace(-pi,pi,nx),
+                           np.linspace(-pi,pi,ny))
+
+        f_coeffs_kernel = np.fft.fft2(kernel)
+        #a = np.real(f_coeffs_kernel)
+        #b = np.imag(f_coeffs_kernel)
+
+        #a,b,a_1d,b_1d,idx_re,idx_im = f2d.extract_coeff_r(f_coeffs_kernel,threshold=2,return_1d=True)
+        #print a_1d,b_1d,idx_re,idx_im
+        c,c_1d,idx = f2d.extract_coeff_all(np.real(f_coeffs_kernel),threshold=.5,return_1d=True)
+        for i in range(len(c_1d)):
+            print i,'&',c_1d[i]/((2*pi)**2),'&',idx[i],'\\\\'
+            print 'REMEMBER TO ROLL BEFORE USING THESE FOURIER COEFFICIENTS'
+
+        #print np.real(c_1d),idx
+
+        """
+        fig1 = plt.figure()
+        ax1 = fig1.gca(projection='3d')
+        #print nx,ny,np.shape(a)
+        ax1.plot_surface(X,Y,a)
+        """
+
+        """
+        print 'testing ifft2'
+        twod_arr = np.array([[20,2,5],[3,4,1],[0,-6,10]])
+        out = np.fft.fft2(twod_arr)
+        print np.fft.ifft2(out)
+        print f2d.idft2(out)
+        """
+
+        fig1 = plt.figure()
+        ax1 = fig1.gca(projection='3d')
+        #approx = np.fft.ifft2(f_coeffs_kernel)
+        #approx = np.fft.ifft2(a+b*1j)
+        #approx_f = np.fft.ifft2(c)
+        approx_m = np.real(f2d.idft2(c,idx))*(65*65)
+        #approx_m = f2d.idft2_cos(c,idx)
+
+        #a00 + a10*cos(X) + a01*cos(Y) + a11*cos(X)*cos(Y)
+        #approx = f2d.idft2_trig(a+b*1j,idx_re,idx_im)
+        ax1.set_title('approx kernel manual')
+        ax1.plot_surface(X,Y,approx_m)
+
+        fig2 = plt.figure()
+        ax2 = fig2.gca(projection='3d')
+        #ax2.plot_surface(X,Y,kernel)
+        ax2.plot_surface(X,Y,-0.4739 + 2*(-0.1916)*cos(X) + 2*(-0.1916)*cos(Y) + 0.110515*cos(X)*cos(Y))
+        ax2.set_title('another approx kernel manual')
+
+
+        plt.show()
+        
+        
+        #Kfft = np.fft.fft2(np.reshape(Z,(grid,grid)))
+
+        #print np.real(Kfft[:2,:2])
+
+        #mp.figure()
+        #mp.plot(Kfft[0,:])
+        #mp.plot(Kfft[1,:])
+        #mp.plot(Kfft[2,:])
+        #mp.plot(Kfft[-1,:])
+        #print type(Kfft)
+
+
+    plt.show()
+
+if __name__ == "__main__":
+    main()

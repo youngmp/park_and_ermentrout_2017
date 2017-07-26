@@ -1,0 +1,127 @@
+par b=.8,q=.2,g=0
+# int e(-s) [sin(xs-x) + b sin[xs-x]*cos(ys-y)]
+#            sxs cx -cxs sx    
+#     (sxs cx -cxs sx)*(cys cy + sys sy)
+#      cxcy sxcys - sxcy cxcys  + cxsy sxsys - sxsy cxsys
+
+# raw output mathematica.
+# cx^2 cy cys h4 s2xs - cxs h1 sx - cxs cy cys h3 sx + 
+# cx (-c2xs h2 - 2 c2xs cy cys h4) sx - c2ys cxs cy^2 h5 sx + 
+# cx h1 sxs + cx^2 cxs h2 sxs + cx cy cys h3 sxs + 
+# c2ys cx cy^2 h5 sxs - cxs h2 sx^2 sxs - 2 cxs cy cys h4 sx^2 sxs + 
+# c2ys cxs h5 sx sy^2 - c2ys cx h5 sxs sy^2 + cx^2 h4 s2xs sy sys - 
+# 2 cxs h4 sx^2 sxs sy sys + 
+# sx sy (-cxs h3 sys - 2 c2xs cx h4 sys - 4 cxs cy cys h5 sys) + 
+# cx sy (h3 sxs sys + 4 cy cys h5 sxs sys)
+
+# with 5 terms the integrand becomes
+# h4*cx^2*cy*s2xcys - h1*sx*cxs - h3*sx*cy*cxcys + 
+# -h2*sxcx*c2xs - 2*h4*sxcxcy*c2xcys - h5*sx*cy^2*cxc2ys + 
+# h1*cx*sxs + h2*cx^2*cxcxs + h3*cxcy*sxcys + 
+# h5*cx*cy^2*sxc2ys - h2*sx^2*sxcxs + TERM + 
+# h5*sx*sy^2*c2ycxs - h5*cx*sy^2*c2ysxs + h4*cx^2*sy*s2xsys +
+# TERM2 + 
+# -h3*sxsy*cxsys - 2*h4*sxsycx*c2xsys + TERM3 + 
+# h3*cx*sy*sxsys + TERM4
+
+# NOTE: TERM=-2*h4*sx^2*cy*cxs*cys*sxs is equivalent to
+# TERM=-h4*sx^2*cy*cys2xs
+# TERM2=-2*h4*sx^2*sy*cxs*sxs*sys is equivalent to
+# TERM2=-h4*sx^2*sy*s2xsys
+# TERM3=-4*h5*sx*sy*cy*cxs*cys*sys is equivalent to
+# TERM3=-2*h5*sx*sy*cy*cxs2ys
+# TERM4=4*h5*cxsy*cy*cys*sxs*sys is equivalent to
+# TERM4=2*h5*cxsy*cy*sxs2ys
+
+cx=cos(x)
+cy=cos(y)
+sx=sin(x)
+sy=sin(y)
+sxsy=sin(x)*sin(y)
+sxcx=sin(x)*cos(x)
+sxcy=sin(x)*cos(y)
+sycy=sin(x)*cos(x)
+
+c2x=cos(2*x)
+c2y=cos(2*y)
+
+cxsy=cos(x)*sin(y)
+cxcy=cos(x)*cos(y)
+cysy=cos(y)*sin(y)
+
+s2xcy=sin(2*x)*cos(y)
+s2xsy=sin(2*x)*sin(y)
+sxc2y=sin(x)*cos(2*y)
+sxs2y=sin(x)*sin(2*y)
+
+cxc2y=cos(x)*cos(2*y)
+cxs2y=cos(x)*sin(2*y)
+c2xcy=cos(2*x)*cos(y)
+c2xsy=cos(2*x)*sin(y)
+
+sxsycx=sin(x)*sin(y)*cos(x)
+sxsycy=sin(x)*sin(y)*cos(y)
+sxcxcy=sin(x)*cos(x)*cos(y)
+cxsycy=cos(x)*sin(y)*cos(y)
+
+h(x,y)=h1*sin(x)+h2*cos(x)*sin(x)+h3*cos(y)*sin(x)+h4*sin(2*x)*cos(y)+h5*sin(x)*cos(2*y)
+j(x,y)=-h(x,y)
+
+#i1x=sxs*cx-cxs*sx
+#i1y=sys*cy-cys*sy
+#i2x=b*(cxcy*sxcys - sxcy*cxcys  + cxsy*sxsys - sxsy*cxsys)
+#i2y=b*(cxcy*cxsys - cxsy*cxcys  + sxcy*sxsys - sxsy*sxcys)
+
+i1x=h1*(sxs*cx-cxs*sx)
+i1y=h1*(sys*cy-cys*sy)
+
+i2x=h2*(cx^2-sx^2)*sxcxs - h2*cx*sx*c2xs + h3*cxcy*sxcys - h3*sxcy*cxcys + h3*cxsy*sxsys - h3*sxsy*cxsys
+i2y=h2*(cy^2-sy^2)*cysys - h2*cy*sy*c2ys + h3*cxcy*cxsys - h3*cxsy*cxcys + h3*sxcy*sxsys - h3*sxsy*sxcys
+
+i3x=h4*(cx^2-sx^2)*cy*s2xcys + h4*(cx^2-sx^2)*sy*s2xsys + h5*sx*(sy^2-cy^2)*cxc2ys + h5*cx*(cy^2-sy^2)*sxc2ys
+i3y=h4*(cy^2-sy^2)*cx*cxs2ys + h4*(cy^2-sy^2)*sx*sxs2ys + h5*sy*(sx^2-cx^2)*c2xcys + h5*cy*(cx^2-sx^2)*c2xsys
+
+i4x=-2*h5*sxsycy*cxs2ys + 2*h5*cxsycy*sxs2ys -2*h4*sxcxcy*c2xcys - 2*h4*sxsycx*c2xsys
+i4y=-2*h5*sxsycx*s2xcys + 2*h5*sxcxcy*s2xsys -2*h4*cxsycy*cxc2ys - 2*h4*sxsycy*sxc2ys
+
+x'= q*j(x,y)-g*(i1x+i2x+i3x+i4x)
+y'= q*j(y,x)-g*(i1y+i2y+i3y+i4y)
+
+cxs'=-cxs+cx
+cys'=-cys+cy
+sxs'=-sxs+sx
+sys'=-sys+sy
+
+sxsys'=-sxsys+sxsy
+sxcys'=-sxcys+sxcy
+cxsys'=-cxsys+cxsy
+cxcys'=-cxcys+cxcy
+sxcxs'=-sxcxs+sxcx
+cysys'=-cysys+cysy
+
+c2xs'=-c2xs+c2x
+c2ys'=-c2ys+c2y
+
+s2xcys'=-s2xcys+s2xcy
+s2xsys'=-s2xsys+s2xsy
+sxc2ys'=-sxc2ys+sxc2y
+sxs2ys'=-sxs2ys+sxs2y
+
+cxc2ys'=-cxc2ys+cxc2y
+cxs2ys'=-cxs2ys+cxs2y
+c2xcys'=-c2xcys+c2xcy
+c2xsys'=-c2xsys+c2xsy
+
+
+
+#p h1=6.4062433109,h2=0.722959007283,h3=5.1728627897,h4=0.172528383917,h5=0.0443514196873
+
+# q=.2,g=1, period approx 12.5
+p h1=.64062433109,h2=.0722959007283,h3=.51728627897,h4=.0172528383917,h5=.00443514196873
+
+@ xp=x,yp=y
+@ xlo=0,xhi=6.3,ylo=0,yhi=6.3
+@ bounds=100000
+@ maxstor=100000
+
+d

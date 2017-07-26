@@ -1,0 +1,128 @@
+"""
+bifurcations in the 1d neural field model with kernel A + B cos(x)
+using PyDSTool
+"""
+
+import PyDSTool as dst
+import matplotlib.pyplot as plt
+
+DSargs = dst.args()
+DSargs.name = 'oned_simple_sep'
+DSargs.ics = {'a1':-0.161910995822,'a2':0.802623597106,'a3':0.000336355330664,'b1':-0.161910995822,'b2':0.802623597106,'b3':0.000336355330664}
+#DSargs.ics = {'a1':.5,'a2':.2,'a3':.3,'b1':1,'b2':0,'b3':0}
+DSargs.pars = {'r':15,'ut':.25,
+               'g':0.5,'q':.5,'eps':0.01,
+               'aa':-.5,'bb':3,'d':-.161911,'ee':.7984566,'be':1}
+#DSargs.tdata = [0,2500]
+
+u = 'a1+a2*cos(2*pi*j/100)+a3*sin(2*pi*j/100)'
+f = '1/(1+exp(-r*('+u+'-ut)))'
+
+DSargs.fnspecs = {
+    'f1':(['a1','a2','a3'],'sum(j,0,99,'+f+')'),
+    'f2':(['a1','a2','a3'],'sum(j,0,99,cos(2*pi*[j]/100)*'+f+')'),
+    'f3':(['a1','a2','a3'],'sum(j,0,99,sin(2*pi*[j]/100)*'+f+')')
+}
+
+"""
+DSargs.varspecs = {
+    'a1':'-a1+aa*f1(a1,a2,a3)/100 + eps*q*d - eps*g*b1',
+    'a2':'-a2+bb*f2(a1,a2,a3)/100 + eps*q*ee - eps*g*b2',
+    'a3':'-a3+bb*f3(a1,a2,a3)/100 - eps*g*b3',
+    'b1':'eps*be*(-b1+a1)',
+    'b2':'eps*be*(-b2+a2)',
+    'b3':'eps*be*(-b3+a3)',
+}
+"""
+
+DSargs.varspecs = {
+    'a1':'-a1+aa*sum(j,0,99,'+f+')/100 + eps*q*d - eps*g*b1',
+    'a2':'-a2+bb*sum(j,0,99,cos(2*pi*[j]/100)*'+f+')/100 + eps*q*ee - eps*g*b2',
+    'a3':'-a3+bb*sum(j,0,99,sin(2*pi*[j]/100)*'+f+')/100 - eps*g*b3',
+    'b1':'eps*be*(-b1+a1)',
+    'b2':'eps*be*(-b2+a2)',
+    'b3':'eps*be*(-b3+a3)',
+}
+
+
+
+#tm = dst.Generator.Euler_ODEsystem(DSargs)
+#tm = dst.Generator.Vode_ODEsystem(DSargs)
+tm = dst.Generator.Dopri_ODEsystem(DSargs)
+#tm = dst.Generator.Radau_ODEsystem(DSargs)
+
+"""
+sol = tm.compute('oned_simple_sep')
+pts = sol.sample()
+
+
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+ax1.plot(pts['t'],pts['a1'])
+ax1.plot(pts['t'],pts['a2'])
+ax1.plot(pts['t'],pts['a3'])
+
+print pts['a1'][-1],pts['a2'][-1],pts['a3'][-1]
+print pts['b1'][-1],pts['b2'][-1],pts['b3'][-1]
+plt.show()
+"""
+
+
+
+PyCont = dst.ContClass(tm)
+
+PCargs = dst.args(name='EQ1', type='EP-C')   # as many arguments can be supplied here as desired
+PCargs.freepars = ['g']   # rest of the arguments created like a struct
+#PCargs.MinStepSize = 1e-6
+#PCargs.StepSize = 1e-3
+PCargs.MaxNumPoints = 200
+PCargs.MaxStepSize = 1e-1
+PCargs.verbosity = 2
+PCargs.SaveEigen = True
+PCargs.LocBifPoints = ['H']
+
+PyCont.newCurve(PCargs)
+
+PyCont['EQ1'].forward()
+
+#PyCont['EQ1'].info()
+#PyCont
+
+#PyCont['EQ1'].display(('g','a2'),stability=True)
+#PyCont['EQ1'].display(('g','a3'))
+#plt.show()
+"""
+PCargs = dst.args(name='FO1',type='LP-C')
+PCargs.initpoint = 'EQ1:H1'
+PCargs.freepars = ['g']
+PCargs.MaxStepSize = 1e-1
+PCargs.LocBifPoints = 'all'
+PCargs.MaxNumPoints = 500
+"""
+
+PCargs = dst.args(name = 'LC1', type = 'LC-C')
+PCargs.initpoint = 'EQ1:H1'
+PCargs.MinStepSize = 1e-6
+PCargs.MaxStepSize = 1e-3
+PCargs.StepSize = 1e-2
+PCargs.MaxNumPoints = 1000
+PCargs.LocBifPoints = 'LPC'
+PCargs.NumSPOut = 40;
+PCargs.SolutionMeasures = 'all'
+PCargs.SaveEigen = True
+PyCont.newCurve(PCargs)
+
+
+
+PyCont['LC1'].forward()
+
+PyCont['EQ1'].display(stability=True, axes=(1,2,1))
+PyCont['LC1'].display(('g','a2'), stability=True)
+
+#PyCont.plot.clearall()
+#PyCont.display(('g','q'),stability=True)
+#PyCont['HO1'].display(('g','a3'))
+
+#PyCont.plot.info()
+plt.show()
+

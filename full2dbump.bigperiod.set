@@ -1,0 +1,304 @@
+## Set file for full2dbump.ode on Wed Feb 15 13:41:03 2017
+20   Number of equations and auxiliaries
+8   Number of parameters
+# Numerical stuff
+10    nout
+40    nullcline mesh
+1   Euler
+165  total
+0.05  DeltaT
+0  T0
+0  Transient
+100  Bound
+1e-12  DtMin
+1  DtMax
+0.001  Tolerance
+0.001  Abs. Tolerance
+0  Max Delay
+100   Eigenvector iterates
+0.001  Eigenvector tolerance
+0.001  Newton tolerance
+0  Poincare plane
+1e-05  Boundary value tolerance
+1e-05  Boundary value epsilon
+20   Boundary value iterates
+0   Poincare None
+1   Poincare variable
+1   Poincare sign
+0   Stop on Section
+0   Delay flag
+165.0000000000033  Current time
+165.0000000000033  Last Time
+1   MyStart
+1   INFLAG
+# Delays
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+# Bndry conds
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Old ICs
+-3.869503249282056  A0
+3.755251516745917  A10
+3.696970141163427  A01
+-4.713406649006914  B10
+-4.730931566011967  B01
+1.374564142255508  A11
+1.880026013993724  B11
+-1.889211722874422  C11
+-1.904538978094249  D11
+-3.912477171030566  E0
+3.617729389963653  E10
+3.638822300899046  E01
+2.285034620462995  E11
+-0.5905618273109259  F01
+-0.514689066381589  F10
+0.9204279808314192  F11
+-0.4955460665422112  G11
+-0.5897792155679901  H11
+# Ending  ICs
+-3.869748089981821  A0
+3.788513526058569  A10
+3.72988176252507  A01
+-4.6896045306426  B10
+-4.708200786616333  B01
+1.400394224608267  A11
+1.853991244648893  B11
+-1.893998309114099  C11
+-1.909493930489757  D11
+-3.912756963858284  E0
+3.616679018259608  E10
+3.638292972538686  E01
+2.290872562755828  E11
+-0.5635832888372789  F01
+-0.4873335697883414  F10
+0.9142692774982978  F11
+-0.4864087063038268  G11
+-0.5811570862360035  H11
+# Parameters
+0.2204052165091386  g
+0.2  w
+20  tau
+25  r
+0.25  theta
+50  n
+1  beta
+1.5  i0
+# Graphics
+0.7071097251469876  rm
+-0.4999999999826661  rm
+0.4999958366025516  rm
+0.7071038372138505  rm
+0.5000041633974482  rm
+-0.4999999999826661  rm
+0  rm
+0.7071038372138505  rm
+0.7071097251469876  rm
+0    
+7    
+1    
+1    
+0    
+0    
+4    
+1    
+1    
+1    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+0    
+1    
+1    
+1    
+0    
+-1000   
+1000   
+0    
+0   3DFlag
+1   Timeflag
+0   Colorflag
+0   Type
+1  color scale
+0   minscale
+166   xmax
+0   xmin
+6.229058742523193   ymax
+-5.83155345916748   ymin
+12   zmax
+-12   zmin
+83   
+0.01204819277108434   
+0.1987526416778564   
+0.165829061290905   
+0   
+0.08333333333333333   
+45   Theta
+45   Phi
+0    xshft
+0    yshft
+0    zshft
+0   xlo
+-5.83155345916748   ylo
+0   
+-1   
+166   xhi
+6.229058742523193   yhi
+20   
+1   
+# Transpose variables etc
+A0
+2   n columns
+1   n rows
+1   row skip
+1   col skip
+1   row 0
+# Coupling stuff for H funs
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Array plot stuff
+
+1   NCols
+0   Row 1
+50   NRows
+8   RowSkip
+0  Zmin
+1  Zmax
+# Torus information 
+0    Torus flag 1=ON
+6.283185307179586  Torus period
+# Range information
+g
+-1   eq-range stab col
+0   shoot flag 1=on
+10   eq-range steps
+0  eq_range low
+1  eq_range high
+A0
+A0
+20   Range steps
+0   Cycle color 1=on
+1   Reset data 1=on
+1   Use old I.C.s 1=yes
+0  Par1 low
+0  Par2 low
+1  Par1 high
+1  Par2 high
+g
+0   BVP side
+0   color cycle flag 1=on
+10   BVP range steps
+0  BVP range low
+1  BVP range high
+RHS etc ...
+dA0/dT=-A0+BETA*(1-I0)*P0+W-G*E0
+dA10/dT=-A10+BETA*P10+W-G*E10
+dA01/dT=-A01+BETA*P01+W-G*E01
+dB10/dT=-B10+BETA*Q10-G*F10
+dB01/dT=-B01+BETA*Q01-G*F01
+dA11/dT=-A11+BETA*P11+W-G*E11
+dB11/dT=-B11+BETA*Q11-G*F11
+dC11/dT=-C11+BETA*R11-G*G11
+dD11/dT=-D11+BETA*S11-G*H11
+dE0/dT=(-E0+A0)/TAU
+dE10/dT=(-E10+A10)/TAU
+dE01/dT=(-E01+A01)/TAU
+dE11/dT=(-E11+A11)/TAU
+dF01/dT=(-F01+B01)/TAU
+dF10/dT=(-F10+B10)/TAU
+dF11/dT=(-F11+B11)/TAU
+dG11/dT=(-G11+C11)/TAU
+dH11/dT=(-H11+D11)/TAU
+THX=MOD(ATAN2(B01,A01)+5*PI,2*PI)-PI
+THY=MOD(ATAN2(B10,A10)+5*PI,2*PI)-PI
+
+where ...
+P0 = 0   
+P10 = 0   
+P01 = 0   
+Q10 = 0   
+Q01 = 0   
+P11 = 0   
+Q11 = 0   
+R11 = 0   
+S11 = 0   

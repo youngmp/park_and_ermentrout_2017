@@ -1,0 +1,9 @@
+"""
+bifurcations in the 2d neural field model.
+
+kernel chosen to be difference of gaussians with sige=2,sigi=3.
+"""
+
+import twod
+
+

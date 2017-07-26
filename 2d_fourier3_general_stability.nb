@@ -1,0 +1,462 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     13191,        453]
+NotebookOptionsPosition[     12696,        432]
+NotebookOutlinePosition[     13033,        447]
+CellTagsIndexPosition[     12990,        444]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"H1", "[", 
+    RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"Sin", "[", "v1", "]"}], 
+    RowBox[{"(", 
+     RowBox[{"1", "+", 
+      RowBox[{"b", " ", 
+       RowBox[{"Cos", "[", "v2", " ", "]"}]}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"H2", "[", 
+    RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
+   RowBox[{"H1", "[", 
+    RowBox[{"v2", ",", "v1"}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.706457156778904*^9, 3.706457168104127*^9}, {
+  3.706457202184414*^9, 3.70645726219215*^9}, {3.70645800295296*^9, 
+  3.706458003089498*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{
+   RowBox[{"after", " ", "canceling", " ", "all", " ", "negatives"}], ",", 
+   " ", 
+   RowBox[{
+   "we", " ", "have", " ", "the", " ", "existence", " ", "equations"}]}], " ",
+   "*)"}]], "Input",
+ CellChangeTimes->{{3.7064572863171053`*^9, 3.706457294216135*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"v1rhs", "=", 
+   RowBox[{"g", " ", 
+    RowBox[{"Integrate", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{"-", "s"}], "]"}], 
+       RowBox[{"H1", "[", 
+        RowBox[{
+         RowBox[{"v1", " ", "s"}], ",", 
+         RowBox[{"v2", " ", "s"}]}], "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"v2rhs", "=", 
+   RowBox[{"g", " ", 
+    RowBox[{"Integrate", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{"-", "s"}], "]"}], 
+       RowBox[{"H2", "[", 
+        RowBox[{
+         RowBox[{"v1", " ", "s"}], ",", 
+         RowBox[{"v2", " ", "s"}]}], "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"s", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.706457297002987*^9, 3.7064573498406067`*^9}, 
+   3.7064577433772573`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"v1", "==", "v1rhs"}], ",", 
+     RowBox[{"v2", "\[Equal]", "v2rhs"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"v1", ",", "v2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.706457748307521*^9, 3.7064577686652603`*^9}}],
+
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{3.706457749916419*^9, 3.7064579989879847`*^9, 
+  3.7065072349283133`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "The stability equations are given by\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox[
+     OverscriptBox["\[Theta]", "."], "1"], "=", 
+    RowBox[{
+     RowBox[{"-", "g"}], 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+      RowBox[{
+       RowBox[{
+        SuperscriptBox["e", 
+         RowBox[{"-", "s"}]], "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], 
+           RowBox[{
+            SubscriptBox["H", "1"], "(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}], 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Theta]", "1"], "(", 
+             RowBox[{"\[Tau]", "-", "s"}], ")"}], "-", 
+            RowBox[{
+             SubscriptBox["\[Theta]", "1"], "(", "\[Tau]", ")"}]}], ")"}]}], 
+         "+", 
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[PartialD]", "y"], 
+           RowBox[{
+            SubscriptBox["H", "1"], "(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}], 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Theta]", "2"], "(", 
+             RowBox[{"\[Tau]", "-", "s"}], ")"}], "-", 
+            RowBox[{
+             SubscriptBox["\[Theta]", "2"], "(", "\[Tau]", ")"}]}], ")"}]}]}],
+         "]"}], 
+       RowBox[{"\[DifferentialD]", "s"}]}]}]}]}], TraditionalForm]]],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox[
+     OverscriptBox["\[Theta]", "."], "2"], "=", 
+    RowBox[{
+     RowBox[{"-", "g"}], 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+      RowBox[{
+       RowBox[{
+        SuperscriptBox["e", 
+         RowBox[{"-", "s"}]], "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[PartialD]", "x"], 
+           RowBox[{
+            SubscriptBox["H", "2"], "(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}], 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Theta]", "1"], "(", 
+             RowBox[{"\[Tau]", "-", "s"}], ")"}], "-", 
+            RowBox[{
+             SubscriptBox["\[Theta]", "1"], "(", "\[Tau]", ")"}]}], ")"}]}], 
+         "+", 
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[PartialD]", "y"], 
+           RowBox[{
+            SubscriptBox["H", "2"], "(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+             RowBox[{
+              RowBox[{"-", 
+               SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}], 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Theta]", "2"], "(", 
+             RowBox[{"\[Tau]", "-", "s"}], ")"}], "-", 
+            RowBox[{
+             SubscriptBox["\[Theta]", "2"], "(", "\[Tau]", ")"}]}], ")"}]}]}],
+         "]"}], 
+       RowBox[{"\[DifferentialD]", "s"}]}]}]}]}], TraditionalForm]]],
+ "\nIf we let ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Theta]", "1"], "=", 
+    RowBox[{
+     SubscriptBox["\[Phi]", "1"], 
+     SuperscriptBox["e", "\[Lambda]t"]}]}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Theta]", "2"], "=", 
+    RowBox[{
+     SubscriptBox["\[Phi]", "2"], 
+     SuperscriptBox["e", "\[Lambda]t"]}]}], TraditionalForm]]],
+ ", then we have the eigenvalue equations\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "1"], "=", 
+    RowBox[{
+     RowBox[{"-", 
+      SubscriptBox["g\[Phi]", "1"]}], 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         SubscriptBox["Q", "1"], "(", "s", ")"}], "[", 
+        FractionBox[
+         RowBox[{
+          SuperscriptBox["e", 
+           RowBox[{"-", "\[Lambda]s"}]], "-", "1"}], "\[Lambda]"], "]"}], 
+       RowBox[{"\[DifferentialD]", "s"}]}]}]}]}], TraditionalForm]]],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"-", 
+     SubscriptBox["g\[Phi]", "2"]}], 
+    RowBox[{
+     SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        SubscriptBox["Q", "2"], "(", "s", ")"}], "[", 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["e", 
+          RowBox[{"-", "\[Lambda]s"}]], "-", "1"}], "\[Lambda]"], "]"}], 
+      RowBox[{"\[DifferentialD]", "s"}]}]}]}], TraditionalForm]]],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "2"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       SubscriptBox["g\[Phi]", "1"]}], 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          SubscriptBox["Q", "3"], "(", "s", ")"}], "[", 
+         FractionBox[
+          RowBox[{
+           SuperscriptBox["e", 
+            RowBox[{"-", "\[Lambda]s"}]], "-", "1"}], "\[Lambda]"], "]"}], 
+        RowBox[{"\[DifferentialD]", "s"}]}]}]}], "-", 
+     RowBox[{
+      SubscriptBox["g\[Phi]", "2"], 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          SubscriptBox["Q", "4"], "(", "s", ")"}], "[", 
+         FractionBox[
+          RowBox[{
+           SuperscriptBox["e", 
+            RowBox[{"-", "\[Lambda]s"}]], "-", "1"}], "\[Lambda]"], "]"}], 
+        RowBox[{"\[DifferentialD]", "s"}]}]}]}]}]}], TraditionalForm]]],
+ "\nwhere\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["Q", "1"], "(", "t", ")"}], " ", "=", 
+    RowBox[{
+     SuperscriptBox["e", 
+      RowBox[{"-", "s"}]], 
+     RowBox[{
+      SubscriptBox["\[PartialD]", "x"], 
+      RowBox[{
+       SubscriptBox["H", "1"], "(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}]}]}], 
+   TraditionalForm]]],
+ ",\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["Q", "2"], "(", "t", ")"}], " ", "=", 
+    RowBox[{
+     SuperscriptBox["e", 
+      RowBox[{"-", "s"}]], 
+     RowBox[{
+      SubscriptBox["\[PartialD]", "y"], 
+      RowBox[{
+       SubscriptBox["H", "1"], "(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}]}]}], 
+   TraditionalForm]]],
+ ",\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["Q", "3"], "(", "t", ")"}], " ", "=", 
+    RowBox[{
+     SuperscriptBox["e", 
+      RowBox[{"-", "s"}]], 
+     RowBox[{
+      SubscriptBox["\[PartialD]", "x"], 
+      RowBox[{
+       SubscriptBox["H", "2"], "(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}]}]}], 
+   TraditionalForm]]],
+ ",\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["Q", "4"], "(", "t", ")"}], " ", "=", 
+    RowBox[{
+     SuperscriptBox["e", 
+      RowBox[{"-", "s"}]], 
+     RowBox[{
+      SubscriptBox["\[PartialD]", "y"], 
+      RowBox[{
+       SubscriptBox["H", "2"], "(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "1"]}], "s"}], ",", 
+        RowBox[{
+         RowBox[{"-", 
+          SubscriptBox["\[Nu]", "2"]}], "s"}]}], ")"}]}]}]}], 
+   TraditionalForm]]],
+ ".\nWe can further compact the notation by writing\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "1"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "g"}], " ", 
+      SubscriptBox["\[Phi]", "1"], 
+      RowBox[{
+       SubscriptBox[
+        OverscriptBox["Q", "^"], "1"], "(", "\[Lambda]", ")"}]}], "-", 
+     RowBox[{"g", " ", 
+      SubscriptBox["\[Phi]", "2"], 
+      RowBox[{
+       SubscriptBox[
+        OverscriptBox["Q", "^"], "2"], "(", "\[Lambda]", ")"}]}]}]}], 
+   TraditionalForm]]],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "2"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "g"}], " ", 
+      SubscriptBox["\[Phi]", "1"], 
+      RowBox[{
+       SubscriptBox[
+        OverscriptBox["Q", "^"], "3"], "(", "\[Lambda]", ")"}]}], "-", 
+     RowBox[{"g", " ", 
+      SubscriptBox["\[Phi]", "2"], 
+      RowBox[{
+       SubscriptBox[
+        OverscriptBox["Q", "^"], "4"], "(", "\[Lambda]", ")"}]}]}]}], 
+   TraditionalForm]]],
+ "\nwhere the hat Q\[CloseCurlyQuote]s are the integrals above."
+}], "Text",
+ CellChangeTimes->{{3.706458042672455*^9, 3.706458125193589*^9}, {
+  3.706458168377775*^9, 3.706458263074541*^9}, {3.706458299761387*^9, 
+  3.706458374505458*^9}, {3.706458462354435*^9, 3.7064585002663927`*^9}, {
+  3.706458737418572*^9, 3.706459158673808*^9}, {3.7067919036306667`*^9, 
+  3.706791938549806*^9}, {3.7067936356891527`*^9, 3.706793635888488*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.70645805427592*^9, 3.7064580575053043`*^9}}]
+},
+WindowSize->{1063, 711},
+WindowMargins->{{Automatic, 311}, {Automatic, 474}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 650, 20, 55, "Input"],
+Cell[1211, 42, 310, 8, 32, "Input"],
+Cell[1524, 52, 979, 32, 55, "Input"],
+Cell[CellGroupData[{
+Cell[2528, 88, 319, 9, 32, "Input"],
+Cell[2850, 99, 128, 2, 32, "Output"]
+}, Open  ]],
+Cell[2993, 104, 9603, 323, 392, "Text"],
+Cell[12599, 429, 93, 1, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

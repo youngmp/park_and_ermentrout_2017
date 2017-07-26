@@ -1,0 +1,56 @@
+"""
+calculate evans function + the intersections and all that.
+
+more specifically, use a linear interpolation or root finder to get the real value for a given g,b. Continue in two parameters.
+"""
+
+from scipy.optimize import brentq
+import numpy as np
+import matplotlib.pylab as mp
+
+from lib import *
+import twod_phase
+
+
+def main():
+
+    # get existence
+    p = twod_phase.Phase()
+
+    M_re = 300
+    M_im = 300
+    N = 200
+    
+    lam_re = np.linspace(-.25,.5,M_re)
+    lam_im = np.linspace(-.01,2,M_im)
+    sint = np.linspace(0,N/10,N)
+    
+    #LAM_re, LAM_im, SINT = np.meshgrid(lam_re,lam_im,sint,dtype=np.complex)
+    LAM_re, LAM_im, SINT = np.meshgrid(lam_re,lam_im,sint)
+    
+    LAM_re_contour, LAM_im_contour = np.meshgrid(lam_re,lam_im)
+
+    # given b, find g s.t. alpha = 0
+
+    bvals = np.linspace(.6,.9,5)
+    gzero_vals = np.zeros(len(bvals))
+
+    regions = 3
+    bvals_regions = np.ceil(bvals)
+    gstartlist = [2.4,2.4]
+    gendlist = [4.5,4.5]
+    
+    #print p.evans_zero_alpha(4.,.4,LAM_re,LAM_im,SINT,real=True)
+
+
+    for i in range(len(bvals)):
+        gzero_vals[i] = brentq(p.evans_zero_alpha,2.4,4.5,args=(b[i],LAM_re,LAM_im,SINT))
+        #gzero_vals[i] = p.evans_zero_alpha(b,LAM_re,LAM_im,SINT))
+
+
+    #mp.figure()
+    #mp.plot(bvals,gzero_vals)
+    #mp.show()
+
+if __name__ == "__main__":
+    main()

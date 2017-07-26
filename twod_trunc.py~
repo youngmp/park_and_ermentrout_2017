@@ -1,0 +1,306 @@
+"""
+2D neural field model, with truncated fourier series. This script extracts the proper coefficients for the H approximation that uses coefficients with index |i|+|j| <= 2.
+
+See 2d_fourier_truc.nb for the mathematica script used to derive this chunk of code.
+
+This script calculates the following integrand:
+
+ Sin(th1)*(2*u1**2+4*u1*u[3]*Cos(x)-2*u1**2*Cos(x)**2-4*u1*u[3]*Cos(x)**3+4*u1*u[2]*Cos(y)-4*u1*u[2]*Cos(x)**2*Cos(y)+2*u1**2*Sin(x)**2+12*u1*u[3]*Cos(x)*Sin(x)**2+4*u1*u[2]*Cos(y)*Sin(x)**2)\
++ Cos(th1)*Sin(th1)*(8*u[3]**2+4*u1*u[3]*Cos(x)-4*u1*u[3]*Cos(x)**3-8*u[3]**2*Cos(x)**4+8*u[2]*u[3]*Cos(x)*Cos(y)-8*u[2]*u[3]*Cos(x)**3*Cos(y)+12*u1*u[3]*Cos(x)*Sin(x)**2+48*u[3]**2*Cos(x)**2*Sin(x)**2+24*u[2]*u[3]*Cos(x)*Cos(y)*Sin(x)**2-8*u[3]**2*Sin(x)**4)\
++ Cos(th2)*Sin(th1)*(4*u[2]**2 - 4*u[2]**2*Cos(x)**2 + 4*u1*u[2]*Cos(y) + 8*u[2]*u[3]*Cos(x)*Cos(y) - 4*u1*u[2]*Cos(x)**2*Cos(y) - 8*u[2]*u[3]*Cos(x)**3*Cos(y) + 4*u[2]**2*Cos(y)**2\
+- 4*u[2]**2*Cos(x)**2*Cos(y)**2 + 4*u[2]**2*Sin(x)**2 + 4*u1*u[2]*Cos(y)*Sin(x)**2 + 24*u[2]*u[3]*Cos(x)*Cos(y)*Sin(x)**2 + 4*u[2]**2*Cos(y)**2*Sin(x)**2 - 4*u[2]**2*Sin(y)**2\
++ 4*u[2]**2*Cos(x)**2*Sin(y)**2 - 4*u[2]**2*Sin(x)**2*Sin(y)**2)
+
+multiplied with f(u_0), where u_0 is the truncated steady-state bump solution.
+
+The function we eventually put into XPP takes the form
+r1*sin(th1) + r2*cos(th1)*sin(th1) + r3*cos(th2)*sin(th1)
+
+where
+r1 = integral((2*u1**2+4*u1*u[3]*Cos(x)-2*u1**2*Cos(x)**2-4*u1*u[3]*Cos(x)**3+4*u1*u[2]*Cos(y)-4*u1*u[2]*Cos(x)**2*Cos(y)+2*u1**2*Sin(x)**2+12*u1*u[3]*Cos(x)*Sin(x)**2+4*u1*u[2]*Cos(y)*Sin(x)**2)*fu)
+r1 = integral((8*u[3]**2+4*u1*u[3]*Cos(x)-4*u1*u[3]*Cos(x)**3-8*u[3]**2*Cos(x)**4+8*u[2]*u[3]*Cos(x)*Cos(y)-8*u[2]*u[3]*Cos(x)**3*Cos(y)+12*u1*u[3]*Cos(x)*Sin(x)**2+48*u[3]**2*Cos(x)**2*Sin(x)**2+24*u[2]*u[3]*Cos(x)*Cos(y)*Sin(x)**2-8*u[3]**2*Sin(x)**4)*fu)
+r3 = integral((4*u[2]**2 - 4*u[2]**2*Cos(x)**2 + 4*u1*u[2]*Cos(y) + 8*u[2]*u[3]*Cos(x)*Cos(y) - 4*u1*u[2]*Cos(x)**2*Cos(y) - 8*u[2]*u[3]*Cos(x)**3*Cos(y) + 4*u[2]**2*Cos(y)**2\
+- 4*u[2]**2*Cos(x)**2*Cos(y)**2 + 4*u[2]**2*Sin(x)**2 + 4*u1*u[2]*Cos(y)*Sin(x)**2 + 24*u[2]*u[3]*Cos(x)*Cos(y)*Sin(x)**2 + 4*u[2]**2*Cos(y)**2*Sin(x)**2 - 4*u[2]**2*Sin(y)**2\
++ 4*u[2]**2*Cos(x)**2*Sin(y)**2 - 4*u[2]**2*Sin(x)**2*Sin(y)**2)*fu)
+
+these are all double integrals.
+
+
+"""
+
+import numpy as np
+np.random.seed(0)
+import matplotlib
+#matplotlib.use("Agg")
+matplotlib.use("GTKAgg")
+
+# for dynamic print updating
+from sys import stdout
+import sys
+import getopt
+
+#import twod_phase
+import matplotlib.pylab as mp
+import os
+#import scipy as sp
+from scipy.integrate import odeint,dblquad
+from scipy.signal import convolve2d,fftconvolve
+from scipy.ndimage.measurements import center_of_mass
+import time
+#from colorsys import hsv_to_rgb
+from mpl_toolkits.mplot3d import Axes3D
+import copy
+import math
+
+
+from matplotlib import rc
+rc('text', usetex=True)
+rc('font', family='serif', serif=['Computer Modern Roman'])
+
+# anim
+import matplotlib.pyplot as plt
+
+import twod
+import fourier_2d as f2d
+from euler import ESolve
+
+sin = np.sin; Sin = np.sin
+cos = np.cos; Cos = np.cos
+pi = np.pi
+sqrt = np.sqrt
+exp = np.exp
+
+periodization_lower = -5
+periodization_upper = 5
+
+i_N = 100
+xarr = np.linspace(-pi,pi,i_N)
+yarr = np.linspace(-pi,pi,i_N)
+
+
+## get fourier modes
+
+# run sim
+simdata = twod.SimDat(q=0.,g=0.,
+                      recompute_kernel=False,
+                      recompute_I=False,
+                      recompute_ss=False,
+                      kernel_type='diff_gauss',
+                      T=100,eps=.01)
+    
+# extract the fourier modes from the ss bump
+c,c1,idx = simdata.get_fourier_modes(simdata.u0ss,threshold=10.)
+c = np.real(c)
+c1 = np.real(c1)
+
+for i in range(len(idx)):
+    print c1[i],idx[i]
+
+    
+#for i in range(len(c1)):
+#    print i,'&',np.real(c1[i])/(simdata.N**2),'&',idx[i],'\\\\'
+
+# reorganize fourier coefficients
+# based on the assumptions stated in 2d_fourier_trunc.nb. Double check if using different parameters/kernel
+
+#print c1,idx
+
+# ulist = [u0,u1,u[2],u[3]]
+
+def count_unique_idx(idxlist):
+    # for each tuple in idxlist, take abs of both coords and check if in uniquelistx,uniquelisty.
+    # given coord, loop over uniquelistx,uniquelisty.
+    # this is to make sure (2,1) is counted the same as (1,2).
+
+    uniquelistx = []
+    uniquelisty = []
+
+    for pair in idxlist:
+        absx = abs(pair[0])
+        absy = abs(pair[1])
+        
+        eleflag = 0
+        for i in range(len(uniquelistx)):
+            if (absx == uniquelistx[i] and absy == uniquelisty[i])\
+               or (absy == uniquelistx[i] and absx == uniquelisty[i]):
+                eleflag = 1
+        if eleflag == 0:
+            uniquelistx.append(absx)
+            uniquelisty.append(absy)
+
+    # put back into list of tuples
+    uniquelist = []
+    for i in range(len(uniquelistx)):
+        uniquelist.append((uniquelistx[i],uniquelisty[i]))
+
+    return uniquelist
+
+print count_unique_idx(idx)
+u = np.zeros(len(count_unique_idx(idx)))
+
+for i in range(len(idx)):
+    idxsum = abs(idx[i][0]) + abs(idx[i][1])
+    
+    if idxsum == 0:
+        u[0] = c1[i]
+    elif idxsum == 1:
+        u[1] = c1[i]
+    elif idxsum == 2:
+        if abs(idx[i][0]) == 2 or abs(idx[i][1]) == 2:
+            u[3] = c1[i]
+        elif abs(idx[i][0]) == abs(idx[i][1]):
+            u[2] = c1[i]
+    elif idxsum == 3:
+        u[4] = c1[i]
+
+# normalize data
+nx,ny = np.shape(simdata.u0ss)
+u = u/(nx*ny)
+print 'ulist',u
+
+
+def u0ss(x,y):
+    """
+    truncated steady-state bump solution
+
+    ulist: fourier coefficients.
+    """
+
+    return u[0] + 2*u[1]*Cos(x) + 2*u[3]*Cos(2*x) + 2*u[1]*Cos(y) + 4*u[2]*Cos(x)*Cos(y) + 4*u[4]*Cos(2*x)*Cos(y) + 2*u[3]*Cos(2*y) + 4*u[4]*Cos(x)*Cos(2*y)
+
+
+
+def r(ulist):
+    """
+    first integral
+    """
+    
+    tot = np.zeros(len(ulist))
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.array([np.sum((4*u1*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu),
+                         np.sum((16*u3*Cos(x)*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu),
+                         np.sum((8*u2*Cos(y)*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu),
+                         np.sum((32*u4*Cos(x)*Cos(y)*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu),
+                         np.sum((8*u4*Cos(2*y)*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu),
+                         np.sum((-8*u4*Cos(2*y)*(u1+2*u2*Cos(y)+4*Cos(x)*(u3+2*u4*Cos(y))+2*u4*Cos(2*y))*Sin(x)**2)*fu)
+                         ])
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+"""
+def r1(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((4*u1*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+def r2(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((16*u3*Cos(x)*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+
+def r3(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((8*u2*Cos(y)*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+
+def r4(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((32*u4*Cos(x)*Cos(y)*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+
+def r5(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((8*u4*Cos(2*y)*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+
+
+def r6(ulist):
+    
+    tot = 0
+    for x in xarr:
+        fu = twod.f(u0ss(x,yarr))
+        tot += np.sum((-8*u4*Cos(2*y)*(u1 + 2*u2*Cos(y) + 4*Cos(x)*(u3 + 2*u4*Cos(y)) + 2*u4*Cos(2*y))*Sin(x)**2)*fu)
+
+    # normalize
+    tot *= (2*pi/i_N)**2
+
+    return tot
+"""
+
+#def main(screen):
+def main():
+    
+    """
+    r1v = r1(u)
+    r2v = r2(u)
+    r3v = r3(u)
+    r4v = r4(u)
+    r5v = r5(u)
+    r6v = r6(u)
+    """
+
+    r1v,r2v,r3v,r4v,,r5v,r6v = r(u)
+
+    print r1v,r2v,r3v,r4v,r5v,r6v
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+
+    x = np.linspace(-pi,pi,64)
+    X,Y = np.meshgrid(x,x)
+    twod.plot_s(ax,(r1v+r5v/2.+r6v)*sin(X)+r2v*cos(X)*sin(X)+r3v*cos(Y)*sin(X)
+                +(r4v/2.)*sin(2*X)*cos(Y)+(r5v/2.)*sin(X)*cos(2*Y))
+    #simdata.plot('u0b')
+    #simdata.plot('phase_space')
+    #simdata.plot('pinning')
+    #simdata.plot('init')
+    #simdata.plot('final')
+    #simdata.plot('movie')
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()

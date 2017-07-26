@@ -1,0 +1,27 @@
+#table wc % 101 -50 50 (cos(pi*t/50))*2*pi/100
+#table ws % 101 -50 50 (cos(pi*t/50))*2*pi/100
+table mh % 101 -50 50 (A*exp(-(t/1)^2)-B*exp(-(t/2)^2))*2*pi/100
+
+p se=1,si=2
+p A=0.5642,B=0.2821
+
+#table wc % 101 0 100 (cos(pi*t/50))*2*pi/100
+#table ws % 101 0 100 (sin(pi*t/50))*2*pi/100
+table ones % 101 0 100 2*pi/100
+
+#cs[0..99]=cos(pi*([j])/50)
+#sn[0..99]=sin(pi*([j])/50)
+
+#special wfcc=conv(periodic,100,50,wc,cs0)
+#special wfss=conv(periodic,100,50,ws,sn0)
+special wfmh=conv(periodic,100,50,mh,ones0)
+
+#cc[0..99]'=wfcc([j])
+#ss[0..99]'=wfss([j])
+mh[0..99]'=wfmh([j])
+
+#cc[0..99](0)=0
+#ss[0..99](0)=0
+mh[0..99](0)=0
+
+@ dt=1,total=1,bounds=10000

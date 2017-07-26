@@ -1,0 +1,613 @@
+"""
+testing various convolutions (periodic and non-periodic)
+this script also serves as documentation on various convolution methods.
+
+questions:
+for periodic convolutions what effects does changing the size of the lookup table have on the convolution approximation?
+
+"""
+
+import numpy as np
+import matplotlib.pylab as mp
+
+from scipy import signal
+from scipy import misc
+
+cos = np.cos
+sin = np.sin
+exp = np.exp
+pi = np.pi
+sqrt = np.sqrt
+
+def bard_conv(n,m,w,u,conv_type='periodic'):
+    """bard's convolution method
+
+    :type n: int
+    :type m: int
+    :type w: ndarray
+    :type u: ndarray
+    :type conv_type: string. handle different cases depending on function types
+
+    (http://www.math.pitt.edu/~bard/xpp/help/xppodes.html)
+    convolve w with u. w is a table of length 2m+1, and u is an array with n values,
+    i.e., indices u[0],...,u[n-1]
+
+    assume all functions periodic for now
+    """
+    
+    conv_final = np.zeros(n)
+    #temp = np.zeros(2*m+1)
+    #idx = 0
+    i = np.arange(-m,m+1,1)
+
+    for j in range(n):
+        conv_final[j] = np.sum(w[m+i]*u[np.mod(j+i+m,n)])
+
+        """
+        for i in range(-m,m+1):
+            #if j + i < 0:
+            #    u_idx = n + j + i
+            #elif j + i > n-1:
+            #    u_idx = j + i - n
+            #else:
+            #    u_idx = i + j
+            #tot += w[m+i]*u[u_idx]
+            tot += w[m+i]*u[np.mod(j+i,n)]
+            #if j == idx:
+            #    temp[i+m] = w[m+i]*u[u_idx]
+        #if j == idx:
+        #    mp.figure()
+        #    mp.plot(temp)
+        #    print sum(temp)
+        #    mp.show()
+        conv_final[j] = tot
+        """
+    return conv_final
+
+
+
+def K_diff(x,se=1,si=2):
+    """
+    difference of gaussians
+    """
+    A=1./(sqrt(pi)*se);B=1./(sqrt(pi)*si)
+    return (A*exp(-(x/se)**2) -
+            B*exp(-(x/si)**2))
+
+periodization_lower = -6
+periodization_upper = 6
+
+def K_diff_p(x,se=1,si=2,Kamp=5):
+    """
+    (periodic version)
+    ricker wavelet https://en.wikipedia.org/wiki/Mexican_hat_wavelet
+    """
+    tot = 0
+    for n in range(periodization_lower,periodization_upper+1):
+        tot = tot + K_diff(x+n*2*pi,se,si)
+    return Kamp*tot
+
+
+        
+def K_diff_p_2d(X,Y,Kamp=5):
+    """
+    periodized kernel using difference of gaussians
+    """
+    tot = 0
+    for n in np.arange(periodization_lower,periodization_upper+1,1):
+        for m in np.arange(periodization_lower,periodization_upper+1,1):
+            tot = tot + K_diff(sqrt( (X+n*2*pi)**2 + (Y+m*2*pi)**2))
+    return tot
+
+
+
+def stewart_conv(k,x):
+    """periodic convolution from stewart.
+
+    :type k: (1xk) matrix of kernel weights
+    :type x: (1xn) matrix of data values
+    """
+    nsize = np.shape(x)[-1]
+    ksize = np.shape(k)[-1]
+    khalf = np.floor(ksize/2)
+    indx = np.mod(np.arange(-khalf, nsize+khalf,dtype='Int32'), nsize)
+    xnew = np.zeros((1,len(indx)))
+    j = 0
+
+    for i in indx:
+        xnew[0,j] = x[0,i]
+        j += 1
+    #print np.shape(x[0,indx]),np.shape(np.flipud(k)[0,:])
+    #return np.convolve(xnew[0,:],np.flipud(k)[0,:],'valid')
+    return np.convolve(xnew[0,:],np.flipud(k[0,:]),'valid')
+    #return np.convolve(x[0,indx],k[0,:],'same')
+
+def mat_conv(k,u):
+    """ periodic convolution via matrix multiplication
+
+    k: matrix
+    u: vector
+    """
+    return np.dot(k,u)
+    
+def w1(x,a=-.5,b=2.):
+    return a + b*cos(pi*x/50)
+
+def ones_arr(x):
+    return 1
+
+def f(x,r=15.,ut=.25):
+    return 1./(1+exp(-r*(x-ut)))
+
+def conv_check(conv_type, args):
+    """
+    conv_type: convolution type
+    args: arguments for function (including convolution type)
+    """
+    return conv_type(*args)
+    
+
+def bard_test(n1,m1,conv_type='periodic',test=None,return_plot_data=False,plot=False):
+    """
+    conv_type: convolution type (only periodic for now)
+    test: test partiulcar convolution
+    """
+    xa=0;xb=2*pi
+    if test == 'sin*1':
+        wv = np.ones(2*m1+1)
+        fv = cos(np.linspace(xa,xb,n1))
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = np.zeros(n1)
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == '1*sin':
+        wv = cos(np.linspace(xa, xb, 2*m1+1))
+        fv = np.ones(n1)
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = np.zeros(n1)
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == 'sin*sin':
+        wv = sin(np.linspace(xa,xb,2*m1+1))
+        fv = sin(np.linspace(xa,xb,n1))
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = -pi*cos(np.linspace(xa,xb,n1))
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == 'cos*cos':
+        wv = cos(np.linspace(xa,xb,2*m1+1))
+        fv = cos(np.linspace(xa,xb,n1))
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = pi*cos(np.linspace(xa,xb,n1))
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == 'cos*sin':
+        wv = cos(np.linspace(xa,xb,2*m1+1))
+        fv = sin(np.linspace(xa,xb,n1))
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = pi*sin(np.linspace(xa,xb,n1))
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == 'sin*cos':
+        wv = sin(np.linspace(xa,xb,2*m1+1))
+        fv = cos(np.linspace(xa,xb,n1))
+        val = bard_conv(n1, m1, wv, fv)*(2*pi)/n1
+        an_fn = pi*sin(np.linspace(xa,xb,n1))
+        err = np.sum(np.abs(val-an_fn))/n1
+    elif test == 'K_diff_p*1':
+        se=1.;si=2.
+        wv = K_diff_p(np.linspace(xa,xb,2*m1+1),se,si,1)
+        fv = np.ones(n1)*1.
+        val = bard_conv(n1,m1,wv,fv)*(2*pi)/n1
+        an_fn = None
+        err = None
+    elif test == '1*K_diff_p':
+        se=1.;si=2.
+        wv = np.ones(2*m1+1)*1.
+        fv = K_diff_p(np.linspace(xa,xb,n1),se,si,1)
+        val = bard_conv(n1,m1,wv,fv)*(2*pi)/n1
+        an_fn = None
+        err = None
+    elif test == 'K_diff*1':
+        se=1.;si=2.
+        print 'bard_test K_diff*1 domain on -pi,pi'
+        wv = K_diff(np.linspace(-pi,pi,2*m1+1),se,si)
+        fv = np.ones(n1)*1.
+        val = bard_conv(n1,m1,wv,fv)*(2*pi)/n1
+        an_fn = None
+        err = None
+    elif test == 'K_diff_p*f(sin)':
+        se=1.;si=2.
+        wv = K_diff_p(np.linspace(xa,xb,2*m1+1),se,si,1)
+        temp = sin(np.linspace(xa,xb,n1)-.5)
+        fv = f(temp)
+        val = bard_conv(n1,m1,wv,fv)*(2*pi)/n1
+        an_fn = None
+        err = None
+    elif test == 'f(sin)*K_diff_p':
+        se=1.;si=2.
+        wv = K_diff_p(np.linspace(xa,xb,n1),se,si,1)
+        temp = sin(np.linspace(xa,xb,2*m1+1)-.5)
+        fv = f(temp)
+        val = bard_conv(n1,m1,fv,wv)*(2*pi)/n1
+        an_fn = None
+        err = None
+    else: 
+        print 'No test',test,'found for bard_conv'
+        raise
+
+
+    if plot:
+        mp.figure()
+        mp.title(test+" bard conv")
+        mp.plot(an_fn)
+        mp.plot(val)
+    if return_plot_data:
+        return val, err, wv, fv, xa, xb, an_fn
+    else:
+        return val, err
+    print "unrecognized test",test
+
+def stewart_test(n2,test=None,return_plot_data=False,plot=False):
+    """
+    require arry dim 1xn
+    """
+    m2 = n2
+    xa=0;xb=2*pi
+    wv = np.zeros((1,n2))
+    fv = np.zeros((1,n2))
+    if test == 'sin*1':
+        wv += 1.
+        fv[0,:] = cos(np.linspace(xa, xb, n2))
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = np.zeros(n2+1)
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == '1*sin':
+        wv[0,:] = cos(np.linspace(xa, xb, m2))
+        fv += 1.
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = np.zeros(n2+1)
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == 'sin*sin':
+        wv[0,:] = sin(np.linspace(xa,xb,m2))
+        fv[0,:] = sin(np.linspace(xa,xb,n2))
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = -pi*cos(np.linspace(xa,xb,n2+1))
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == 'cos*cos':
+        wv[0,:] = cos(np.linspace(xa,xb,m2))
+        fv[0,:] = cos(np.linspace(xa,xb,n2))
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = pi*cos(np.linspace(xa,xb,n2+1))
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == 'cos*sin':
+        wv[0,:] = cos(np.linspace(xa,xb,m2))
+        fv[0,:] = sin(np.linspace(xa,xb,n2))
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = pi*sin(np.linspace(xa,xb,n2+1))
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == 'sin*cos':
+        wv[0,:] = sin(np.linspace(xa,xb,m2))
+        fv[0,:] = cos(np.linspace(xa,xb,n2))
+        val = stewart_conv(wv, fv)*(2*pi)/n2
+        an_fn = pi*sin(np.linspace(xa,xb,n2+1))
+        err = np.sum(np.abs(val-an_fn))/n2
+    elif test == 'K_diff_p*1':
+        se=1.;si=2.
+        wv[0,:] = K_diff_p(np.linspace(xa,xb,n2),se,si,1)
+        fv += 1.
+        val = stewart_conv(wv,fv)*(2*pi)/n2
+        an_fn = None
+        err = None
+    elif test == '1*K_diff_p':
+        se=1.;si=2.
+        wv += 1.
+        fv += K_diff_p(np.linspace(xa,xb,n2),se,si,1)
+        val = stewart_conv(wv,fv)*(2*pi)/n2
+        an_fn = None
+        err = None
+    elif test == 'K_diff_p*f(sin)':
+        se=1.;si=2.
+        wv[0,:] = K_diff_p(np.linspace(xa,xb,n2),se,si,1)
+        temp = sin(np.linspace(xa,xb,n2)-.5)
+        fv[0,:] = f(temp)
+        val = stewart_conv(wv,fv)*(2*pi)/n2
+        an_fn = None
+        err = None
+    elif test == 'f(sin)*K_diff_p':
+        se=1.;si=2.
+        wv[0,:] = K_diff_p(np.linspace(xa,xb,n2),se,si,1)
+        temp = sin(np.linspace(xa,xb,n2)-.5)
+        fv[0,:] = f(temp)
+        val = stewart_conv(fv,wv)*(2*pi)/n2
+        an_fn = None
+        err = None
+
+    
+    else: 
+        print 'No test',test,'found for stewart_conv'
+        raise
+
+
+    if plot:
+        mp.figure()
+        mp.title(test+" stewart conv")
+        mp.plot(an_fn)
+        mp.plot(val)
+    if return_plot_data:
+        return val, err, wv, xa, xb, an_fn
+    else:
+        return val,err
+    print "unrecognized test",test
+
+def mat_test(N,test=None,return_plot_data=False,plot=False):
+    """
+    test conv with matrix multiplication
+    """
+    xa=0;xb=2*pi
+    Wmatrix = np.zeros((N,N))
+    x = np.linspace(xa, xb, N)
+    if test == 'sin*1':
+        uvec = np.ones(N)
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = sin(x[i] - x[j])
+        val = mat_conv(Wmatrix, uvec)*(2*pi)/N
+        err = np.linalg.norm(val)
+    elif test == '1*sin':
+        uvec = np.zeros(N)+1.
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = ones_arr(x[i] - x[j])
+        val = mat_conv(Wmatrix, sin(x))*(2*pi)/N
+        err = np.linalg.norm(val)
+    elif test == 'sin*sin':
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = sin(x[i] - x[j])
+        val = mat_conv(Wmatrix, sin(x))*(2*pi)/N
+        an_fn = -pi*cos(np.linspace(xa,xb,N))
+        err =  np.sum(np.abs(val-an_fn))/N
+    elif test == 'cos*cos':
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = cos(x[i] - x[j])
+        val = mat_conv(Wmatrix, cos(x))*(2*pi)/N
+        an_fn = pi*cos(np.linspace(xa,xb,N))
+        err =  np.sum(np.abs(val-an_fn))/N
+    elif test == 'cos*sin':
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = cos(x[i] - x[j])
+        val = mat_conv(Wmatrix, sin(x))*(2*pi)/N
+        an_fn = pi*sin(np.linspace(xa,xb,N))
+        err =  np.sum(np.abs(val-an_fn))/N
+    elif test == 'sin*cos':
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = sin(x[i] - x[j])
+        val = mat_conv(Wmatrix, cos(x))*(2*pi)/N
+        an_fn = pi*sin(np.linspace(xa,xb,N))
+        err =  np.sum(np.abs(val-an_fn))/N
+    elif test == 'K_diff_p*1':
+        se=1.;si=2.
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = K_diff_p(x[i] - x[j],se,si,1.)
+        fv = np.ones(N)*1.
+        val = mat_conv(Wmatrix,fv)*(2*pi)/N
+        an_fn = None
+        err = None
+    elif test == '1*K_diff_p':
+        se=1.;si=2.
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = 1.
+        fv = K_diff_p(x,se,si,1.)
+        val = mat_conv(Wmatrix,fv)*(2*pi)/N
+        an_fn = None
+        err = None
+    elif test == 'K_diff_p*f(sin)':
+        se=1.;si=2.
+        for i in range(N):
+            for j in range(N):
+                Wmatrix[i,j] = K_diff_p(x[i]-x[j],se,si,1.)
+        temp = sin(np.linspace(xa,xb,N)-.5)
+        fv = f(temp)
+        val = mat_conv(Wmatrix,fv)*(2*pi)/N
+        an_fn = None
+        err = None
+    else: 
+        print 'No test',test,'found for manual_conv'
+        raise
+    
+    if plot:
+        mp.figure()
+        mp.title(test+" matrix conv")
+        mp.plot(an_fn)
+        mp.plot(val)
+    if return_plot_data:
+        return val, err, wv, xa, xb, an_fn
+    else:
+        return val,err
+    print "unrecognized test",test
+
+def main():
+    np.random.seed(2000)
+
+
+    # domain 0 to 2pi
+    #a=-pi;b=pi
+    a=0;b=2*pi
+    
+
+    x = np.linspace(a,b,250+1)
+    XX,YY = np.meshgrid(x,x)
+
+    ascent = misc.ascent()
+    kernel = K_diff_p_2d(XX,YY)
+    
+    conv_builtin = signal.convolve2d(ascent,kernel,boundary='wrap',mode='same')
+    conv_fft = np.real(np.fft.ifft2(np.fft.fft2(ascent)*np.fft.fft2(kernel,ascent.shape)))
+
+    k_rows, k_cols = kernel.shape
+    conv_fft = np.roll(np.roll(conv_fft, -(k_cols//2), axis=-1),
+                       -(k_rows//2), axis=-2)
+
+    mp.figure()
+    mp.imshow(conv_builtin)
+    
+    mp.figure()
+    mp.imshow(conv_fft)
+    print np.sum(np.abs(conv_fft - conv_builtin)) # circular convolution works!
+    mp.show()
+
+    """
+    total_plots = 10
+    mp.figure()
+    Ktablefft = np.fft.fft(w*dy,N_dom)
+    for i in range(N_T):
+        fu = np.roll(f(u),N_dom/2)
+
+        wf = np.real(np.fft.ifft(Ktablefft*np.fft.fft(fu)))
+        u = u + dt*(-u + wf)
+
+        #u = u + dt*(-u + bard_conv(n,m,w,fu,conv_type='periodic')*dy)
+        
+
+        #mp.figure()
+
+        mp.plot(u,c=str(c-(3.*i)/(4.*N_T)))
+        
+    mp.show()
+    """
+    
+
+
+
+    """
+
+    plot = True
+
+    se=1.;si=2.
+
+    # bard discretization
+    n1 = 100
+    m1 = 50
+
+    # stewart discretization
+    n2 = 100
+    
+    # matrix disc
+    N = 100
+
+    print "Convolution\t\tbard (n="+str(n1)+",m="+str(m1)+")\tstewart (n="+str(n2)+")\t\tmatrix (n="+str(N)+")"
+
+    ### TEST 1: convolve sin*1
+    valb,errb = bard_test(n1,m1,test='sin*1')
+    vals,errs = stewart_test(n2,test='sin*1')
+    valm,errm = mat_test(N,test='sin*1')
+    print "sin*1\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+
+    ### TEST 2: convolve 1*sin
+    valb,errb = bard_test(n1,m1,test='1*sin')
+    vals,errs = stewart_test(n2,test='1*sin')
+    valm,errm = mat_test(N,test='1*sin')
+    print "1*sin\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+
+    ### TEST 3: convolve sin*sin
+    valb,errb = bard_test(n1,m1,test='sin*sin')
+    vals,errs = stewart_test(n2,test='sin*sin')
+    valm,errm = mat_test(N,test='sin*sin')
+    print "sin*sin\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+    if False:
+        mat_test(N,test='sin*sin',plot=True)
+        stewart_test(n2,test='sin*sin',plot=True)
+        bard_test(n1,m1,test='sin*sin',plot=True)
+
+    ### TEST 3: convolve cos*cos
+    valb,errb = bard_test(n1,m1,test='cos*cos')
+    vals,errs = stewart_test(n2,test='cos*cos')
+    valm,errm = mat_test(N,test='cos*cos')
+    print "cos*cos\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+    if False:
+        mat_test(N,test='cos*cos',plot=True)
+        stewart_test(n2,test='cos*cos',plot=True)
+        bard_test(n1,m1,test='cos*cos',plot=True)
+    
+
+    ### TEST 4: convolve cos*sin
+    valb,errb = bard_test(n1,m1,test='cos*sin')
+    vals,errs = stewart_test(n2,test='cos*sin')
+    valm,errm = mat_test(N,test='cos*sin')
+    print "cos*sin\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+    if False:
+        mat_test(N,test='cos*sin',plot=True)
+        stewart_test(n2,test='cos*sin',plot=True)
+        bard_test(n1,m1,test='cos*sin',plot=True)
+
+
+    ### TEST 5: convolve sin*cos
+    valb,errb = bard_test(n1,m1,test='sin*cos')
+    vals,errs = stewart_test(n2,test='sin*cos')
+    valm,errm = mat_test(N,test='sin*cos')
+    print "sin*cos\t\t\t"+str(errb)+"\t\t"+str(errs)+"\t\t"+str(errm)
+    if False:
+        mat_test(N,test='sin*cos',plot=True)
+        stewart_test(n2,test='sin*cos',plot=True)
+        bard_test(n1,m1,test='sin*cos',plot=True)
+
+
+    ### TEST 6: convolve K_diff_p*1
+    if False:
+        bard_test(n1,m1,test='K_diff_p*1',plot=True)
+        stewart_test(n2,test='K_diff_p*1',plot=True)
+        mat_test(N,test='K_diff_p*1',plot=True)
+
+    ### TEST 7: convolve 1*K_diff_p
+    if False:
+        bard_test(n1,m1,test='1*K_diff_p',plot=True)
+        stewart_test(n2,test='1*K_diff_p',plot=True)
+        mat_test(N,test='1*K_diff_p',plot=True)
+        
+    ### TEST 8: convolve K_diff*1
+    if False:
+        bard_test(n1,m1,test='K_diff*1',plot=True)
+
+    ### TEST 9: K_diff_p*f(sin)
+    if False:
+        bard_test(n1,m1,test='K_diff_p*f(sin)',plot=True)
+        stewart_test(n2,test='K_diff_p*f(sin)',plot=True)
+        mat_test(N,test='K_diff_p*f(sin)',plot=True)
+
+    if False:
+        bard_test(n1,m1,test='K_diff_p*f(sin)',plot=True)
+        bard_test(n1,m1,test='f(sin)*K_diff_p',plot=True)
+        #stewart_test(n2,test='f(sin)*K_diff_p',plot=True)
+
+    #########################
+    #  compare discrete convolution to fourier transform
+    #########################
+
+    a = np.array([0,0,1,2,3,9,0]) # 'kernel'
+    b = np.array([0,1,0,1,5,0,0]) # 'signal'
+
+    # pad the kernel
+    N = len(a)
+    a_pad = np.zeros(3*N)
+    a_pad[:N] = a
+    a_pad[N:2*N] = a
+    a_pad[2*N:3*N] = a
+        
+    # construct brute-force conv
+    w_tilde = np.zeros(N)
+    for i in range(N):
+        for j in range(N):
+            w_tilde[i] += a_pad[i-j+(N-1)]*b[j]
+    
+    # use fft to get convolution
+    fft_output = np.fft.ifft(np.fft.fft(a)*np.fft.fft(b)) # For array, "*" means element-wise multiplication, and the dot() function is used for matrix multiplication.
+    mp.plot(w_tilde)
+    mp.plot(fft_output-10)
+
+
+    mp.show()
+    """
+
+if __name__ == "__main__":
+    main()

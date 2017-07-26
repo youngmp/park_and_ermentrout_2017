@@ -1,0 +1,354 @@
+## Set file for twodphs.ode on Fri Feb  3 15:42:09 2017
+22   Number of equations and auxiliaries
+8   Number of parameters
+# Numerical stuff
+1    nout
+40    nullcline mesh
+3   Runge-Kutta
+7.161  total
+0.01  DeltaT
+0  T0
+0  Transient
+100000  Bound
+1e-12  DtMin
+1  DtMax
+0.001  Tolerance
+0.001  Abs. Tolerance
+0  Max Delay
+100   Eigenvector iterates
+0.001  Eigenvector tolerance
+0.001  Newton tolerance
+0  Poincare plane
+1e-05  Boundary value tolerance
+1e-05  Boundary value epsilon
+20   Boundary value iterates
+0   Poincare None
+1   Poincare variable
+1   Poincare sign
+0   Stop on Section
+0   Delay flag
+6.939999999999896  Current time
+6.939999999999896  Last Time
+1   MyStart
+1   INFLAG
+# Delays
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+# Bndry conds
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Old ICs
+6.817796235454074  X
+6.775632756503696  Y
+-0.03961819333718817  CXS
+0.5098101733547975  CYS
+0.2860442762909435  SXS
+-0.1617485167118791  SYS
+0.03474712472494021  SXSYS
+0.5429650447607042  SXCYS
+0.3079877158846004  CXSYS
+0.04705746916363836  CXCYS
+0.04574503511636838  SXCXS
+-0.001612881027101557  CYSYS
+-0.1838231721964767  C2XS
+0.3329009326087204  C2YS
+0.0695306587041092  S2XCYS
+0.02033033487874972  S2XSYS
+0.3904175416300497  SXC2YS
+-0.04944054644586796  SXS2YS
+0.2091463293771547  CXC2YS
+0.2473126602977231  CXS2YS
+-0.0853716351062305  C2XCYS
+-0.1038108546827817  C2XSYS
+# Ending  ICs
+-6.788039636248357  X
+18.30408405121879  Y
+0.4932747018336724  CXS
+-0.04510276444311184  CYS
+0.1680932068564256  SXS
+-0.2774217739898628  SYS
+0.01575920222524066  SXSYS
+-0.30537155151507  SXCYS
+-0.5381619187567652  CXSYS
+0.06468416561358065  CXCYS
+0.003604261956528813  SXCXS
+-0.04931784886074933  CYSYS
+0.3176950147626599  C2XS
+-0.1997185300401585  C2YS
+-0.2343424881229305  S2XCYS
+-0.06467569100636304  S2XSYS
+0.1153160420706727  SXC2YS
+0.02590154191642481  SXS2YS
+-0.08950759015848467  CXC2YS
+-0.05617400609251825  CXS2YS
+0.2178180824950657  C2XCYS
+-0.372423823312081  C2XSYS
+# Parameters
+0.8  b
+0.5  q
+5.507103095889842  g
+0.6406243310900001  h1
+0.072295900728  h2
+0.51728627897  h3
+0.017252838392  h4
+0.0044351419687  h5
+# Graphics
+0.7071097251469876  rm
+-0.4999999999826661  rm
+0.4999958366025518  rm
+0.7071038372138506  rm
+0.5000041633974482  rm
+-0.4999999999826661  rm
+0  rm
+0.7071038372138506  rm
+0.7071097251469876  rm
+0    
+1    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+-1000   
+1000   
+0    
+0   3DFlag
+1   Timeflag
+0   Colorflag
+0   Type
+1  color scale
+0   minscale
+6.679999828338623   xmax
+0   xmin
+6.273741722106934   ymax
+0.003973440732806921   ymin
+12   zmax
+-12   zmin
+3.339999914169312   
+0.299401205298746   
+3.13885758141987   
+0.3189910552103635   
+0   
+0.08333333333333333   
+45   Theta
+45   Phi
+0    xshft
+0    yshft
+0    zshft
+0   xlo
+0.003973440732806921   ylo
+0   
+0   
+6.679999828338623   xhi
+6.273741722106934   yhi
+6.3   
+6.3   
+# Transpose variables etc
+X
+2   n columns
+1   n rows
+1   row skip
+1   col skip
+1   row 0
+# Coupling stuff for H funs
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Array plot stuff
+
+1   NCols
+0   Row 1
+50   NRows
+8   RowSkip
+0  Zmin
+1  Zmax
+# Torus information 
+0    Torus flag 1=ON
+6.283185307179586  Torus period
+# Range information
+b
+-1   eq-range stab col
+0   shoot flag 1=on
+10   eq-range steps
+0  eq_range low
+1  eq_range high
+X
+X
+20   Range steps
+0   Cycle color 1=on
+1   Reset data 1=on
+1   Use old I.C.s 1=yes
+0  Par1 low
+0  Par2 low
+1  Par1 high
+1  Par2 high
+b
+0   BVP side
+0   color cycle flag 1=on
+10   BVP range steps
+0  BVP range low
+1  BVP range high
+RHS etc ...
+dX/dT=Q*J(X,Y)-G*(I1X+I2X+I3X+I4X)
+dY/dT=Q*J(Y,X)-G*(I1Y+I2Y+I3Y+I4Y)
+dCXS/dT=-CXS+CX
+dCYS/dT=-CYS+CY
+dSXS/dT=-SXS+SX
+dSYS/dT=-SYS+SY
+dSXSYS/dT=-SXSYS+SXSY
+dSXCYS/dT=-SXCYS+SXCY
+dCXSYS/dT=-CXSYS+CXSY
+dCXCYS/dT=-CXCYS+CXCY
+dSXCXS/dT=-SXCXS+SXCX
+dCYSYS/dT=-CYSYS+CYSY
+dC2XS/dT=-C2XS+C2X
+dC2YS/dT=-C2YS+C2Y
+dS2XCYS/dT=-S2XCYS+S2XCY
+dS2XSYS/dT=-S2XSYS+S2XSY
+dSXC2YS/dT=-SXC2YS+SXC2Y
+dSXS2YS/dT=-SXS2YS+SXS2Y
+dCXC2YS/dT=-CXC2YS+CXC2Y
+dCXS2YS/dT=-CXS2YS+CXS2Y
+dC2XCYS/dT=-C2XCYS+C2XCY
+dC2XSYS/dT=-C2XSYS+C2XSY
+
+where ...
+CX = COS(X)   
+CY = COS(Y)   
+SX = SIN(X)   
+SY = SIN(Y)   
+SXSY = SIN(X)*SIN(Y)   
+SXCX = SIN(X)*COS(X)   
+SXCY = SIN(X)*COS(Y)   
+SYCY = SIN(X)*COS(X)   
+C2X = COS(2*X)   
+C2Y = COS(2*Y)   
+CXSY = COS(X)*SIN(Y)   
+CXCY = COS(X)*COS(Y)   
+CYSY = COS(Y)*SIN(Y)   
+S2XCY = SIN(2*X)*COS(Y)   
+S2XSY = SIN(2*X)*SIN(Y)   
+SXC2Y = SIN(X)*COS(2*Y)   
+SXS2Y = SIN(X)*SIN(2*Y)   
+CXC2Y = COS(X)*COS(2*Y)   
+CXS2Y = COS(X)*SIN(2*Y)   
+C2XCY = COS(2*X)*COS(Y)   
+C2XSY = COS(2*X)*SIN(Y)   
+SXSYCX = SIN(X)*SIN(Y)*COS(X)   
+SXSYCY = SIN(X)*SIN(Y)*COS(Y)   
+SXCXCY = SIN(X)*COS(X)*COS(Y)   
+CXSYCY = COS(X)*SIN(Y)*COS(Y)   
+I1X = H1*(SXS*CX-CXS*SX)   
+I1Y = H1*(SYS*CY-CYS*SY)   
+I2X = H2*(CX^2-SX^2)*SXCXS - H2*CX*SX*C2XS + H3*CXCY*SXCYS - H3*SXCY*CXCYS + H3*CXSY*SXSYS - H3*SXSY*CXSYS   
+I2Y = H2*(CY^2-SY^2)*CYSYS - H2*CY*SY*C2YS + H3*CXCY*CXSYS - H3*CXSY*CXCYS + H3*SXCY*SXSYS - H3*SXSY*SXCYS   
+I3X = H4*(CX^2-SX^2)*CY*S2XCYS + H4*(CX^2-SX^2)*SY*S2XSYS + H5*SX*(SY^2-CY^2)*CXC2YS + H5*CX*(CY^2-SY^2)*SXC2YS   
+I3Y = H4*(CY^2-SY^2)*CX*CXS2YS + H4*(CY^2-SY^2)*SX*SXS2YS + H5*SY*(SX^2-CX^2)*C2XCYS + H5*CY*(CX^2-SX^2)*C2XSYS   
+I4X = -2*H5*SXSYCY*CXS2YS + 2*H5*CXSYCY*SXS2YS -2*H4*SXCXCY*C2XCYS - 2*H4*SXSYCX*C2XSYS   
+I4Y = -2*H5*SXSYCX*S2XCYS + 2*H5*SXCXCY*S2XSYS -2*H4*CXSYCY*CXC2YS - 2*H4*SXSYCY*SXC2YS   
+
+User-defined functions:
+H(X,Y) = H1*SIN(X)+H2*COS(X)*SIN(X)+H3*COS(Y)*SIN(X)+H4*SIN(2*X)*COS(Y)+H5*SIN(X)*COS(2*Y)  
+J(X,Y) = -H(X,Y)  

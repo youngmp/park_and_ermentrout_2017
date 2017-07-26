@@ -1,0 +1,163 @@
+"""
+My attempt at numerically solving the integro-differential equation assigned by Bard
+
+The next step is to modify to include the phase equation.
+
+Numerical scheme:
+u_j^{n+1} = u_j^n + \Delta t \left ( -u_j^n + \sum_{k=1}^N K(x_j-x_k)F(u_k^n)\Delta x \right) + \varepsilon I(x) - \varepsilon z
+
+\Delta x = (b-a)/N
+"""
+import numpy as np
+import matplotlib.pylab as mp
+#import scipy as sp
+from scipy.integrate import odeint
+import time
+from colorsys import hsv_to_rgb
+from scipy.linalg import blas as FB
+from euler import *
+
+# anim
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+def rhs(y,t,domain,mu,A,B,r,ut,q,g,I,K,j,N,M):
+    """
+    diffeq for full equation
+    y: (solution estimate u,z)
+    A,B: parms for K
+    r,ut: parms for F
+    q,g: parms for rhs
+    """
+
+    dx = 1./N
+    dy = np.zeros(2*N)
+
+    u=y[:N];z=y[N:]
+    fu = 1./(1.+np.exp(-r*(u-ut)))
+
+    for i in range(N):
+        M[i,j] = fu[np.mod((i+N/2-j),(N-1))]
+    wf = dx*np.dot(M,K)*2*np.pi
+    #wf = dx*FB.dgemm(alpha=1.,a=M,b=K)*2*np.pi
+    #print np.shape(wf)
+    
+    # RHS
+    dy[:N] = -u + wf[:,0] - g*z + q*I#I(domain)
+    dy[N:] = (-z + u)/mu
+
+    return dy
+
+def F(x,r,ut):
+    return 1./(1.+np.exp(-r*(x-ut)))
+
+def I(x):
+    return np.cos(2*np.pi*(x+.5))
+
+def main():
+
+    # parms
+    mu=300
+    A=-.5;B=2.
+    r=25.;ut=.25
+    q=.03;g=.013#g=.013
+
+    # domain
+    N = 100 # always use even number!
+    domain = np.linspace(0,1,N)
+    domain2 = np.linspace(0,1,N+1)
+
+    # time
+    t0=0;T=2000;dt=.1
+    t = np.linspace(t0,T,int(T/dt)+1)
+
+    # init    
+    u0 = np.cos(2*np.pi*(domain+.25))
+    #u0 = np.cos(2*np.pi*(domain))
+    z0 = np.zeros(N)
+    init = np.append(u0,z0)
+    # convolution
+    """
+    M = np.zeros((N,N))
+    for i in range(N):
+        for j in range(N):
+            M[i,j] = K(domain[i]-domain[j],A,B)*2*np.pi
+    """
+    #M += np.random.rand(N,N)-.5
+    #I = np.cos(2*np.pi*(domain-.5))#+(np.random.rand(N)-.5)
+    I = np.cos(2*np.pi*(domain+.5))
+    K = np.zeros((N+1,1))
+    K[:,0] = A + B*np.cos(2*(domain2-.5)*np.pi)
+
+
+    # solve
+
+    M = np.zeros((N,N+1))
+    j = np.arange(0,N,1)    
+    #sol = odeint(rhs,init,t,args=(domain,mu,A,B,r,ut,q,g,I,K,j,N,M))
+    sol = ESolve(rhs,init,t,args=(domain,mu,A,B,r,ut,q,g,I,K,j,N,M))
+
+    #print elapsed, 'time elapsed'    
+    #out = np.savetxt('u0.txt',sol[int(T/dt)-1,:N])
+    # plot
+    # clean this up, maybe write a dedicated movie script
+    #mp.plot(t,sol[:,0])
+    #mp.show()
+
+    fig = plt.figure()
+    plt.ion()
+    plt.show()
+    g1 = fig.add_subplot(111)
+    
+
+    np.savetxt('python_1D_sim.dat',sol[:,0]) # to compare to XPPAUT
+    for i in range(len(t)):
+        k = i*50
+        #g1.matshow(np.reshape(sol[k,:N],(rN,rN)))
+        g1.plot(domain,sol[k,:N])
+        plt.ylim(-5,3)
+        plt.pause(.01)
+        print t[k], 'of max t =',t[-1]
+        g1.clear()
+
+
+    """
+    fig = plt.figure(1)
+    ax = plt.axes(xlim=(0, 1), ylim=(-5, 5))
+    #ax = plt.axes()
+    line, = ax.plot([], [], lw=2)
+    #mp.ion()
+    #mp.show()
+    def init():
+        line.set_data([], [])
+        return line,
+    def animate(j):
+        #rgb = hsv_to_rgb( *(1.*j/Nt,1,1) )
+        line.set_data(domain,sol[j,:len(u0)])
+        #line.color(rgb)
+        return line,
+        
+    #anim = animation.FuncAnimation(fig, animate, np.arange(1,len(sol[:len(sol[:,0]/2),0])), blit=True,interval=1)
+    #anim = animation.FuncAnimation(fig, animate, np.arange(1,len(sol[:len(sol[:,0]/2),0])))
+    anim = animation.FuncAnimation(fig, animate, len(sol[:len(sol[:,0]/2),0]), init_func=init, interval=20, blit=True)
+    #for j in range(len(sol[:len(sol[:,0]/2),0])):
+
+    mywriter = animation.AVConvWriter()
+    #anim.save('basic_animation.mp4', extra_args=['-vcodec', 'libx264'],writer=mywriter)
+    anim.save('basic_animation.mp4', fps=15,  writer=mywriter)
+    """
+    #mp.figure()
+    #mp.plot(sol[:,0])
+    #mp.plot(sol[0,:len(u0)])
+    #mp.plot(sol[int(.1*T/dt),:len(u0)])
+    #mp.plot(sol[int(.5*T/dt),:len(u0)])
+    #mp.plot(sol[int(T/dt)-100,:len(u0)])
+    #mp.plot(sol[int(T/dt)-1,:len(u0)])
+
+    plt.show()
+        
+    #rgb[0]/=255.;rgb[1]/=255.;rgb[2]/=255.
+        
+
+if __name__ == "__main__":
+    main()

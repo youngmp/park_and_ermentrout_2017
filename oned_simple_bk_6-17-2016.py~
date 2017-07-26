@@ -1,0 +1,711 @@
+"""
+Nnumerical integration of neural field model + phase model.
+
+ALL DOMAINS ON [0,2Pi]
+
+todo: 
+-incorporate numerical SS values into theory, i.e.,
+get I_1(0) and I_2(0) in terms of the numerical SS bump
+-include mu dependence on wave speed
+-xxxx get bump u0b as a function of r,t,g,q
+-xx write file exists/DNE code
+
+*=high priority
+xx=done
+xxxx=double checked/fixed
+
+notes:
+Look for same bifurcation transitions.
+
+execute this file in the working directory containing the directory of SS bump solution data
+
+"""
+import numpy as np;cos=np.cos;sin=np.sin;pi=np.pi
+import matplotlib.pylab as mp
+import os.path
+#import scipy as sp
+from scipy.integrate import odeint
+import time
+from colorsys import hsv_to_rgb
+from scipy.linalg import blas as FB
+from euler import *
+
+np.random.seed(0)
+
+# anim
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+cos = np.cos
+sin = np.sin
+pi = np.pi
+
+def rhs2(y,t,domain,mu,A,B,r,ut,q,g,Ivals,N,eps):
+    """
+    diffeq for full equation on interval [0,2pi]
+    y: (solution estimate u,z)
+    A,B: parms for K
+    r,ut: parms for F
+    q,g: parms for rhs
+    """
+
+    dy = np.zeros(2*N)
+
+    u=y[:N];z=y[N:]
+    fu = 1./(1.+np.exp(-r*(u-ut)))
+
+    # new implementation with trig identities:
+    wf0 = A*np.sum(fu)
+    wf1 = B*cos(domain)*np.sum(cos(domain)*fu)
+    wf2 = B*sin(domain)*np.sum(sin(domain)*fu)
+    w = (wf0 + wf1 + wf2)/N#(wf0 + wf1 + wf2)*(domain[-1]-domain[0])/N
+    
+    dy[:N] = -u + w + eps*(q*Ivals - g*z)
+    dy[N:] = eps*(-z + u)/mu
+
+    return dy
+
+def rhs_unoptimized(y,t,domain,mu,r,ut,q,g,Ivals,Kvals,N,eps):
+    """
+    diffeq for full equation on interval [0,2pi]
+    unseparated kernel
+    y: (solution estimate u,z)
+    A,B: parms for K
+    r,ut: parms for F
+    q,g: parms for rhs
+    """
+    dy = np.zeros(2*N)
+
+    u=y[:N];z=y[N:]
+    fu = 1./(1.+np.exp(-r*(u-ut)))
+
+    # old implementation without trig identities:
+    #w = np.convolve(A+B*cos(domain),fu,'same')*(domain[-1]-domain[0])/N
+    w = np.dot(Kvals,fu)*(domain[-1]-domain[0])/N
+        
+    dy[:N] = -u + w + eps*(q*Ivals - g*z)
+    dy[N:] = eps*(-z + u)/mu
+
+    return dy
+
+
+def f(x,r,ut,d=False):
+    """
+    d: derivative flag
+    """
+
+    if d:
+        a = np.exp(-r*(x-ut))
+        return (r*a)/(1.+a)**2
+    else:
+        return 1./(1.+np.exp(-r*(x-ut)))
+
+
+
+def u0b2(x,c0=-1,c1=3.8,shift=0.,
+         u0=None,
+         z0=None,
+         d=False,params=None,return_bump=False,plot_bump=False):
+    """
+    bump solution on [-pi,pi]
+    d: derivative flag
+    c0,c1: chosen s.t. if u(x,0)=cos(x), then the s.s. bump solution
+    is approximately -1+3.8cos(x).
+
+    input params to get numerically simulated steady-state bump solution
+    in order (mu,A,B,r,ut,eps,q,g)
+
+    if return_bump false: returns (ss0,ss1)
+    if return_bump true: returns (ss0,ss1,bump_ss_u,bump_ss_z)
+    """
+    
+
+    if params != None:
+
+
+        mu,A,B,r,ut,eps,q,g = params
+
+        mu = mu#300 default (try 1000 later)
+        A=A;B=B
+        r=r;ut=ut # default r=25.;ut=.25 # can get taveling bumps more easily with r=15.
+        
+        #q=.0;g=.03 # default q=.03;g=.013(hopf);g=.03(translation)
+        eps=eps;q=0;g=0#g
+        
+        # domain
+        N = 120 # always use even number >= 100!
+        domain = np.linspace(-pi,pi*(1-1./N),N)
+        
+        # time
+        t0=0;T=5000;dt=.1
+        t = np.linspace(t0,T,int(T/dt)+1)
+
+        if (u0 == None) or (z0 == None):
+            print 'using default inits for u0b2: domain \in [0,2pi]'
+            print 'u0 = np.cos(domain+pi/2), z0 = np.zeros'
+            u0 = np.cos(domain+pi/2)
+            z0 = np.zeros(N)
+
+        init = np.append(u0,z0)
+        Ivals = 0#I(domain)
+
+        sol = ESolve(rhs2,init,t,args=(domain,mu,A,B,r,ut,q,g,Ivals,N,eps))
+
+        bump_ss_u = sol[-1,:N]
+        bump_ss_z = sol[-1,N:]
+
+        # WLOG(?) use shifted sin: A*sin(x-c)
+        peak_idx = np.argmax(bump_ss_u) # solution peak idx
+
+        # create cos function based on data
+        ss0 = (np.amax(bump_ss_u)+np.amin(bump_ss_u))/2
+        ss1 = (np.amax(bump_ss_u)-np.amin(bump_ss_u))/2
+
+        # compare created sin function to data to get shift (of period 2pi)
+        ss_shift = (np.argmax(ss0+ss1*cos(domain)) - peak_idx)*2.*pi/N
+        
+
+        print 
+        print 'STEADY-STATE STABLE BUMP WITH PARAMTERS:'
+        print 'mu=',mu, ';A=',A,';B=',B,';r=',r, ';ut=',ut, ';eps=',eps, ';q=',q, ';g=',g
+        print 'N=',N, ';domain [-pi,pi]', ';T=',T, ';dt=',dt
+        #print 'default params -- see u0b'
+        print 'ss0=',ss0,';ss1=',ss1,';ss_shift=',ss_shift
+
+        if plot_bump:
+            mp.figure()
+            mp.title('SS bump solution numerics (blue) vs theory (green). ss bump deriv (red)')
+            dom = np.linspace(0,2*pi,len(bump_ss_u))
+            mp.plot(dom,bump_ss_u)
+            mp.plot(dom,u0b2(dom,c0=ss0,c1=ss1,shift=ss_shift))
+            mp.plot(dom,u0b2(dom,c0=ss0,c1=ss1,shift=ss_shift,d=True))
+
+
+        if return_bump:
+            return ss0,ss1,ss_shift,bump_ss_u,bump_ss_z
+        else:
+            return ss0,ss1,ss_shift
+        
+    else:
+        if d:
+            # derivative of bump
+            return -c1*sin(x+shift)
+        else:
+            return c0 + c1*cos(x+shift)
+    # end u0b2
+
+
+def ii(x,i0,i1,ishift,ss0=0.,ss1=0.,ss_shift=0,params=None,plot_i=False):
+    """
+    pinning term: estimation + function
+    i(x) = q \int_\Omega f'(u_0(y+x)) u_0'(y+x) I(y) dy
+
+    x: x \in [0,2pi]
+    a0,a1: shift/amplitude of ii (sine?) function
+    ss0,ss1,shift: params of steady-state bump solution (get using u0b2)
+    params: all other parameters for ss bump and f
+    plotH: plot H function with estimated amplitude
+    plotbump: plot ss-bump solution
+
+    if parameters are put into the function, then an estimate of H is generated.
+    if no parameters are put into the function, return a1*sin(x).
+
+    """
+    if params != None: # ignore inputs
+        
+        mu,A,B,r,ut,eps,q,g = params
+
+        ## plot i(\theta(\tau))
+        N = 300
+        #x = np.linspace(0,2*pi,N)
+        x = np.linspace(0,2*pi,N)
+        y = np.linspace(0,2*pi,N)
+
+        ii2 = np.zeros(N)
+        for k in range(N):
+            tot = 0
+            for j in range(N):
+                tot += f(u0b2(x[k]+y[j],c0=ss0,c1=ss1,shift=ss_shift),r,ut,d=True)*\
+                       u0b2(x[k]+y[j],c0=ss0,c1=ss1,shift=ss_shift,d=True)*\
+                       I(y[j]) # pg 199 Notebook#2
+
+            ii2[k] = tot/N
+        ii2 *= q
+        
+        # create cos function based on data
+        peak_idx = np.argmax(ii2) # solution peak idx
+        i0 = (np.amax(ii2)+np.amin(ii2))/2
+        i1 = (np.amax(ii2)-np.amin(ii2))/2
+
+        # compare created cos function to data to get shift (out of period 2pi)
+        ishift = (np.argmax(i0+i1*cos(x)) - peak_idx)*2.*pi/N
+        print 
+        print 'i(x) parameters i0 =',i0, ';i1 =', i1, ';ishift =', ishift
+
+        if plot_i:
+            mp.figure()
+            mp.title('i numerics (blue) vs numerical fit (green)')
+            mp.plot(x,ii2)
+            mp.plot(x,i0+i1*cos(x+ishift))
+            mp.plot([0,2*pi],[0,0],ls='--')
+            mp.show()
+        
+        # return params
+        return i0,i1,ishift
+
+        
+    else:
+        return i0+i1*cos(x+ishift)
+    # end ii()
+    
+
+def H(x,a1=1.,ss0=0.,ss1=0.,ss_shift=0.,params=None,plotH=False):
+    """
+    x: x \in [0,2pi]
+    a1: amplitude of H (sine) function
+    ss0,ss1,ss_shift: params of steady-state bump solution (get using u0b2)
+    params: all other parameters for ss bump and f
+    plotH: plot H function with estimated amplitude
+    plotbump: plot ss-bump solution
+
+    if parameters are put into the function, then an estimate of H is generated.
+    if no parameters are put into the function, return a1*sin(x).
+    ======================
+    
+    H is generically odd.  typically  a1*sin(x).
+
+    (does not depend explicity/directly on kernel K, so parms A,B are not needed)
+    
+    r,ut are params for f. only used if params != None
+    """
+
+    if params != None: 
+        # get new H, ignore x,a1,c0,c1,shift
+
+        mu,A,B,r,ut,eps,q,g = params
+
+        ## plot H
+        N = 300
+        x = np.linspace(0,2*pi,N)
+        y = np.linspace(0,2*pi,N)
+        H = np.zeros(N)
+        for k in range(N):
+            tot = 0
+            for j in range(N):
+                tot += f(u0b2(y[j],c0=ss0,c1=ss1,shift=ss_shift),r,ut,d=True)*\
+                       u0b2(y[j],c0=ss0,c1=ss1,shift=ss_shift,d=True)*\
+                       u0b2(y[j]+x[k],c0=ss0,c1=ss1,shift=ss_shift) # pg 175 Notebook#2
+
+                # alternative H from change of variables. equivalent to above.
+                #tot += f(u0b2(y[j]-x[k],c0=ss0,c1=ss1,shift=ss_shift),r,ut,d=True)*\
+                #       u0b2(y[j]-x[k],c0=ss0,c1=ss1,shift=ss_shift,d=True)*\
+                #       u0b2(y[j],c0=ss0,c1=ss1,shift=ss_shift) # pg 175 Notebook#2
+            H[k] = tot/N
+        if plotH:
+            mp.figure()
+            mp.title('H numerics (blue) vs theory (green)')
+            mp.plot(H)
+            mp.plot(np.amax(H)*sin(x))
+            mp.show()
+
+        # return amplitude
+        amp = np.amax(H)
+        print 
+        #print "H(x) amplitude error:", np.amax(H) - np.abs(np.amin(H))
+        print 'H(x) parameter (amplitude) a1 =',amp
+        return amp
+        
+    else:
+        return a1*sin(x)
+    # end H()
+
+def kappa_estimate(ss0,ss1,ss_shift,params,N=200):
+    """
+    check value of inner product (u_0',u^*).
+    (u_0',u^*) = \int_0^{2\pi} u_0'(x) f'(u_0(x)) u_0'(x) dx
+    I claimed this inner product is 1 in eq 59 log_youngmin.pdf. Generically it is not.
+
+    ss0,ss1,ss_shift: ss bump solution
+    """
+    x = np.linspace(0,2*pi,N)
+    (mu,A,B,r,ut,eps,q,g) = params
+
+    tot = 0
+    for i in range(N):
+        tot += f(u0b2(x[i],c0=ss0,c1=ss1,shift=ss_shift),r,ut,d=True)*\
+               u0b2(x[i],c0=ss0,c1=ss1,shift=ss_shift,d=True)*\
+               u0b2(x[i],c0=ss0,c1=ss1,shift=ss_shift,d=True)
+    tot /= N
+    #print 'value of inner product (u_0\',u^*):', tot
+    return tot
+
+def phase_rhs_full(th,t,mu,q,g,y0,dt,Hamp,c0,c1,eps):
+    """
+    full phase model approximation at steady-state
+
+    th: theta variables with N time step history [0,...,N-1] time steps back
+    t: time (either slow time \tau or regular time t)
+    mu,r,ut,q,g: full sim params; included in Hamp
+    y0: initial y vector for negative time
+    dt: time step
+    Hamp: H function amplitude
+    c0,c1: steady-state bump solution
+
+    # decreasing solution vector
+    a = np.array([1,2,3])
+
+    # new solution value
+    an = 0
+    
+    # change required for update
+    da = np.roll(a,1)-a
+    da[0] = an - a[0]
+
+    return da
+    
+    """
+
+    if t >=0 and t < .1:
+        print 'note 12/2: this fn is a bit outdated. Make sure to bring up-to-date before running'
+    
+    # conversions from absorbed parameters:
+    #g2=g*mu;q2=q*mu;eps=1./mu
+
+    # full numerics. see notebook 2 pg 175.
+
+    N=len(y0) # farthest back I can integrate
+    # integrate H
+    hval = 0
+    for i in range(N):
+        #hval += np.exp(-dt*i) * H(th[i]-y0[i],a1=Hamp)
+        hval += np.exp(-dt*i) * H(th[i]-th[0],a1=Hamp)
+    hval *= -g/N
+    
+    dth = np.roll(th,1)-th
+    dth[0] = hval - th[0]
+
+    return eps*dth
+
+def phase_rhs_short(y,t,mu,q,g,Hamp,eps,kap,i0,i1,ishift,ss0,ss1,ss_shift):
+    """
+    truncated phase model approximation (equivalent to above)
+    derivation in pg 190-191 nb#2
+
+    y: [theta,I_1,I_2], th \in [0,2pi]
+    t: time
+    mu,q,g: full sim parms
+    Hamp: amplitude of H: H=A*sin(x)
+
+    """
+    
+    # for readability
+    th=y[0];I1=y[1];I2=y[2];A=Hamp
+    
+    #rhs_th = g2*A*( I2*sin(th)-I1*cos(th) )
+    rhs_th = (ii(th,i0,i1,ishift)+g*A*( I2*sin(th)-I1*cos(th) )/mu)/kap # 1/mu term in 2/2/2015 log_youngmin.pdf
+    rhs_I1 = -I1/mu + sin(th)
+    rhs_I2 = -I2/mu + cos(th)
+
+    return eps*np.array([rhs_th,rhs_I1,rhs_I2])
+
+def I(x):
+    """
+    pinning
+    x in [0,2pi]
+    """
+    #return np.cos(x-pi)
+    return np.cos(x-1)
+
+def main():
+    # parms
+    mu = 1
+    A=-.5;B=3.
+    r=15.;ut=.25 # default r=25.;ut=.25 # can get taveling bumps more easily with r=15.
+
+    #q=.0;g=.03 # default q=.03;g=.013(hopf);g=.03(translation)
+    eps=.01;q=1.;g=2
+    #eps=.005;q=0;g=16.91005
+
+    params = (mu,A,B,r,ut,eps,q,g)
+
+    # domain
+    N = 120 # always use even number >= 100!
+    domain2 = np.linspace(-pi,pi*(1-1./N),N)
+
+    # time
+    t0=0;T=5000;dt=.05
+    t = np.linspace(t0,T,int(T/dt)+1)
+    
+    numerics = True # run numerics
+    save_ss = True # save ss data
+    use_ss = False # use saved ss data. use defaults if DNE
+    phase = True # run phase model
+
+    # filenames
+    # for [0,2pi]
+    ss_file_u2 = 'bump_ss_1d/bump_ss_u2_r'+str(r)+'_ut'+str(ut)+\
+                 '_A'+str(A)+'_B'+str(B)+'_mu'+str(mu)+\
+                 '_q'+str(q)+'_g'+str(g)+'_N'+str(N)+\
+                 '_dt'+str(dt)+'_T'+str(T)+'_eps'+str(eps)+'.dat'
+    ss_file_z2 = 'bump_ss_1d/bump_ss_z2_r'+str(r)+'_ut'+str(ut)+\
+                 '_A'+str(A)+'_B'+str(B)+'_mu'+str(mu)+\
+                 '_q'+str(q)+'_g'+str(g)+'_N'+str(N)+\
+                 '_dt'+str(dt)+'_T'+str(T)+'_eps'+str(eps)+'.dat'
+
+
+    ## solve full system
+    if numerics:
+        
+        # [0,2pi]
+        # default inits
+        #u0d = np.cos(domain2+pi/2) # default
+        u0d = np.cos(domain2)
+        z0d = np.zeros(N)
+
+        if use_ss:                        
+            # load steady-state files if they exist
+            if os.path.isfile(ss_file_u2) and os.path.isfile(ss_file_u2):
+                # load numerical steady-state conditions.
+                u02 = np.loadtxt(ss_file_u2)
+                z02 = np.loadtxt(ss_file_z2)
+            else:
+                # else load default initial conditions
+                u02 = u0d
+                z02 = z0d
+        else:
+            # else use defaults
+            u02 = u0d
+            z02 = z0d
+
+
+        # check/get ss bump solution given parameters above
+        ss0,ss1,ss_shift=u0b2(0,params=params,u0=u0d,z0=z0d,plot_bump=False)
+
+        # estimate inner produt (u_0',u^*)
+        kap = kappa_estimate(ss0,ss1,ss_shift,params)
+        print 
+        print 'inner product kappa_1 \equiv (u_0\',u^*) =',kap
+        
+        # check/get H(x) parameter
+        Hamp = H(1,ss0=ss0,ss1=ss1,ss_shift=ss_shift,params=params,plotH=False)
+        
+        # check/get i(x) parameters
+        i0,i1,ishift = ii(1,i0=0,i1=0,ishift=0,ss0=ss0,ss1=ss1,ss_shift=ss_shift,params=params,plot_i=False)
+        
+        # check f'(bump)
+        #y = np.linspace(0,2*pi,500)
+        #mp.plot(f(u0b2(y,c0=ss0,c1=ss1,shift=ss_shift),r,ut,d=True))
+        #mp.show()
+        
+        # check f'(domain)
+        #ytemp = np.linspace(-5,5,1000)
+        #mp.plot(f(ytemp,r,ut,d=True))
+        #mp.plot(f(ytemp,r,ut))
+        #mp.show()
+
+        
+        init2 = np.append(u02,z02)
+
+        # pinning
+        Ivals = I(domain2)
+        
+        # integrate full numerics
+        #sol2 = ESolve(rhs2,init2,t,args=(domain2,mu,A,B,r,ut,q,g,Ivals,N,eps))
+        sol2 = odeint(rhs2,init2,t,args=(domain2,mu,A,B,r,ut,q,g,Ivals,N,eps))
+
+        
+        # build kernel
+        Kvals = np.zeros((N,N))
+        for i in range(N):
+            for j in range(N):
+                Kvals[i,j] = A+B*cos(domain2[i]-domain2[j])
+        sol3 = odeint(rhs_unoptimized,init2,t,args=(domain2,mu,r,ut,q,g,Ivals,Kvals,N,eps))
+
+        # get center of mass of bump solution
+        cs2 = np.cos(domain2)
+        sn2 = np.sin(domain2)
+
+        # cosine/sine phase angle
+        cu2 = np.sum(cs2*sol2[:,:N],axis=1)
+        su2 = np.sum(sn2*sol2[:,:N],axis=1)
+
+        cu3 = np.sum(cs2*sol3[:,:N],axis=1)
+        su3 = np.sum(sn2*sol3[:,:N],axis=1)
+
+        # center of mass
+        ph_angle = np.arctan2(su2,cu2)
+        ph_angle2 = np.arctan2(su3,cu3)
+
+        # plot solution as sanity check
+        #mp.figure(11)
+        #mp.plot(domain2,sol2[-1,:N])
+
+        #mp.figure(12)
+        #mp.plot(domain2,sol3[-1,:N])
+        #mp.show()
+        
+        # save bump initial condition for later
+        # save_ss overwrites because longer times lead to better ss values
+        if save_ss:# and not(os.path.isfile(ss_file_u) and os.path.isfile(ss_file_u)):
+            # get final bump values. ss for long time
+            bump_ss_u2 = sol2[-1,:N]
+            bump_ss_z2 = sol2[-1,N:]
+            np.savetxt(ss_file_u2,bump_ss_u2)
+            np.savetxt(ss_file_z2,bump_ss_z2)
+
+        
+
+
+
+        # phase angle of center of mass
+        #theta = np.mod(ph_angle+4*pi,2*pi)
+        #theta = ph_angle
+        
+        # plot numerical center of mass phase angle
+        mp.figure(3)
+        mp.plot(t,np.mod(ph_angle+pi,2*pi)-pi,lw=3,color='black')
+        #mp.plot(t,np.mod(ph_angle2+pi,2*pi)-pi,lw=3,color='gray')
+
+        # wave speed
+        c = eps*np.sqrt(g*Hamp/(mu*kap)-(1./mu)**2)
+        cnum = (ph_angle[-1]-ph_angle[-2])/dt
+        if q == 0.:
+            print
+            print 'wave speed (numeric)', cnum
+            print 'wave speed (theory-analytic)', c
+
+        ## solve short phase estimation
+        if phase:
+            # domain on [0,2pi]
+            
+            if numerics and save_ss:
+                # get initial conditions from numerics (replace the 3 lines below)
+
+                th0 = ph_angle[0]
+                I10 = cos(th0)*mu/(1.-cnum**2)
+                I20 = -cos(th0)*(cnum*mu**2)/((cnum*mu)**2+1)
+
+            else:
+                # inits from analytic computations
+                #if save_ss:
+                th0 = ph_angle[0]
+                I10 = 0
+                I20 = 0
+            
+            y0 = [th0,I10,I20]
+            solph2 = odeint(phase_rhs_short,y0,t,args=(mu,q,g,Hamp,eps,kap,
+                                                       i0,i1,ishift,
+                                                       ss0,ss1,ss_shift))
+            if q == 0.:
+                print 'wave speed (theory-numeric)', np.abs(solph2[-1,0]-solph2[-2,0])/(t[-1]-t[-2])
+            #print 'wave speed (numeric)', np.abs(sol2[-1,0]-sol2[-2,0])/(t[-1]-t[-2])
+            
+            # plot phase angle
+            if True:
+                #mp.plot(t,np.mod(solph2[:,0]+pi,2*pi),lw=3,color='green')
+                mp.plot(t,-(np.mod(solph2[:,0]+pi,2*pi)-pi),lw=3,color='green')
+                #mp.plot(t,solph2[:,1],lw=1,color='teal',ls='--')
+                #mp.plot(t,solph2[:,2],lw=1,color='red',ls='--')
+
+        mp.title('theory (green) vs numerics (black),g='+str(g)+',q='+str(q)+',eps='+str(eps)+',mu='+str(mu))
+        #mp.title('Bump peak angle over time')
+        mp.xlabel('t')
+        mp.ylabel('theta')
+        mp.ylim(-pi,pi)
+        #mp.plot(cu)
+        #mp.plot(su)
+        mp.show()
+
+    # show movie of full sim
+    if True:
+        #print elapsed, 'time elapsed'    
+        #out = np.savetxt('u0.txt',sol[int(T/dt)-1,:N])
+        # plot
+        # clean this up, maybe write a dedicated movie script
+        #mp.plot(t,sol[:,0])
+        #mp.title('u0')
+        #mp.ylabel('u0')
+        #mp.show()
+        
+        fig = plt.figure(figsize=(11,5))
+        plt.ion()
+        plt.show()
+        g1 = fig.add_subplot(121)
+        g2 = fig.add_subplot(122)
+
+
+        movdir = 'mov'
+        
+        for j in range(len(t)):
+            k = j*20
+            #g1.matshow(np.reshape(sol[k,:N],(rN,rN)))
+            g1.set_title("Solutions u (blue), z (green)")
+            g1.plot(domain2,sol2[k,N:],lw=3,color='green')
+            g1.plot(domain2,sol2[k,:N],lw=3,color='blue')
+            LL = np.argmin(np.abs(domain2 - np.mod(ph_angle[k],2*np.pi)))
+            g1.scatter(domain2[LL],sol2[k,LL],color='red',s=100)
+            #print ph_angle[k]
+            g1.set_xlabel('Domain')
+            g1.set_ylabel('Firing rate')
+            
+            g1.set_ylim(-10,10)
+            g1.set_xlim(0,2*np.pi)
+            g1.text(.5,9,"t="+str(t[k]))
+            g1.text(.5,8,"g="+str(g)+", eps="+str(eps)+", q="+str(q))
+            
+            g2.set_title("Peak Location on Unit Circle")
+            g2.scatter(cos(ph_angle[k]),sin(ph_angle[k]),s=100,color='red')
+            xx = np.linspace(0,2*pi,100)
+            g2.plot(cos(xx),sin(xx), color='black', lw=3)
+            g2.set_ylim(-1.2,1.2)
+            g2.set_xlim(-1.2,1.2)
+            
+            #fig.savefig(movdir+"/test"+str(j)+".jpg")
+            
+            plt.pause(.01)
+            print t[k], 'of max t =',t[-1]
+            g1.clear()
+            g2.clear()
+
+
+
+    """
+    fig = plt.figure(1)
+    ax = plt.axes(xlim=(0, 1), ylim=(-5, 5))
+    #ax = plt.axes()
+    line, = ax.plot([], [], lw=2)
+    #mp.ion()
+    #mp.show()
+    def init():
+        line.set_data([], [])
+        return line,
+    def animate(j):
+        #rgb = hsv_to_rgb( *(1.*j/Nt,1,1) )
+        line.set_data(domain,sol[j,:len(u0)])
+        #line.color(rgb)
+        return line,
+        
+    #anim = animation.FuncAnimation(fig, animate, np.arange(1,len(sol[:len(sol[:,0]/2),0])), blit=True,interval=1)
+    #anim = animation.FuncAnimation(fig, animate, np.arange(1,len(sol[:len(sol[:,0]/2),0])))
+    anim = animation.FuncAnimation(fig, animate, len(sol[:len(sol[:,0]/2),0]), init_func=init, interval=20, blit=True)
+    #for j in range(len(sol[:len(sol[:,0]/2),0])):
+
+    mywriter = animation.AVConvWriter()
+    #anim.save('basic_animation.mp4', extra_args=['-vcodec', 'libx264'],writer=mywriter)
+    anim.save('basic_animation.mp4', fps=15,  writer=mywriter)
+    """
+    #mp.figure()
+    #mp.plot(sol[:,0])
+    #mp.plot(sol[0,:len(u0)])
+    #mp.plot(sol[int(.1*T/dt),:len(u0)])
+    #mp.plot(sol[int(.5*T/dt),:len(u0)])
+    #mp.plot(sol[int(T/dt)-100,:len(u0)])
+    #mp.plot(sol[int(T/dt)-1,:len(u0)])
+
+    plt.show()
+        
+    #rgb[0]/=255.;rgb[1]/=255.;rgb[2]/=255.
+        
+
+if __name__ == "__main__":
+    main()

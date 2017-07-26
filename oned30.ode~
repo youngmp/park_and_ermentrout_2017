@@ -1,0 +1,10 @@
+k(x)=(1-2*x^2)*exp(-x^2)
+par sig=4
+table w % 31 -15 15 k(x/sig)
+f(u)=1/(1+exp(-beta*(u-ut)))
+fu[0..29]=f(u[j])
+special kf=conv(periodic,30,15,w,fu0)
+u[0..29]'=-u[j]+a*kf([j])
+par beta=25,ut=.25,a=5
+d
+

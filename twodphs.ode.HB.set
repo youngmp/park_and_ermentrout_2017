@@ -1,0 +1,354 @@
+## Set file for twodphs.ode on Fri Feb  3 16:05:17 2017
+22   Number of equations and auxiliaries
+8   Number of parameters
+# Numerical stuff
+1    nout
+40    nullcline mesh
+3   Runge-Kutta
+7.86  total
+0.005  DeltaT
+0  T0
+0  Transient
+100000  Bound
+1e-12  DtMin
+1  DtMax
+0.001  Tolerance
+0.001  Abs. Tolerance
+0  Max Delay
+100   Eigenvector iterates
+0.001  Eigenvector tolerance
+0.001  Newton tolerance
+0  Poincare plane
+1e-05  Boundary value tolerance
+1e-05  Boundary value epsilon
+20   Boundary value iterates
+0   Poincare None
+1   Poincare variable
+1   Poincare sign
+0   Stop on Section
+0   Delay flag
+7.859999999999855  Current time
+7.859999999999855  Last Time
+1   MyStart
+1   INFLAG
+# Delays
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+# Bndry conds
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Old ICs
+5.188271518076839  X
+5.302779233074105  Y
+0.3119469675840688  CXS
+0.7437302538257494  CYS
+-0.8385610929883748  SXS
+-0.07841198787400105  SYS
+0.1628767021450579  SXSYS
+-0.6732451205408428  SXCYS
+0.03358413802091573  CXSYS
+0.1792342548603617  CXCYS
+-0.2125018087020935  SXCXS
+-0.1144103358458292  CYSYS
+-0.7046092535584006  C2XS
+0.2182536436953266  C2YS
+-0.2999547415242222  S2XCYS
+0.07777871154743612  S2XSYS
+-0.2905295054603841  SXC2YS
+0.2631673484849257  SXS2YS
+-0.05774874098013905  CXC2YS
+-0.04461913483843419  CXS2YS
+-0.6226316132558698  C2XCYS
+0.1969207115623835  C2XSYS
+# Ending  ICs
+5.188008683498003  X
+5.30308304370162  Y
+0.3118975189882278  CXS
+0.7437935354686304  CYS
+-0.8385440341049617  SXS
+-0.07815732034009394  SYS
+0.1626818593773101  SXSYS
+-0.6733054734958694  SXCYS
+0.03372430577291599  CXSYS
+0.1792085964261893  CXCYS
+-0.2124359122337451  SXCXS
+-0.1142924864499909  CYSYS
+-0.7046512843082483  C2XS
+0.218456156956712  C2YS
+-0.2999027906856164  S2XCYS
+0.07757605432051565  S2XSYS
+-0.290742204081015  SXC2YS
+0.2629780552636093  SXS2YS
+-0.0577093816773223  CXC2YS
+-0.0444908085500786  CXS2YS
+-0.6227329838855588  C2XCYS
+0.1968241457312387  C2XSYS
+# Parameters
+0.8  b
+0.5  q
+2  g
+0.6406243310900001  h1
+0.072295900728  h2
+0.51728627897  h3
+0.017252838392  h4
+0.0044351419687  h5
+# Graphics
+0.7071097251469876  rm
+-0.4999999999826661  rm
+0.4999958366025518  rm
+0.7071038372138506  rm
+0.5000041633974482  rm
+-0.4999999999826661  rm
+0  rm
+0.7071038372138506  rm
+0.7071097251469876  rm
+0    
+1    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+1    
+2    
+1    
+1    
+0    
+-1000   
+1000   
+0    
+0   3DFlag
+1   Timeflag
+0   Colorflag
+0   Type
+1  color scale
+0   minscale
+7.860000133514404   xmax
+0   xmin
+7.757283210754395   ymax
+4.809087753295898   ymin
+12   zmax
+-12   zmin
+3.930000066757202   
+0.2544529218863702   
+6.283185482025146   
+0.6783810737311522   
+0   
+0.08333333333333333   
+45   Theta
+45   Phi
+0    xshft
+0    yshft
+0    zshft
+0   xlo
+4.809087753295898   ylo
+0   
+0   
+7.860000133514404   xhi
+7.757283210754395   yhi
+6.3   
+6.3   
+# Transpose variables etc
+X
+2   n columns
+1   n rows
+1   row skip
+1   col skip
+1   row 0
+# Coupling stuff for H funs
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+# Array plot stuff
+
+1   NCols
+0   Row 1
+50   NRows
+8   RowSkip
+0  Zmin
+1  Zmax
+# Torus information 
+0    Torus flag 1=ON
+6.283185307179586  Torus period
+# Range information
+b
+-1   eq-range stab col
+0   shoot flag 1=on
+10   eq-range steps
+0  eq_range low
+1  eq_range high
+X
+X
+20   Range steps
+0   Cycle color 1=on
+1   Reset data 1=on
+1   Use old I.C.s 1=yes
+0  Par1 low
+0  Par2 low
+1  Par1 high
+1  Par2 high
+b
+0   BVP side
+0   color cycle flag 1=on
+10   BVP range steps
+0  BVP range low
+1  BVP range high
+RHS etc ...
+dX/dT=Q*J(X,Y)-G*(I1X+I2X+I3X+I4X)
+dY/dT=Q*J(Y,X)-G*(I1Y+I2Y+I3Y+I4Y)
+dCXS/dT=-CXS+CX
+dCYS/dT=-CYS+CY
+dSXS/dT=-SXS+SX
+dSYS/dT=-SYS+SY
+dSXSYS/dT=-SXSYS+SXSY
+dSXCYS/dT=-SXCYS+SXCY
+dCXSYS/dT=-CXSYS+CXSY
+dCXCYS/dT=-CXCYS+CXCY
+dSXCXS/dT=-SXCXS+SXCX
+dCYSYS/dT=-CYSYS+CYSY
+dC2XS/dT=-C2XS+C2X
+dC2YS/dT=-C2YS+C2Y
+dS2XCYS/dT=-S2XCYS+S2XCY
+dS2XSYS/dT=-S2XSYS+S2XSY
+dSXC2YS/dT=-SXC2YS+SXC2Y
+dSXS2YS/dT=-SXS2YS+SXS2Y
+dCXC2YS/dT=-CXC2YS+CXC2Y
+dCXS2YS/dT=-CXS2YS+CXS2Y
+dC2XCYS/dT=-C2XCYS+C2XCY
+dC2XSYS/dT=-C2XSYS+C2XSY
+
+where ...
+CX = COS(X)   
+CY = COS(Y)   
+SX = SIN(X)   
+SY = SIN(Y)   
+SXSY = SIN(X)*SIN(Y)   
+SXCX = SIN(X)*COS(X)   
+SXCY = SIN(X)*COS(Y)   
+SYCY = SIN(X)*COS(X)   
+C2X = COS(2*X)   
+C2Y = COS(2*Y)   
+CXSY = COS(X)*SIN(Y)   
+CXCY = COS(X)*COS(Y)   
+CYSY = COS(Y)*SIN(Y)   
+S2XCY = SIN(2*X)*COS(Y)   
+S2XSY = SIN(2*X)*SIN(Y)   
+SXC2Y = SIN(X)*COS(2*Y)   
+SXS2Y = SIN(X)*SIN(2*Y)   
+CXC2Y = COS(X)*COS(2*Y)   
+CXS2Y = COS(X)*SIN(2*Y)   
+C2XCY = COS(2*X)*COS(Y)   
+C2XSY = COS(2*X)*SIN(Y)   
+SXSYCX = SIN(X)*SIN(Y)*COS(X)   
+SXSYCY = SIN(X)*SIN(Y)*COS(Y)   
+SXCXCY = SIN(X)*COS(X)*COS(Y)   
+CXSYCY = COS(X)*SIN(Y)*COS(Y)   
+I1X = H1*(SXS*CX-CXS*SX)   
+I1Y = H1*(SYS*CY-CYS*SY)   
+I2X = H2*(CX^2-SX^2)*SXCXS - H2*CX*SX*C2XS + H3*CXCY*SXCYS - H3*SXCY*CXCYS + H3*CXSY*SXSYS - H3*SXSY*CXSYS   
+I2Y = H2*(CY^2-SY^2)*CYSYS - H2*CY*SY*C2YS + H3*CXCY*CXSYS - H3*CXSY*CXCYS + H3*SXCY*SXSYS - H3*SXSY*SXCYS   
+I3X = H4*(CX^2-SX^2)*CY*S2XCYS + H4*(CX^2-SX^2)*SY*S2XSYS + H5*SX*(SY^2-CY^2)*CXC2YS + H5*CX*(CY^2-SY^2)*SXC2YS   
+I3Y = H4*(CY^2-SY^2)*CX*CXS2YS + H4*(CY^2-SY^2)*SX*SXS2YS + H5*SY*(SX^2-CX^2)*C2XCYS + H5*CY*(CX^2-SX^2)*C2XSYS   
+I4X = -2*H5*SXSYCY*CXS2YS + 2*H5*CXSYCY*SXS2YS -2*H4*SXCXCY*C2XCYS - 2*H4*SXSYCX*C2XSYS   
+I4Y = -2*H5*SXSYCX*S2XCYS + 2*H5*SXCXCY*S2XSYS -2*H4*CXSYCY*CXC2YS - 2*H4*SXSYCY*SXC2YS   
+
+User-defined functions:
+H(X,Y) = H1*SIN(X)+H2*COS(X)*SIN(X)+H3*COS(Y)*SIN(X)+H4*SIN(2*X)*COS(Y)+H5*SIN(X)*COS(2*Y)  
+J(X,Y) = -H(X,Y)  

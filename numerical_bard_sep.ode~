@@ -1,0 +1,54 @@
+# equivalent neural field equations
+table cs % 100 0 99 cos(2*pi*t/100)
+table sn % 100 0 99 sin(2*pi*t/100)
+table ones % 100 0 99 1
+
+f(u)=1/(1+exp(-r*(u-ut)))
+par r=15,ut=.25
+
+f[0..99]=f(a1+a2*cs([j])+a3*sn([j]))
+
+special p0=mmult(100,1,ones,f0)
+special p1=mmult(100,1,cs,f0)
+special p2=mmult(100,1,sn,f0)
+
+hopf period at g = 1.6, q=1 is 441
+
+a1'=-a1 + aa*p0(0)/100 + eps*q*D - eps*g*b1
+a2'=-a2 + bb*p1(0)/100 + eps*q*E - eps*g*b2
+a3'=-a3 + bb*p2(0)/100 - eps*g*b3
+
+b1'=eps*be*(-b1+a1)
+b2'=eps*be*(-b2+a2)
+b3'=eps*be*(-b3+a3)
+
+# coupling parameters
+p g=1,q=0.5,eps=0.01
+
+# kernel parameters
+p aa=-.5,bb=3
+
+# steady-state bump
+p d=-.161911,e=.7984566
+
+# adaptation parameter
+p be=1
+
+a1(0)=1
+a2(0)=2
+a3(0)=0
+
+aux sol[0..99]=a1+a2*cs([j])+a3*sn([j])
+aux pp1=p0(0)
+aux pp2=p1(0)
+aux pp3=p2(0)
+
+@ total=200
+@ xlo=0,xhi=200
+@ ylo=-5,yhi=5
+@ maxstor = 1000000000
+@ Ntst=40,Nmax=400,Dsmax=0.1
+@ parmin=2.2,parmax=2.8
+@ dsmin=.001,dsmax=.1
+
+d

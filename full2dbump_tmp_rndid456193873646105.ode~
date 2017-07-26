@@ -1,0 +1,82 @@
+# this uses the external DLL stuff to solve the 2D bump equations
+# u' = -u + int_T^2 K(x-x',y-y') F(U(x',y',t)) dx' dy'
+# in general when K is the separable kernel
+#
+#  (1 + cx cxp+ sx sxp)(1 + cy cyp + sy syp)
+# = 1 + cx cxp + cy cyp + sx sxp + sy syp + cx cxp cy cyp +
+#       sx sxp sy syp + cx cxp sy syp + sx cy syp cyp
+#  k = 1-i0 + cos(x) cos(x') + sin(x) sin(x') +
+#  cos(y) cos(y') + sin(y) sin(y') + cos(x)cos(y) cos(x') cos(y')
+#  + sin(x) sin(y) sin(x') sin(y') + sin(x)cos(y) sin(x')cos(y;)
+#  + cos(x)sin(y) cos(x')sin(y') 
+#  so we have 
+# u=a0  + a10 cos(x) + a01 cos(y) + b10 sin(x) + b01*sin(y)
+#       + a11 cos(x) cos(y) + b11 sin(x) sin(y) 
+#       + c11 cos(x) sin(y) + d11 sin(x) cos(y)  
+#  with adaptation, 
+# z' = (-z + u)/tau
+# so z = e0 + e10 cos(x) + e01 cos(y) +e11 cos(x) cos(y) ...
+# etc
+
+
+a0'=-a0+beta*(1-i0)*p0+w-g*e0
+a10'=-a10+beta*p10+w-g*e10
+a01'=-a01+beta*p01+w-g*e01
+b10'=-b10+beta*q10-g*f10
+b01'=-b01+beta*q01-g*f01
+a11'=-a11+beta*p11+w-g*e11
+b11'=-b11+beta*q11-g*f11
+c11'=-c11+beta*r11-g*g11
+d11'=-d11+beta*s11-g*h11
+
+e0'=(-e0+a0)/tau
+e10'=(-e10+a10)/tau
+e01'=(-e01+a01)/tau
+e11'=(-e11+a11)/tau
+f01'=(-f01+b01)/tau
+f10'=(-f10+b10)/tau
+f11'=(-f11+b11)/tau
+g11'=(-g11+c11)/tau
+h11'=(-h11+d11)/tau
+
+aux thx=mod(atan2(b01,a01)+5*pi,2*pi)-pi
+aux thy=mod(atan2(b10,a10)+5*pi,2*pi)-pi
+
+p0=0
+p10=0
+p01=0
+q10=0
+q01=0
+p11=0
+q11=0
+r11=0
+s11=0
+
+init a0=-3.8740100000000002,a10=3.7967,a01=3.7449300000000001,a11=1.41212
+init b10=-4.6804399999999999,b10=-4.6804399999999999,b11=1.84876
+init c11=-1.89717,d11=-1.90564
+init e0=-3.9165399999999999,e10=3.6286100000000001,e01=3.6538200000000001,e11=2.2974999999999999
+init f01=-0.57874300000000001,f10=-0.50260400000000005,f11=0.91585700000000003,g11=-0.49064999999999998,h11=-0.58823599999999998
+
+par g=0,w=0.2,tau=50
+par r=25,theta=.25
+par n=50,beta=1,i0=1.5
+export {a0,a10,a01,b10,b01,a11,b11,c11,d11,r,theta,n} {p0,p10,p01,q10,q01,p11,q11,r11,s11}
+
+
+@ dll_lib=twodfull.so,dll_fun=get2d
+#@ dll_lib=twodfull64.so,dll_fun=get2d
+done
+
+# compile twodb with
+# gcc -fPIC -dynamiclib -arch i386 twodfull.c -o twodfull.so
+
+# in ubuntu 14.04, 32 bit, the following command worked to compile
+# gcc -fPIC -shared -march=i386 twodfull.c -o twodfull.so -lm
+
+# in ubuntu 14.04, 64 bit, the following command worked to compile
+# gcc -fPIC -shared twodfull.c -o twodfull64.so -lm
+
+# note that as of feb 14, 2017 only the 32 bit compiled version is recognized by xpp. trying to call twodfull64.so after compiling returns the error "Cant find the library"
+# 
+

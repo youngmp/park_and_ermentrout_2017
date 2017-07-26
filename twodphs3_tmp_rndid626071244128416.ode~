@@ -1,0 +1,47 @@
+par b=.8,q=.001,g=.5
+# int e(-s) [sin(xs-x) + b sin[xs-x]*cos(ys-y)]
+#            sxs cx -cxs sx    
+#     (sxs cx -cxs sx)*(cys cy + sys sy)
+#      cxcy sxcys - sxcy cxcys  + cxsy sxsys - sxsy cxsys
+cx=cos(x)
+cy=cos(y)
+sx=sin(x)
+sy=sin(y)
+sxsy=sin(x)*sin(y)
+sxcy=sin(x)*cos(y)
+cxsy=cos(x)*sin(y)
+cxcy=cos(x)*cos(y)
+
+#h(x,y)=h1*sin(x)+h3*cos(y)*sin(x)+h2*cos(x)*sin(x)+h4*sin(2*x)*cos(y)+h5*sin(x)*cos(2*y)
+#h(x,y)=h1*sin(x)+h3*cos(y)*sin(x)
+h(x,y)=sin(x)*(1+b*cos(y))
+j(x,y)=-h(x,y)
+
+i1x=sxs*cx-cxs*sx
+i1y=sys*cy-cys*sy
+i2x=b*(cxcy*sxcys - sxcy*cxcys  + cxsy*sxsys - sxsy*cxsys)
+i2y=b*(cxcy*cxsys - cxsy*cxcys  + sxcy*sxsys - sxsy*sxcys)
+
+x'= q*j(x,y)-g*(i1x+i2x)
+y'= q*j(y,x)-g*(i1y+i2y)
+
+cxs'=-cxs+cx
+cys'=-cys+cy
+sxs'=-sxs+sx
+sys'=-sys+sy
+sxsys'=-sxsys+sxsy
+sxcys'=-sxcys+sxcy
+cxsys'=-cxsys+cxsy
+cxcys'=-cxcys+cxcy
+
+#p h1=6.4062433109,h2=0.722959007283,h3=5.1728627897,h4=0.172528383917,h5=0.0443514196873
+init x=2.0286499999999998,y=5.9553500000000001,cxs=-0.25408399999999998,cys=0.92777699999999996,sxs=0.94494800000000001,sys=-0.37001800000000001
+init sxsys=-0.350132,sxcys=0.87656800000000001,cxsys=0.085270100000000001,cxcys=-0.239646,
+
+@ xp=x,yp=y
+@ xlo=0,xhi=6.3,ylo=0,yhi=6.3
+@ total=10.81
+@ bounds=100000
+@ maxstor=100000
+
+d

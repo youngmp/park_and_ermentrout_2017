@@ -1,0 +1,33 @@
+table w % 101 -50 50 (a+b*cos(pi*t/50))/100
+table cs % 100 0 99 cos(2*pi*t/100)
+table sn % 100 0 99 sin(2*pi*t/100)
+
+f[0..99]=f(u[j])
+f(x)=1/(1+exp(-r*(x-ut)))
+
+
+special wf=conv(periodic,100,50,w,f0)
+
+u[0..99]'=(-u[j]+wf([j])+eps*(-g*z[j]+q*(ssYShift+ssAmp*cos(2*pi*([j])/100))))
+z[0..99]'=(eps*beta*(-z[j]+u[j]))
+
+# the steady-state shift values are from oned_simple.py
+par r=15,ut=.25
+par q=.5,beta=1.,eps=0.01,g=1.,ssAmp=0.7984566375,ssYShift=-0.161910995932
+
+u[0..99](0)=ssYshift+ssAmp*cos(2*pi*[j]/100)
+z[0..99](0)=ssAmp*cos(2*pi*([j]-1)/100)
+par a=-.5,b=3
+
+@ total=400,nout=10
+@ maxstor = 10000000
+
+cu=sum(0,99)of(cs(i')*shift(u0,i'))
+su=sum(0,99)of(sn(i')*shift(u0,i'))
+aux theta=mod(atan2(su,cu)+pi,2*pi)-pi
+
+@ xp=t,yp=theta
+@ xlo=0,xhi=400
+@ ylo=-pi,yhi=pi
+
+done

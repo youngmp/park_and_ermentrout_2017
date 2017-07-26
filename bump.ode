@@ -1,0 +1,11 @@
+table w % 101 -50 50 (a+b*cos(2*pi*t/100))/100
+f(u)=1/(1+exp(-beta*(u-ut)))
+fu[0..99]=f(u[j])
+special fw=conv(periodic,100,50,w,fu0)
+q(j)=eps*cos(2*pi*(j-jhat)/100)
+par jhat=30
+par a=-.5,b=3,beta=15,ut=.25,eps=0
+u[0..99]'=-u[j]+fw([j])+q([j])
+u[0..99](0)=(1+cos(2*Pi*[j]/100))
+@ total=200
+d

@@ -1,0 +1,40 @@
+# same as numerical_bard.ode but without the convolution
+
+table w % 101 -50 50 (a+b*cos(pi*t/50))*2*pi/100
+table cs % 100 0 99 cos(2*pi*t/100)
+table sn % 100 0 99 sin(2*pi*t/100)
+
+cs[0..99]=cos(2*pi*[j]/100)
+sn[0..99]=sin(2*pi*[j]/100)
+
+fu[0..99]=f(u[j])
+
+f(x)=1/(1+exp(-r*(x-ut)))
+
+
+par r=25,ut=.25
+
+csfu[0..99]=cs[j]*fu[j]
+snfu[0..99]=sn[j]*fu[j]
+
+wfa[0..99]=a*sum(0,99)of(shift(fu0,i'))
+wfb[0..99]=b*cs[j]*sum(0,99)of(shift(csfu0,i'))
+wfc[0..99]=b*sn[j]*sum(0,99)of(shift(snfu0,i'))
+wf[0..99]=(wfa[j]+wfb[j]+wfc[j])/100
+
+u[0..99]'=-u[j]+wf[j]+eps*(-g*z[j]+q*ssAmp*cos(2*pi*([j])/100))
+z[0..99]'=eps*be*(-z[j]+u[j])
+
+par q=1,g=1,be=1,eps=0
+par ssAmp=1.
+
+u[0..99](0)=cos(2*pi*[j]/100)
+par a=-.5,b=3
+
+@ total=4000,nout=10,meth=euler
+@ maxstor = 10000000000000
+
+#cu=sum(0,99)of(cs(i')*shift(u0,i'))
+#su=sum(0,99)of(sn(i')*shift(u0,i'))
+#aux theta=mod(atan2(su,cu)+4*pi,2*pi)
+done

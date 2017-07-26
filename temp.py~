@@ -1,0 +1,49 @@
+import numpy as np
+
+import twod_phase as tdp
+
+
+import matplotlib.pyplot as plt
+
+pi = np.pi
+
+g=1.14
+
+p = tdp.Phase(x0=-1,x1=1.,y0=0,y1=0.0,
+              init_mode='cartesian',
+              q=0.,g=g,
+              dde_dt=.05,
+              dde_T=500,
+              phase_option='full',
+              recompute_h=False,recompute_j=False,
+              recompute_fq=False,recompute_phase_lc=False,
+              compute_h_error=False,
+              save_last=False,
+              use_last=False)
+
+
+
+p2 = tdp.Phase(x0=-2,x1=2.5,y0=0,y1=0.0,
+               init_mode='cartesian',
+               q=0.,g=g,
+               dde_dt=.05,
+               dde_T=500,
+               phase_option='full',
+               recompute_h=False,recompute_j=False,
+               recompute_fq=False,recompute_phase_lc=False,
+               compute_h_error=False,
+               save_last=False,
+               use_last=False)
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.set_title("phase over time")
+ax.set_xlabel('t')
+ax.set_ylabel(r"$\theta$")
+ax.plot(p.dde_t,np.mod(p.th1_ph+pi,2*pi)-pi,label='sol1')
+#ax.plot(p.dde_t,np.mod(p.th2_ph+pi,2*pi)-pi)
+
+ax.plot(p2.dde_t,np.mod(p2.th1_ph+pi,2*pi)-pi,label='sol2')
+#ax.plot(p.dde_t,np.mod(p.th2_ph+pi,2*pi)-pi)
+ax.legend()
+plt.show()

@@ -1,0 +1,37 @@
+hx=nu1*(-b*nu2^2-b*nu1^2*nu2^2+b*nu1^4+2*nu1^2+1+2*nu2^2+nu2^4-2*nu1^2*nu2^2+b+2*b*nu1^2+nu1^4)/((1+nu1^2)*(1+nu1^2+2*nu1*nu2+nu2^2)*(1+nu1^2-2*nu1*nu2+nu2^2))
+hy=-nu2*(-1-b-2*b*nu2^2-b*nu2^4-2*nu2^2-nu2^4+b*nu1^2+b*nu1^2*nu2^2+2*nu1^2*nu2^2-nu1^4-2*nu1^2)/((1+nu2^2)*(1+nu1^2+2*nu1*nu2+nu2^2)*(1+nu1^2-2*nu1*nu2+nu2^2))
+
+nu1'=-nu1+g*hx
+nu2'=-nu2+g*hy
+
+al'=-al+al^2 - be^2 + g^2*(-(ph2*ph3) + ph1*ph4 + qh2*qh3 - qh1*qh4) + g*(al*(ph1 + ph4) - be*(qh1 + qh4))
+be'=-be+2*al*be + g^2*(ph4*qh1 - ph3*qh2 - ph2*qh3 + ph1*qh4) + g*(be*(ph1 + ph4) + al*(qh1 + qh4))
+
+ph1aux=(1+6*al^5+al^6+be^6+3*nu1^2+3*nu1^4+nu1^6+3*nu2^2+2*nu1^2*nu2^2-nu1^4*nu2^2+3*nu2^4-nu1^2*nu2^4+nu2^6-be^4*(-3+nu1^2+nu2^2)+3*al^4*(5+be^2+nu1^2+nu2^2)+4*al^3*(5+3*be^2+3*nu1^2+3*nu2^2)+2*al*(3*be^4+3*nu1^4+3*(1+nu2^2)^2+2*nu1^2*(3+nu2^2)+2*be^2*(3+nu1^2+nu2^2))-be^2*(-3+nu1^4-2*nu2^2+nu2^4-2*nu1^2*(1+5*nu2^2))+al^2*(3*be^4+3*nu1^4+2*nu1^2*(9+nu2^2)+2*be^2*(9+nu1^2+nu2^2)+3*(5+6*nu2^2+nu2^4)))
+
+ph1=-(1/(1+nu1^2))+((1+al)*b*ph1aux)/((1+2*al+al^2+be^2+nu1^2+2*be*(nu1-nu2)-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2-2*be*nu1+nu1^2+2*be*nu2-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2-2*be*(nu1+nu2))*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2+2*be*(nu1+nu2)))+(((1+al)*Cos(2*Atan(Abs(be-nu1)/(1+al))))/((1+al)^2+be^2-2*be*nu1+nu1^2)+((1+al)*Cos(2*Atan(Abs(be+nu1)/(1+al))))/((1+al)^2+be^2+2*be*nu1+nu1^2)+(Abs(be-nu1)*Sin(2*Atan(Abs(be-nu1)/(1+al))))/((1+al)^2+be^2-2*be*nu1+nu1^2)+(Abs(be+nu1)*Sin(2*Atan(Abs(be+nu1)/(1+al))))/((1+al)^2+be^2+2*be*nu1+nu1^2))/2.-(b*(Cos(2*Atan(Abs(nu1-nu2)))/(1+nu1^2-2*nu1*nu2+nu2^2)+Cos(2*Atan(Abs(nu1+nu2)))/(1+nu1^2+2*nu1*nu2+nu2^2)+(Abs(nu1-nu2)*Sin(2*Atan(Abs(nu1-nu2))))/(1+nu1^2-2*nu1*nu2+nu2^2)+(Abs(nu1+nu2)*Sin(2*Atan(Abs(nu1+nu2))))/(1+nu1^2+2*nu1*nu2+nu2^2)))/2.
+
+
+qh1=-((be*((1+al)^2+be^2-nu1^2))/(be^4-2*be^2*(-(1+al)^2+nu1^2)+((1+al)^2+nu1^2)^2))-(b*be*(1+6*al^5+al^6+be^6+nu1^2-nu1^4-nu1^6+nu2^2+10*nu1^2*nu2^2+nu1^4*nu2^2-nu2^4+nu1^2*nu2^4-nu2^6-3*be^4*(-1+nu1^2+nu2^2)+4*al^3*(5+3*be^2+nu1^2+nu2^2)+al^4*(15+3*be^2+nu1^2+nu2^2)+be^2*(3+3*nu1^4-2*nu2^2+3*nu2^4+2*nu1^2*(-1+nu2^2))+2*al*(3+3*be^4-nu1^4+2*nu2^2-nu2^4-2*be^2*(-3+nu1^2+nu2^2)+2*nu1^2*(1+5*nu2^2))+al^2*(15+3*be^4-nu1^4+6*nu2^2-nu2^4-2*be^2*(-9+nu1^2+nu2^2)+2*nu1^2*(3+5*nu2^2))))/((1+2*al+al^2+be^2+nu1^2+2*be*(nu1-nu2)-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2-2*be*nu1+nu1^2+2*be*nu2-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2-2*be*(nu1+nu2))*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2+2*be*(nu1+nu2)))
+
+ph2=(b*((-4*(1+al)*nu1*nu2*(1+4*al^3+al^4-3*be^4+2*nu1^2+nu1^4+2*nu2^2-2*nu1^2*nu2^2+nu2^4+2*be^2*(-1+nu1^2+nu2^2)+4*al*(1-be^2+nu1^2+nu2^2)+2*al^2*(3-be^2+nu1^2+nu2^2)))/((1+2*al+al^2+be^2+nu1^2+2*be*(nu1-nu2)-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2-2*be*nu1+nu1^2+2*be*nu2-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2-2*be*(nu1+nu2))*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2+2*be*(nu1+nu2)))+Cos(2*Atan(Abs(nu1-nu2)))/(1+nu1^2-2*nu1*nu2+nu2^2)-Cos(2*Atan(Abs(nu1+nu2)))/(1+nu1^2+2*nu1*nu2+nu2^2)+(Abs(nu1-nu2)*Sin(2*Atan(Abs(nu1-nu2))))/(1+nu1^2-2*nu1*nu2+nu2^2)-(Abs(nu1+nu2)*Sin(2*Atan(Abs(nu1+nu2))))/(1+nu1^2+2*nu1*nu2+nu2^2)))/2.
+
+qh2=(2*b*be*nu1*nu2*(3+12*al^3+3*al^4-be^4+2*nu1^2+2*nu2^2-(nu1^2-nu2^2)^2+2*be^2*(1+nu1^2+nu2^2)+4*al*(3+be^2+nu1^2+nu2^2)+2*al^2*(9+be^2+nu1^2+nu2^2)))/((1+al*(2+al)+(be+nu1-nu2)^2)*(1+al*(2+al)+(be-nu1+nu2)^2)*(1+al*(2+al)+(-be+nu1+nu2)^2)*(1+al*(2+al)+(be+nu1+nu2)^2))
+
+
+ph3=ph2
+qh3=qh2
+
+ph4aux=(1+6*al^5+al^6+be^6+3*nu1^2+3*nu1^4+nu1^6+3*nu2^2+2*nu1^2*nu2^2-nu1^4*nu2^2+3*nu2^4-nu1^2*nu2^4+nu2^6-be^4*(-3+nu1^2+nu2^2)+3*al^4*(5+be^2+nu1^2+nu2^2)+4*al^3*(5+3*be^2+3*nu1^2+3*nu2^2)+2*al*(3*be^4+3*nu1^4+3*(1+nu2^2)^2+2*nu1^2*(3+nu2^2)+2*be^2*(3+nu1^2+nu2^2))-be^2*(-3+nu1^4-2*nu2^2+nu2^4-2*nu1^2*(1+5*nu2^2))+al^2*(3*be^4+3*nu1^4+2*nu1^2*(9+nu2^2)+2*be^2*(9+nu1^2+nu2^2)+3*(5+6*nu2^2+nu2^4)))
+
+ph4=-(1/(1+nu2^2))+((1+al)*b*ph4aux)/((1+2*al+al^2+be^2+nu1^2+2*be*(nu1-nu2)-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2-2*be*nu1+nu1^2+2*be*nu2-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2-2*be*(nu1+nu2))*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2+2*be*(nu1+nu2)))+(((1+al)*Cos(2*Atan(Abs(be-nu2)/(1+al))))/((1+al)^2+be^2-2*be*nu2+nu2^2)+((1+al)*Cos(2*Atan(Abs(be+nu2)/(1+al))))/((1+al)^2+be^2+2*be*nu2+nu2^2)+(Abs(be-nu2)*Sin(2*Atan(Abs(be-nu2)/(1+al))))/((1+al)^2+be^2-2*be*nu2+nu2^2)+(Abs(be+nu2)*Sin(2*Atan(Abs(be+nu2)/(1+al))))/((1+al)^2+be^2+2*be*nu2+nu2^2))/2.-(b*(Cos(2*Atan(Abs(nu1-nu2)))/(1+nu1^2-2*nu1*nu2+nu2^2)+Cos(2*Atan(Abs(nu1+nu2)))/(1+nu1^2+2*nu1*nu2+nu2^2)+(Abs(nu1-nu2)*Sin(2*Atan(Abs(nu1-nu2))))/(1+nu1^2-2*nu1*nu2+nu2^2)+(Abs(nu1+nu2)*Sin(2*Atan(Abs(nu1+nu2))))/(1+nu1^2+2*nu1*nu2+nu2^2)))/2.
+
+qh4=-((be*((1+al)^2+be^2-nu2^2))/(be^4-2*be^2*(-(1+al)^2+nu2^2)+((1+al)^2+nu2^2)^2))-(b*be*(1+6*al^5+al^6+be^6+nu1^2-nu1^4-nu1^6+nu2^2+10*nu1^2*nu2^2+nu1^4*nu2^2-nu2^4+nu1^2*nu2^4-nu2^6-3*be^4*(-1+nu1^2+nu2^2)+4*al^3*(5+3*be^2+nu1^2+nu2^2)+al^4*(15+3*be^2+nu1^2+nu2^2)+be^2*(3+3*nu1^4-2*nu2^2+3*nu2^4+2*nu1^2*(-1+nu2^2))+2*al*(3+3*be^4-nu1^4+2*nu2^2-nu2^4-2*be^2*(-3+nu1^2+nu2^2)+2*nu1^2*(1+5*nu2^2))+al^2*(15+3*be^4-nu1^4+6*nu2^2-nu2^4-2*be^2*(-9+nu1^2+nu2^2)+2*nu1^2*(3+5*nu2^2))))/((1+2*al+al^2+be^2+nu1^2+2*be*(nu1-nu2)-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2-2*be*nu1+nu1^2+2*be*nu2-2*nu1*nu2+nu2^2)*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2-2*be*(nu1+nu2))*(1+2*al+al^2+be^2+nu1^2+2*nu1*nu2+nu2^2+2*be*(nu1+nu2)))
+
+
+aux ph1val=ph1
+aux ph2val=ph2
+
+
+par b=.8,g=1.5
+

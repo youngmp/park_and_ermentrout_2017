@@ -1,0 +1,13 @@
+#  assume mu=1 wlog
+# int b*exp(-b*s) sin(y_s-y) ds = 
+# int b*exp(-b*s)[sin(y_s)cos(y)-cos(y_s)sin(y) ds]
+# cos(y) Is - sin(y) Ic
+# Is = int b exp(-bs) sin(y(t-s)) ds
+# 
+u'=-q*sin(u)-g*(is*cos(u)-ic*sin(u))
+is'=beta*(-is+sin(u))
+ic'=beta*(-ic+cos(u))
+#par q=.01,g=0,beta=.25
+par q=.01,g=0,beta=1.
+d
+

@@ -1,0 +1,175 @@
+"""
+2D phase approximation, where we take H_x=x*e^{-(x^2+y^2)}
+"""
+
+import fourier_2d as f2d
+import numpy as np
+import matplotlib.pylab as mp
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+from scipy.integrate import quad
+
+sin = np.sin
+cos = np.cos
+pi = np.pi
+sqrt = np.sqrt
+exp = np.exp
+
+
+def h1(x,y):
+    return x*exp(-(x**2+y**2)**2)
+
+def h2(x,y):
+    return y*exp(-(x**2+y**2)**2)
+
+def phase_dde_approx():
+    """
+    the full integro-delay-differential equation using Euler's method
+    x: x[:N], x[N:]. x history and y history, respectively. up to N time steps.    
+
+    todo:
+    -start with bard's approximations
+    -once the bard method works, move on to Fourier stuff.
+    
+    I will use this guy's code if I have to:
+    https://zulko.wordpress.com/2013/03/01/delay-differential-equations-easy-with-python/
+    """
+
+    g = 3. # 1.85
+    q = .9
+    T = 200
+    dt = .1
+    TN = int(T/dt)
+    t = np.linspace(0,T,TN)
+
+    # delay time and steps
+    delay_t = 20
+    delay_N = int(delay_t/dt)
+
+    th1 = np.zeros(TN)
+    th2 = np.zeros(TN)
+
+    np.random.seed(0)
+    th1[:delay_N] = .4#(np.random.randn(delay_N)-.5)*.1#
+    th2[:delay_N] = .45#(np.random.randn(delay_N)-.5)*.1#
+    
+    # approximate the H function as a negative gaussian derivative: x*exp(-(x^2+y^2))
+    
+    # solve dde
+    # for reference: H_1(x,y) = x*exp(-(x^2+y^2))
+    # so H_1(th1(tau-s)-th1(tau),th2(tau-s)-th2(tau))
+
+    n = np.arange(0,delay_N,1)
+    for i in range(delay_N-1,TN):
+
+        x_minus = th1[i-1-n]-th1[i-1] - 2*pi
+        x_zero = th1[i-1-n]-th1[i-1]
+        x_plus = th1[i-1-n]-th1[i-1] + 2*pi
+        
+        y_minus = th2[i-1-n]-th2[i-1] - 2*pi
+        y_zero = th2[i-1-n]-th2[i-1]
+        y_plus = th2[i-1-n]-th2[i-1] + 2*pi
+
+        h1_array = h1(x_minus,y_minus) + h1(x_zero,y_zero) + h1(x_plus,y_plus)
+        h2_array = h2(x_minus,y_minus) + h2(x_zero,y_zero) + h2(x_plus,y_plus)
+        
+        j1 = -h1(th1[i-1],th2[i-1])
+        j2 = -h2(th1[i-1],th2[i-1])
+
+        th1[i] = th1[i-1] + dt*( -(1.*g)*np.sum(np.exp(-n*dt)*h1_array)*dt + q*j1 )
+        th2[i] = th2[i-1] + dt*( -(1.*g)*np.sum(np.exp(-n*dt)*h2_array)*dt + q*j2 )
+
+    # update history
+    return th1,th2
+
+
+def M(r,nu):
+    #def M_integrand(s,r,nu):
+    #    return (1./nu)*np.exp(-r**2*(2*np.cos(s)-1)-s/nu)*(np.cos(s)-1)
+    #M_integrand = lambda s,r,nu: np.exp(-r**2*(1-2*np.cos(nu*s))-s)*(np.cos(nu*s)-1)
+    M_integrand = lambda s,r,nu: np.exp(-r**2*(1-2*np.cos(nu*s))-s)*(np.cos(nu*s)-1)
+    
+    return quad(M_integrand,0,np.inf,args=(r,nu))
+
+
+def N(r,nu):
+    #def N_integrand(s,r,nu):
+        #return (1./nu)*np.exp(-r**2*(2*np.cos(s)-1)-s/nu)*np.sin(s)
+        #return np.exp(-r**2*(2*np.cos(nu*s)-1)-s)*np.sin(nu*s)
+    N_integrand = lambda s,r,nu: np.exp(-r**2*(1-2*np.cos(nu*s))-s)*np.sin(nu*s)
+        
+    return quad(N_integrand,0,np.inf,args=(r,nu))
+
+
+def main():
+
+    if True:
+        th1,th2 = phase_dde_approx()
+        mp.figure()
+        mp.plot(th1)
+        mp.plot(th2)
+        #mp.plot(np.mod(th1,2*pi))
+        #mp.plot(np.mod(th2,2*pi))
+        
+        mp.figure()
+        mp.plot(th1,th2)
+        #mp.plot(np.mod(th1,2*pi),np.mod(th2,2*pi))
+        #mp.plot(np.mod(th1-pi,2*pi)+pi,np.mod(th2-pi,2*pi)+pi)
+        #mp.scatter(np.mod(th1,2*pi),np.mod(th2,2*pi))
+        
+        mp.show()
+
+
+    #print N(1,1)
+    q=1
+    g=3
+    rN = 30
+    nuN = 30
+    rvals = np.linspace(0,1.5,rN)
+    nuvals = np.linspace(-2,2,nuN)
+    
+    surfM = np.zeros((rN,nuN))
+    surfN = np.zeros((rN,nuN))
+
+    for i in range(len(rvals)):
+        for j in range(len(nuvals)):
+            surfM[i,j] = -g*M(rvals[i],nuvals[j])[0] - q
+            surfN[i,j] = g*np.exp(-rvals[i]**2)*N(rvals[i],nuvals[j])[0] - nuvals[j]
+
+    XX, YY = np.meshgrid(rvals,nuvals,indexing='ij')
+
+    fig2 = plt.figure()
+    ax2 = fig2.gca(projection='3d')
+    #ax.set_zlim(-5,10)
+    ax2.set_title("M surface with q="+str(q)+" and g="+str(g))
+    ax2.set_xlabel("r")
+    ax2.set_ylabel("nu")
+    ax2.plot_surface(XX,YY,surfM,
+                     rstride=2,
+                     edgecolors="k",
+                     cstride=2,
+                     cmap="gray",
+                     alpha=0.8,
+                     linewidth=0.25)
+
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    #ax.set_zlim(-5,10)
+    ax.set_title("N surface with q="+str(q)+" and g="+str(g))
+    ax.set_xlabel("r")
+    ax.set_ylabel("nu")
+    ax.plot_surface(XX,YY,surfN,
+                    rstride=2,
+                    edgecolors="k",
+                    cstride=2,
+                    cmap="gray",
+                    alpha=0.8,
+                    linewidth=0.25)
+    #mp.matshow(np.abs(Nvals))
+
+    plt.show()
+
+if __name__ == "__main__":
+    main()

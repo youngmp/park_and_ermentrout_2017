@@ -1,0 +1,40 @@
+# phase shift equation
+# for random up/down movement
+# try q=0.5, g=2.66. start th=.2,i1=-1,i2=0.001
+# try q=0.5, g=2.66. start th=.2,i1=-1,i2=0.2
+# both appear chaotic but remain bounded
+
+# for chaotic bounds, 
+# try q=0.5, g=2.668. start th=.2,i1=-1,i2=0.2
+
+# for large amplitude oscillations
+# q=1,g=3.5
+
+th' = -q*sin(th) + g*( i2*sin(th)-i1*cos(th) )
+i1' = -(i1 - sin(th))/(beta*A)
+i2' = -(i2 - cos(th))/(beta*A)
+
+# q = q/beta
+
+# Technically Hamp changes as a fn of r,ut.
+# but this approximation is fine for back-of-the-envelope stuff
+p g=2.66,q=.5
+p eps=.01,g2=1,beta=1,A=1
+
+
+#global 1 th-pi {th=-pi}
+#global 1 -pi-th {th=pi}
+
+aux thm=mod(th+pi,2*pi)-pi
+
+th(0)=0
+i1(0)=-.4
+i2(0)=.2
+
+@ ParMax=5,ParMin=0
+@ Dsmin=.001
+@ Dsmax=.05
+@ maxstor=100000000
+@ bounds=1000000
+@ total=100
+@ done

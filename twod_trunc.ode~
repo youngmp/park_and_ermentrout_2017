@@ -1,0 +1,9 @@
+p be=.8
+p g=3
+
+f(u) = u/(1+u^2)
+
+nu1'=-nu1+g*(f(nu1) + be*( f(nu1+nu2) + f(nu1-nu2) ) )/2
+nu2'=-nu2+g*(f(nu2) + be*( f(nu1+nu2) - f(nu1-nu2) ) )/2
+
+@ xp=nu1,yp=nu2
