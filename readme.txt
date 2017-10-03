@@ -115,6 +115,10 @@ Search the following headers to go to that section
       chaos_simple_theory1.dat: chaotic solution in the 1d reduced/phase neural field model.  zshift=.01,g=2.661,q=0.5,eps=.01,mu=1,T=50000
       chaos_simple_theory2.dat: same as above, but with zshift = .0100001
 
+      chaos_simple1_N=*.dat: Chaos data for spatial discretization N.
+      
+      these chaos_*.dat files are created using oned_simple.py, which contains all the methods to run the full 1d numerics (with the convolution) and the 1d phase model (ode version).
+
 	diagram.dat,diagram.25.dat: data for normal form figures (1d phase model).
 
 	evans.ode.2par_b_g.dat: evans function 2parameter curve data (truncated phase model)

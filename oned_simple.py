@@ -35,7 +35,7 @@ class Sim(object):
     filenames
     """
     def __init__(self,
-                 N=120,a=0.,b=2*pi,
+                 N=240,a=0.,b=2*pi,
                  r=15.,ut=0.25,
                  mu=1.,
                  A=-.5,B=3.):
@@ -657,15 +657,17 @@ def main():
     # for chaos, use g=3.054,q=0.5 ???
     # for chaos, use g=2.65,q=0.5 (numerics)
     # for chaos g=2.661, q=0.5 (theory)
-    sim = SimDat(g=2.661,q=.5,zshift=.01,phase=True,T=50000,kernel_factor=1.)
-    sim.plot('theory')
+    sim = SimDat(g=2.65,q=.5,zshift=.01,phase=True,T=50000,kernel_factor=1.)
+    sim.plot('phase_angle')
+    #sim.plot('theory')
     sim.params()
+    print sim.Hamp
 
     if True:
 
         # see readme.txt for info on data files
-        np.savetxt("chaos_simple_theory1.dat",np.mod(sim.solph[:,0]+pi,2*pi)-pi)
-        #np.savetxt("chaos_simple1.dat",sim.ph_angle) 
+        #np.savetxt("chaos_simple_theory1.dat",np.mod(sim.solph[:,0]+pi,2*pi)-pi)
+        np.savetxt("chaos_simple1_N="+str(sim.N)+".dat",sim.ph_angle)
 
         pass
     

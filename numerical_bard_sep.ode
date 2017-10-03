@@ -39,11 +39,11 @@ a2(0)=2
 a3(0)=0
 
 
-aux sol[0..99]=a1+a2*cs([j])+a3*sn([j])
+sol[0..99]=a1+a2*cs([j])+a3*sn([j])
 
-#cu=sum(0,99)of(cs(i')*shift(sol0,i'))
-#su=sum(0,99)of(sn(i')*shift(sol0,i'))
-#aux theta=mod(atan2(su,cu)+pi,2*pi)-pi
+cu=sum(0,99)of(cs(i')*shift(sol0,i'))
+su=sum(0,99)of(sn(i')*shift(sol0,i'))
+aux theta=mod(atan2(su,cu)+pi,2*pi)-pi
 
 aux pp1=p0(0)
 aux pp2=p1(0)

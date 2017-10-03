@@ -2946,8 +2946,105 @@ def oned_chaos_fig():
     
 
     return fig
+
+
+def oned_chaos_fig_finer():
+    """
+    same as oned_chaos_fig, but with finer time discretization
+    """
+    
+    fig = plt.figure(figsize=(10,3))
+
+    ax1 = fig.add_subplot(111)
+    
+    c1 = np.loadtxt("chaos_simple1_N=240.dat")
+    c2 = np.loadtxt("chaos_simple2_N=240.dat")
+
+    NT = len(c1)
+    t = np.linspace(0,50000,NT)
+    dt = t[-1]/NT
     
 
+    start_t = 5000
+    end_t = 25000
+
+    sidx = int(start_t/dt)
+    eidx = int(end_t/dt)
+
+
+    for slc in unlink_wrap(c1[sidx:eidx]):
+        ax1.plot(t[sidx:eidx][slc],c1[sidx:eidx][slc],color='black',lw=2)
+    for slc in unlink_wrap(c2[sidx:eidx]):
+        ax1.plot(t[sidx:eidx][slc],c2[sidx:eidx][slc],color='#3399ff',lw=2,ls='--',dashes=(5,1))
+
+    ax1.set_ylabel(r'$\bm{\theta}$')
+    ax1.set_xlabel(r'$\bm{t}$')
+    ax1.set_xlim(start_t,end_t)
+    ax1.set_ylim(-pi,pi)
+
+    ax1.set_yticks(np.arange(-1,1+.5,.5)*pi)
+    #x_label = [r"$0$", r"$\frac{\pi}{4}$", r"$\frac{\pi}{2}$", r"$\frac{3\pi}{4}$",   r"$\pi$"]
+    ax1.set_yticklabels(x_label)
+
+
+    return fig
+    
+def oned_phase_chaos_fig_map():
+    """
+    return map figure for chaos in the reduced model 
+    """
+
+
+    fig = plt.figure(figsize=(5,5))
+
+    ax1 = fig.add_subplot(111)
+    
+    
+    dat = np.loadtxt('1d_phs_chaos_map.dat')
+    x = dat[:,0]
+    y = dat[:,1]
+    
+    nskip = 10
+
+    ax1.scatter(x[::100],y[::100],s=1,edgecolor='none',color='black')
+
+    """
+    ax1a = inset_axes(ax1,
+                      width="60%", # width = 30% of parent_bbox
+                      height="40%", # height : 1 inch
+                      loc=3)
+    """
+
+
+    ax1a = inset_axes(ax1,width=1, height=1,  loc=1, 
+                      bbox_to_anchor=(0.74, 0.45), 
+                      bbox_transform=ax1.figure.transFigure)
+
+    ax1a.scatter(x,y,s=1,edgecolor='none',color='black')
+    ax1a.set_xlim(-.3315,-.329)
+    ax1a.set_ylim(.265,.3)
+    
+    ax1b = inset_axes(ax1,width=1, height=1,  loc=1, 
+                      bbox_to_anchor=(0.65, 0.79), 
+                      bbox_transform=ax1.figure.transFigure)
+
+    ax1b.scatter(x,y,s=1,edgecolor='none',color='black')
+    ax1b.set_xlim(-.739,-.736)
+    ax1b.set_ylim(.24,.31)
+
+    ax1a.set_xticks([])
+    ax1a.set_yticks([])
+    ax1b.set_xticks([])
+    ax1b.set_yticks([])
+
+    mark_inset(ax1, ax1a, loc1=2, loc2=4, fc="none", ec="0.5")
+    mark_inset(ax1, ax1b, loc1=2, loc2=4, fc="none", ec="0.5")
+    
+    ax1.set_xlabel(r'$S(\tau)$')
+    ax1.set_ylabel(r'$C(\tau)$')
+    
+    return fig
+    
 
 def twod_auto_3terms_fig_old():
     """
@@ -8764,20 +8861,24 @@ def main():
         #(oned_bump_combined,[],["oned_bump_combined.pdf"]), 
         #(oned_normal_form_bard,[],['1d_normal_form.pdf']),
         #(oned_chaos_fig,[],['oned_chaos.pdf']),
+
+        #(oned_chaos_fig_finer,[],['oned_chaos_finer.pdf']),
+        (oned_phase_chaos_fig_map,[],['oned_phase_chaos_fig_map.pdf']),
+
         #(twod_full_auto_5terms_fig,[],['twod_full_auto_5terms.pdf']),
         #(twod_full_auto_5terms_2par,[],['twod_full_auto_5terms_2par.pdf']),
 
         #(twod_phase_auto_3terms_fig2,[],['twod_phase_auto_3terms_q=0p1_.pdf']), # if you are getting a stop iteration error, comment this line and continue.
         #(twod_phase_auto_3terms_2par,[],['twod_phase_auto_3terms_2par.pdf']),
-        (combined_phase_fig,["const"],["twod_const_velocity.pdf","twod_const_velocity.png"]),
+        #(combined_phase_fig,["const"],["twod_const_velocity.pdf","twod_const_velocity.png"]),
         #(wave_exist_2d_full_v4,[],['twod_wave_exist_full_v4.pdf']),
         #(wave_exist_2d_trunc_v4,[],['twod_wave_exist_trunc_v4.pdf']),
         #(wave_stbl_2d,[],['twod_wave_stbl.pdf']),
 
         #(evans_full_combined,[],['evans_full_combined.pdf']),
         #(evans_2par,[],['evans_2par.pdf']),
-        (combined_phase_fig,["limit_cycle"],["twod_limit_cycle.pdf","twod_limit_cycle.png"]),
-        (combined_phase_fig,["non_const"],["twod_non_const.pdf","twod_non_const.png"]),
+        #(combined_phase_fig,["limit_cycle"],["twod_limit_cycle.pdf","twod_limit_cycle.png"]),
+        #(combined_phase_fig,["non_const"],["twod_non_const.pdf","twod_non_const.png"]),
         #(twod_phase_3terms_chaos_fig,[],['twod_phase_3terms_chaos_fig.png'],500)
         ]
 
