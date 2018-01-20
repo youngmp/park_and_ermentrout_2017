@@ -201,7 +201,6 @@ def main():
 
     plot_surface_movie(simdata,skip,movie=False,scene_number=2)
 
-
     simdata = twod.SimDat(q=1.,g=5.,
                           pinning_function='ss',
                           initial_function='ss',

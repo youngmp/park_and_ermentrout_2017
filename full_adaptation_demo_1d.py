@@ -101,27 +101,12 @@ def plot_surface_movie(simdata,skip,movie=False,
         ax2.set_ylim(-1.2,1.2)
         ax2.set_xlim(-1.2,1.2)
 
-
-
-        #ax.xaxis.set_ticks_position('none')
-        #ax.yaxis.set_ticks_position('none')
-        
-        #fig.savefig(file_prefix+str(i)+file_suffix)
-        #ax.text(0,0,11,"t="+str(t[k]))
-        #ax.text(0,0,10,"g="+str(g)+", q="+str(q)+", eps="+str(eps))
-
-        #plt.show()
-
-        #plt.pause(.000000001)
-        #plt.cla()
-
         j = start_iter+i
 
         fig.savefig(file_prefix+str(j)+file_suffix)
         plt.cla()
         plt.close()
-
-
+        
         stdout.write("\r Simulation Recapping... %d%%" % int((100.*(k+1)/len(simdata.t))))
         stdout.flush()
     print

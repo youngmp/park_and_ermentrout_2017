@@ -72,20 +72,30 @@ from xppy.utils import diagram #get xppy at https://github.com/jsnowacki/xppy
 from xppcall import xpprun # get xppcall at https://github.com/youngmp/Py_XPPCALL
 from lib import *
 
+
 cos = np.cos
+Cos = np.cos
 sin = np.sin
+
+Sin = np.sin
 pi = np.pi;Pi=pi
 sqrt = np.sqrt
+
 Sqrt = np.sqrt
 exp = np.exp
 erfc = sp.special.erfc;Erfc=erfc
+
 erf = sp.special.erf;Erf=erf
 E = np.exp(1)#2.7182818284590452353602874713527
 cosh = np.cosh;Cosh=cosh
 
+arcsin = np.arcsin
+
 x_label = [r"$\bm{-\pi$}", r"$\bm{-\frac{\pi}{2}}$", r"$\bm{0}$", r"$\bm{\frac{\pi}{2}}$",   r"$\bm{\pi}$"]
 #x_label = [r"$-\pi$", r"$-\pi/2$", r"$0$", r"$\pi/2$",   r"$\pi$"]
 x_label_short = [r"$\bm{-\pi}$", r"$\bm{0}$", r"$\bm{\pi}$"]
+
+x_label2 = [r"$\bm{-\frac{\pi}{2}}$", r"$\bm{0}$", r"$\bm{\frac{\pi}{2}}$"]
 
 blue2='#0066B2'
 labelbg='#CCFF66'
@@ -494,6 +504,7 @@ def beautify_phase(ax,xval,yval,per,dt,
         if ticks:
             ax.set_xticks(np.arange(-1,1+1,1)*pi)
             ax.set_yticks(np.arange(-1,1+1,1)*pi)
+
 
         ax.set_xticklabels(x_label_short,fontsize=fontsize)
         ax.set_yticklabels(x_label_short,fontsize=fontsize)
@@ -1592,12 +1603,9 @@ def HJ_fig():
     ax11.set_xticks(np.arange(-1,1+.5,.5)*pi)
     ax11.set_xticklabels(x_label)
     ax11.set_xlabel(r'$\theta$',size=15)
-
     
     ax11.set_xlim(-pi,pi)
     ax11.legend(loc=4)
-
-
 
     ax12 = fig.add_subplot(1,2,2)
     ax12.set_title(BB,x=subtitle_shift,y=subtitle_shift_y)
@@ -6738,8 +6746,6 @@ def wave_exist_2d_trunc_v4(b=.8):
         v1 = val_final[key][:,1]
         v2 = val_final[key][:,2]
 
-        #print g
-
         if key == 'br4':
             ax1.add_collection3d(collect3d_colorgrad(v1,g,v2,use_nonan=False,zorder=4,
                                                      lwstart=2,lwend=4,
@@ -8818,13 +8824,159 @@ def twod_phase_3terms_chaos_fig():
     
     
     return fig
-    
 
-    
-    
-    
-    
+def psi_fn(g,q,om):
+    """
+    wave lag function
+    """
+    return arcsin((-om+g*om-om**3.)/(q*(1+om**2.)))
 
+def lurch_l1(g,q,psi,om):
+    return -(2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))/(3.*(1 + om**2)) - (2**0.3333333333333333*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2)))/(3.*(-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3 + Sqrt((-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3)**2 + 4*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2))**3))**0.3333333333333333) + (-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3 + Sqrt((-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3)**2 + 4*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2))**3))**0.3333333333333333/(3.*2**0.3333333333333333)
+
+def lurch_l2(g,q,psi,om):
+
+    return -(2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))/(3.*(1 + om**2)) + ((1 + 1j*Sqrt(3))*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2)))/(3.*2**0.6666666666666666*(-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3 + Sqrt((-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3)**2 + 4*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2))**3))**0.3333333333333333) - ((1 - 1j*Sqrt(3))*(-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3 + Sqrt((-16/(1 + om**2)**3 + (24*g)/(1 + om**2)**3 - (12*g**2)/(1 + om**2)**3 + (2*g**3)/(1 + om**2)**3 - (48*om**2)/(1 + om**2)**3 + (48*g*om**2)/(1 + om**2)**3 - (12*g**2*om**2)/(1 + om**2)**3 - (48*om**4)/(1 + om**2)**3 + (24*g*om**4)/(1 + om**2)**3 - (16*om**6)/(1 + om**2)**3 + 18/(1 + om**2)**2 - (27*g)/(1 + om**2)**2 + (9*g**2)/(1 + om**2)**2 + (54*om**2)/(1 + om**2)**2 - (18*g*om**2)/(1 + om**2)**2 - (9*g**2*om**2)/(1 + om**2)**2 + (54*om**4)/(1 + om**2)**2 + (9*g*om**4)/(1 + om**2)**2 + (18*om**6)/(1 + om**2)**2 - 27*q*Cos(psi) - 27*q*om**2*Cos(psi) - (24*q*Cos(psi))/(1 + om**2)**3 + (24*g*q*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*Cos(psi))/(1 + om**2)**3 - (72*q*om**2*Cos(psi))/(1 + om**2)**3 + (48*g*q*om**2*Cos(psi))/(1 + om**2)**3 - (6*g**2*q*om**2*Cos(psi))/(1 + om**2)**3 - (72*q*om**4*Cos(psi))/(1 + om**2)**3 + (24*g*q*om**4*Cos(psi))/(1 + om**2)**3 - (24*q*om**6*Cos(psi))/(1 + om**2)**3 + (45*q*Cos(psi))/(1 + om**2)**2 - (27*g*q*Cos(psi))/(1 + om**2)**2 + (99*q*om**2*Cos(psi))/(1 + om**2)**2 - (18*g*q*om**2*Cos(psi))/(1 + om**2)**2 + (63*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*g*q*om**4*Cos(psi))/(1 + om**2)**2 + (9*q*om**6*Cos(psi))/(1 + om**2)**2 - (12*q**2*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 + (12*g*q**2*om**2*Cos(psi)**2)/(1 + om**2)**3 - (36*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 + (6*g*q**2*om**4*Cos(psi)**2)/(1 + om**2)**3 - (12*q**2*om**6*Cos(psi)**2)/(1 + om**2)**3 + (18*q**2*Cos(psi)**2)/(1 + om**2)**2 + (36*q**2*om**2*Cos(psi)**2)/(1 + om**2)**2 + (18*q**2*om**4*Cos(psi)**2)/(1 + om**2)**2 - (2*q**3*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**2*Cos(psi)**3)/(1 + om**2)**3 - (6*q**3*om**4*Cos(psi)**3)/(1 + om**2)**3 - (2*q**3*om**6*Cos(psi)**3)/(1 + om**2)**3)**2 + 4*(-((2 - g + 2*om**2 + q*Cos(psi) + q*om**2*Cos(psi))**2/(1 + om**2)**2) + (3*(1 - g + 2*om**2 + g*om**2 + om**4 + 2*q*Cos(psi) + 2*q*om**2*Cos(psi)))/(1 + om**2))**3))**0.3333333333333333)/(6.*2**0.3333333333333333)
+    
+def lurching_existence():
+    """
+    lurching waves.
+
+    existence and stability equations comptued in mathematica "lurching.nb"    
+    """
+    
+    om = np.linspace(-5,5,5000) # velocity
+    q1 = 2. # pinning strength
+    q2 = 3. # pinning strength
+    q3 = 4. # pinning strength
+    g=4.
+    
+    fig = plt.figure(figsize=(6,3))
+    gs = gridspec.GridSpec(2,4)
+    ax11 = plt.subplot(gs[:2,:2])
+    ax13 = plt.subplot(gs[0,2:])
+    ax23 = plt.subplot(gs[1,2:])
+    #ax11 = fig.add_subplot(221)
+    #ax12 = fig.add_subplot(222)
+    
+    #ax21 = fig.add_subplot(223)
+    #ax22 = fig.add_subplot(224)
+
+    p1 = psi_fn(g,q1,om)
+    p2 = psi_fn(g,q2,om)
+    p3 = psi_fn(g,q3,om)
+    
+    ax11.plot(om,np.real(p1),color='0.',lw=2,label=r'$q=2$')
+    ax11.plot(om,np.real(p2),color='.4',lw=1.5,label=r'$q=3$')
+    ax11.plot(om,np.real(p3),color='.75',label=r'$q=4$')
+
+    om_im = np.linspace(-3,3+0*1j,100)
+    L1 = lurch_l1(g,q1,psi_fn(g,q1,om_im),om_im)
+    ax13.plot(np.real(om_im),np.real(L1),color='black')
+    ax13.plot(np.real(om_im),np.imag(L1),color='red')
+
+    L2 = lurch_l2(g,q1,psi_fn(g,q1,om_im),om_im)
+    ax23.plot(np.real(om_im),np.real(L2),color='black')
+    ax23.plot(np.real(om_im),np.imag(L2),color='red')
+
+    # plot vertical lines indicating example parameter values
+    ax13.plot([1,1],[-2,4],color='red',ls='--',zorder=-3,alpha=.7,dashes=(5,2))
+    ax13.plot([0.5,0.5],[-2,4],color='red',ls='--',zorder=-3,alpha=.7,dashes=(5,2))
+
+    ax23.plot([1,1],[-2,4],color='red',ls='--',zorder=-3,alpha=.7,dashes=(5,2))
+    ax23.plot([0.5,0.5],[-2,4],color='red',ls='--',zorder=-3,alpha=.7,dashes=(5,2))
+
+    ax11.set_ylabel(r'$\bm{\psi}$',fontsize=15)
+    ax11.set_xlabel(r'$\bm{\Omega}$',fontsize=15)
+
+    ax11.set_xlim(om[0],om[-1])
+    ax11.set_ylim(-pi/2.,pi/2.)
+
+    ax11.set_yticks(np.arange(-.5,.5+.5,.5)*pi)
+    ax11.set_yticklabels(x_label2,fontsize=15)
+
+    #ax13.set_xlim()
+    ax13.set_ylim(-1.5,.1)
+
+    ax23.set_xlabel(r'$\bm{\Omega}$',fontsize=15)
+
+    ax13.set_xticks([])
+
+    ax13.set_ylabel(r'$\bm{\lambda_1}$',labelpad=-3)
+    ax23.set_ylabel(r'$\bm{\lambda_2,\overline\lambda_3}$',labelpad=-3)
+
+    ax11.xaxis.set_major_formatter(formatter)
+    #ax11.yaxis.set_major_formatter(formatter)
+
+    ax13.xaxis.set_major_formatter(formatter)
+    ax13.yaxis.set_major_formatter(formatter)
+
+    ax23.xaxis.set_major_formatter(formatter)
+    ax23.yaxis.set_major_formatter(formatter)
+
+    ax13.locator_params(axis='y',nbins=3)
+    ax23.locator_params(axis='y',nbins=3)
+
+
+
+    ax11.legend(prop={'size':9})
+
+    return fig
+
+
+def lurching_example():
+    """
+    example of losso f stability
+    """
+    
+    fig = plt.figure(figsize=(6,3))
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+
+
+
+    dat1 = oned_simple.SimDat(g=4.,q=2.,zshift=.1,T=2000,phase=True,Ivelocity=0.005)
+    dat2 = oned_simple.SimDat(g=4.,q=2.,zshift=.1,T=2000,phase=True,Ivelocity=0.01)
+
+
+    # clean numerics
+    x1,y1 = clean(dat1.t,dat1.ph_angle)
+    x2,y2 = clean(dat2.t,dat2.ph_angle)
+
+    # clean theory
+
+    xt1,yt1 = clean(dat1.t,-(np.mod(dat1.solph[:,0]+pi,2*pi)-pi))
+    xt2,yt2 = clean(dat2.t,-(np.mod(dat2.solph[:,0]+pi,2*pi)-pi))
+    #ax.plot(dat1.t,-(np.mod(self.solph[:,0]+pi,2*pi)-pi),lw=3,color='green')
+
+    # plot numerics
+    ax1.plot(x1,y1,color='k',lw=2)
+    ax2.plot(x2,y2,color='k',lw=2)
+
+    # plot theory #blue2='#0066B2'
+    ax1.plot(xt1,yt1,color=blue2,lw=2)
+    ax2.plot(xt2,yt2,color=blue2,lw=2)
+
+    ax1.set_title(r'$\bm{\Omega=0.5}$')
+    ax2.set_title(r'$\bm{\Omega=1}$')
+
+    ax1.set_xlabel(r'$\bm{t}$')
+    ax2.set_xlabel(r'$\bm{t}$')
+    
+    ax1.set_ylim(-pi/2.,pi/2.)
+    ax2.set_ylim(-pi/2.,pi/2.)
+
+    ax1.set_yticks(np.arange(-1,1+1,1)*pi)
+    ax1.set_yticklabels(x_label_short,fontsize=15)
+
+    ax2.set_yticks(np.arange(-1,1+1,1)*pi)
+    ax2.set_yticklabels(x_label_short,fontsize=15)
+
+    ax1.xaxis.set_major_formatter(formatter)
+    ax2.xaxis.set_major_formatter(formatter)
+
+    return fig
+    
 
 def generate_figure(function, args, filenames, dpi=100):
     # workaround for python bug where forked processes use the same random 
@@ -8854,6 +9006,7 @@ def main():
         #(ss_bump_fig,[],["ss_bumps.pdf"]),
         #(HJ_fig, [],['oned_HJ_fig.pdf']),
         #(HJ_i_fig,[],['HJ_i_fig.pdf']),
+
         #(oned_full_auto,[],["1d_full_auto_q0p5_gvary.pdf"]),
         #(oned_phase_auto,['q0.5'],["1d_auto_q0p5_gvary.pdf"]),
         #(g_nu_fig,[],['g_nu.pdf']),
@@ -8863,7 +9016,7 @@ def main():
         #(oned_chaos_fig,[],['oned_chaos.pdf']),
 
         #(oned_chaos_fig_finer,[],['oned_chaos_finer.pdf']),
-        (oned_phase_chaos_fig_map,[],['oned_phase_chaos_fig_map.pdf']),
+        #(oned_phase_chaos_fig_map,[],['oned_phase_chaos_fig_map.pdf']),
 
         #(twod_full_auto_5terms_fig,[],['twod_full_auto_5terms.pdf']),
         #(twod_full_auto_5terms_2par,[],['twod_full_auto_5terms_2par.pdf']),
@@ -8871,6 +9024,7 @@ def main():
         #(twod_phase_auto_3terms_fig2,[],['twod_phase_auto_3terms_q=0p1_.pdf']), # if you are getting a stop iteration error, comment this line and continue.
         #(twod_phase_auto_3terms_2par,[],['twod_phase_auto_3terms_2par.pdf']),
         #(combined_phase_fig,["const"],["twod_const_velocity.pdf","twod_const_velocity.png"]),
+
         #(wave_exist_2d_full_v4,[],['twod_wave_exist_full_v4.pdf']),
         #(wave_exist_2d_trunc_v4,[],['twod_wave_exist_trunc_v4.pdf']),
         #(wave_stbl_2d,[],['twod_wave_stbl.pdf']),
@@ -8878,8 +9032,14 @@ def main():
         #(evans_full_combined,[],['evans_full_combined.pdf']),
         #(evans_2par,[],['evans_2par.pdf']),
         #(combined_phase_fig,["limit_cycle"],["twod_limit_cycle.pdf","twod_limit_cycle.png"]),
+
         #(combined_phase_fig,["non_const"],["twod_non_const.pdf","twod_non_const.png"]),
-        #(twod_phase_3terms_chaos_fig,[],['twod_phase_3terms_chaos_fig.png'],500)
+        #(twod_phase_3terms_chaos_fig,[],['twod_phase_3terms_chaos_fig.png'],500),
+
+        ## figures for thesis defense
+        (lurching_existence,[],['lurching_existence.pdf']),
+        (lurching_example,[],['lurching_example.pdf']),
+        
         ]
 
 

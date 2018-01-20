@@ -12,7 +12,7 @@ special p0=mmult(100,1,ones,f0)
 special p1=mmult(100,1,cs,f0)
 special p2=mmult(100,1,sn,f0)
 
-hopf period at g = 1.6, q=1 is 441
+#hopf period at g = 1.6, q=1 is 441
 
 a1'=-a1 + aa*p0(0)/100 + eps*q*D - eps*g*b1
 a2'=-a2 + bb*p1(0)/100 + eps*q*E - eps*g*b2
@@ -23,7 +23,7 @@ b2'=eps*be*(-b2+a2)
 b3'=eps*be*(-b3+a3)
 
 # coupling parameters
-p g=1,q=0.5,eps=0.01
+p g=19.926,q=10.4495,eps=0.05
 
 # kernel parameters
 p aa=-.5,bb=3
@@ -34,12 +34,15 @@ p d=-.161911,e=.7984566
 # adaptation parameter
 p be=1
 
-a1(0)=1
-a2(0)=2
+a1(0)=-.0951
+a2(0)=.4852
 a3(0)=0
-
+b1(0)=-.107
+b2(0)=.5365299
+b3(0)=0
 
 sol[0..99]=a1+a2*cs([j])+a3*sn([j])
+aux sola[0..99]=a1+a2*cs([j])+a3*sn([j])
 
 cu=sum(0,99)of(cs(i')*shift(sol0,i'))
 su=sum(0,99)of(sn(i')*shift(sol0,i'))

@@ -28,6 +28,8 @@ periodization_upper = 6
 # i can also use this code to avoid the turing bifurcation, which results in
 # multiple bump solutions.
 
+
+
 def rhs(y_old,t,eps,mu,Ktable,Ivals,g,q,r,ut,N):
     """
     y_old: solution values of shape (2*N).

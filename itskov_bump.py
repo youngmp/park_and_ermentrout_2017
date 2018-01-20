@@ -113,6 +113,24 @@ def main():
 
     J = np.zeros((N,N))
 
+    mp.figure(figsize=(5,5))
+    from matplotlib import rc
+    rc('text', usetex=True)
+    rc('font', family='serif', serif=['Computer Modern Roman'])
+
+    xvals = x-pi
+    yvals = phi(x-pi)
+
+    mp.plot(xvals,yvals,lw=2,color='black')
+    mp.plot([-np.pi,np.pi],[0,0],color='gray')
+
+    mp.title('')
+    mp.xlabel(r'Distance from Neuron $x_j$ to Neuron $x_i$',fontsize=15)
+    mp.ylabel(r'Connection Strength $J_{ij}$',fontsize=15)
+    mp.xlim(-np.pi,np.pi)
+    mp.ylim(np.amin(yvals)-.01,np.amax(yvals)+.01)
+    mp.show()
+
     for i in range(N):
         for j in range(N):
             # take distance from neuron i to neuron j
@@ -152,21 +170,23 @@ def main():
     
     # PLOT full sim
     fig = plt.figure()
-    fig2 = plt.figure()
-    plt.ion()
-    plt.show()
+    #fig2 = plt.figure()
+    #plt.ion()
+    #plt.show()
     g1 = fig.add_subplot(111)
-    g2 = fig2.gca(projection='3d')
+    #g2 = fig2.gca(projection='3d')
     X, Y = np.meshgrid(x, y)
     for i in range(len(t)):
         k = i*100
         #Ln.set_data(np.reshape(sol[i,:N],(rN,rN)))
         g1.matshow(reshape2(sol[k,:N]))
-        g2.plot_surface(X,Y,reshape2(sol[k,:N]),rstride=1, cstride=1, cmap=cm.coolwarm)
+        #g2.plot_surface(X,Y,reshape2(sol[k,:N]),rstride=1, cstride=1, cmap=cm.coolwarm)
+        plt.title('t='+str(np.ceil(t[k]))+'ms')
         plt.pause(.001)
+        plt.savefig('savedir/'+str(i)+'.png')
         print t[k], 'of max t =',t[-1]
         g1.clear()
-        g2.clear()
+        #g2.clear()
 
 
     

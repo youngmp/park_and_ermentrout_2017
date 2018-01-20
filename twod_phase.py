@@ -190,7 +190,6 @@ class Phase(sd):
         self.filename_th2 = self.savedir+'/'+self.dde_dir+'/th2_last.dat'
         self.filename_thi_t = self.savedir+'/'+self.dde_dir+'/thi_t_last.dat'
 
-
         self.H1,self.H2 = self.H_i()
         self.J1,self.J2 = self.J_i()
 

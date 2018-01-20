@@ -738,7 +738,6 @@ class SimDat(SteadyState):
         self.init = np.zeros((2,self.N,self.N))
         #self.init[0,:,:] = self.u0ss + self.break_val
 
-
         file_not_found = False
         while True:
 

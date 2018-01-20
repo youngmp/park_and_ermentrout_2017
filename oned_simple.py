@@ -82,7 +82,8 @@ class SteadyState(Sim):
                  eps=0.005,
                  ss0=-69,ss1=-69,ss_shift=0.,
                  Nkap=200,
-                 kernel_factor=1.
+                 kernel_factor=1.,
+                 Ivelocity=0.
              ):
         # defaults
 
@@ -92,12 +93,14 @@ class SteadyState(Sim):
         self.display_params = display_params
         self.g = g
         self.q = q
-        self.ss_dt = ss_dt
         self.ss_t0 = ss_t0
         self.ss_T = ss_T
+        self.ss_dt = ss_dt
         self.ss_TN = int(self.ss_T/self.ss_dt)
         self.ss_t = np.linspace(self.ss_t0,self.ss_T,self.ss_TN)
         self.eps = eps
+
+        self.Ivelocity = Ivelocity
 
         self.ss0 = ss0
         self.ss1 = ss1
@@ -151,7 +154,14 @@ class SteadyState(Sim):
         # get J function parameters
         self.i0,self.i1,self.ishift,self.J_numerical = self.get_J(return_data=True)
 
-
+    def It(self,t):
+        """
+        time-dependent input current
+        t: time
+        c: velocity
+        """
+        
+        return self.I(self.domain-t*self.Ivelocity)
 
     def rhs2(self,y,t,sim_factor=1.):
         """
@@ -174,8 +184,10 @@ class SteadyState(Sim):
         w = self.kernel_factor*(wf0 + wf1 + wf2)/self.N#(wf0 + wf1 + wf2)*(domain[-1]-domain[0])/N
         
         #dy[:N] = -u + w + eps*(q*Ivals - g*z)
-        dy[:self.N] = sim_factor*(-u + w + self.eps*(self.q*self.Ivals- self.g*z))
+        #dy[:self.N] = sim_factor*(-u + w + self.eps*(self.q*self.Ivals- self.g*z))
+        dy[:self.N] = sim_factor*(-u + w + self.eps*(self.q*self.It(t)- self.g*z))
         dy[self.N:] = sim_factor*(self.eps*(-z + u)/self.mu)
+
         
         return dy
 
@@ -360,8 +372,8 @@ class SteadyState(Sim):
         else:
             return i0,i1,ishift
 
-    def J(self,x):
-        return self.i0+self.i1*cos(x+self.ishift)
+    def J(self,x,t,vel=0.):
+        return self.i0+self.i1*cos(x+self.ishift+t*vel)
 
     def params(self):
         """
@@ -418,7 +430,8 @@ class SimDat(SteadyState):
                  use_last=False,
                  use_random=False,
                  sim_factor=1.,
-                 kernel_factor=1.
+                 kernel_factor=1.,
+                 Ivelocity=0.
              ):
 
         """
@@ -426,6 +439,8 @@ class SimDat(SteadyState):
         use_last: use last value of previous sim
         use_ss: use steady-state bump as init
         use_random: use random initial conditions
+
+        Ivelocity: velocity of input current
         """
 
         SteadyState.__init__(self,kernel_factor=kernel_factor)
@@ -446,6 +461,8 @@ class SimDat(SteadyState):
         self.dt = dt
         self.q = q
         self.g = g
+        
+        self.Ivelocity = Ivelocity
 
         self.ushift = ushift
         self.zshift = zshift
@@ -481,7 +498,7 @@ class SimDat(SteadyState):
 
         self.cu = np.sum(cs*self.sol[:,:self.N],axis=1)
         self.su = np.sum(sn*self.sol[:,:self.N],axis=1)
-        
+
         # get last position of z coordinate
         self.cz = np.sum(cs*self.sol[-1,self.N:])
         self.sz = np.sum(sn*self.sol[-1,self.N:])
@@ -605,7 +622,7 @@ class SimDat(SteadyState):
         # for readability
         th=y[0];I1=y[1];I2=y[2];A=self.Hamp
 
-        rhs_th = (self.q*self.J(th)+self.g*A*( I2*sin(th)-I1*cos(th) )/self.mu)/self.kap 
+        rhs_th = (self.q*self.J(th,t,vel=self.Ivelocity)+self.g*A*( I2*sin(th)-I1*cos(th) )/self.mu)/self.kap 
         # 1/mu term in 2/2/2015 log_youngmin.pdf
 
         rhs_I1 = -I1/self.mu + sin(th)
@@ -641,8 +658,6 @@ class SimDat(SteadyState):
         return fig
 
 
-
-
 def main():
     
     """
@@ -657,13 +672,26 @@ def main():
     # for chaos, use g=3.054,q=0.5 ???
     # for chaos, use g=2.65,q=0.5 (numerics)
     # for chaos g=2.661, q=0.5 (theory)
-    sim = SimDat(g=2.65,q=.5,zshift=.01,phase=True,T=50000,kernel_factor=1.)
+    Ivelocity=0.01
+    sim = SimDat(g=1,q=.1,zshift=.01,phase=True,T=5000,kernel_factor=1.,Ivelocity=Ivelocity)
+
     sim.plot('phase_angle')
     #sim.plot('theory')
     sim.params()
     print sim.Hamp
 
-    if True:
+
+    # at final time value, get position of peaks of input current and solution u + direction.
+    print 'final input current position: '+str(np.mod((sim.t*Ivelocity)[-1]+pi,2*pi)-pi)
+    # compute peak I value and save
+    
+
+    print 'final solution position: '+str(sim.ph_angle[-1])
+
+    
+    print 'direction: ?'
+
+    if False:
 
         # see readme.txt for info on data files
         #np.savetxt("chaos_simple_theory1.dat",np.mod(sim.solph[:,0]+pi,2*pi)-pi)
